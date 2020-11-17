@@ -1,0 +1,13 @@
+{
+    "success": 1,
+    "json": [
+        {
+            "guid": "008ca0b1-55b4-4c56-b8a8-4de4b299d3bE",
+            "name": "Account Pictures"
+        },
+		{
+            "guid": "00bcfc5a-ed94-4e48-96a1-3f6217f21990",
+            "name": "RoamingTiles"
+        }
+    ]
+}

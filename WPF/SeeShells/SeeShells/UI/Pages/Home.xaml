@@ -1,0 +1,153 @@
+﻿<Page x:Class="SeeShells.UI.Pages.Home"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:template="clr-namespace:SeeShells.UI.Templates"
+      xmlns:local="clr-namespace:SeeShells.UI.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Home"
+      Loaded="Page_Loaded"
+      Style="{StaticResource DefaultPageStyle}">
+    <Grid x:Name="HomePage">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height=".25*"/>
+            <RowDefinition Height="0*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Name="OfflineLocationRow" Height="1*"/>
+                    <RowDefinition Name="OSVersionRow" Height="1*"/>
+                </Grid.RowDefinitions>
+                <!--<template:CheckBoxWithLabel x:Name="OfflineCheck" Grid.Column="0" Grid.Row="0" LabelContent="Offline" CheckClicked="OfflineChecked" CheckUnclicked="OfflineUnchecked"/>-->
+                <Viewbox Grid.Row="0" Grid.ColumnSpan="2">
+                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <RadioButton x:Name="OfflineCheck" Content="Offline Registry" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Checked="OfflineChecked" Unchecked="OfflineUnchecked"/>
+                            <RadioButton x:Name="LiveCheck" Content="Live Registry" IsChecked="True" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Checked="OnlineChecked" Unchecked="OnlineUnchecked"/>
+                    </StackPanel>
+                </Viewbox>
+                
+
+                <Viewbox  Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5,0,5,10">
+                    <StackPanel>
+                        <Viewbox Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <StackPanel Orientation="Vertical">
+                                <Label Content="Offline hive location:" Foreground="LightGray" />
+                                <StackPanel Orientation="Horizontal">
+                                    <ListBox x:Name="offlineHiveLocation" MinWidth="300" ItemsSource="{Binding OfflineFileLocations}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="2" IsItemsHost="True" HorizontalAlignment="Stretch"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                    </ListBox>
+                                    <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left"  VerticalAlignment="Center" >
+                                        <Button x:Name="OfflineBrowseButton" Content="Browse" Click="OfflineBrowseButton_Click" Margin="10,0"/>
+                                    </Viewbox>
+                                </StackPanel>
+                            </StackPanel>
+                        </Viewbox>
+
+                        <Viewbox Grid.Row="2" Grid.ColumnSpan="2" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <StackPanel Orientation="Vertical">
+                                <Label Content="Select the OS Version of the offline hive:" Foreground="LightGray" />
+                                <ComboBox Grid.Row="2" x:Name="OSVersion" VerticalContentAlignment="Center" MinWidth="200" />
+                            </StackPanel>
+                        </Viewbox>
+                    </StackPanel>
+                </Viewbox>
+
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                <Viewbox HorizontalAlignment="Left" Height="5" VerticalAlignment="Center">
+                    <Rectangle Fill="#FFF4F4F5" Height="5" Stroke="Black" Width="700"/>
+                </Viewbox>
+                <Viewbox HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5">
+                    <Button x:Name="ToggleAdv"  FontFamily="Marlett" FontSize="20" Click ="ToggleAdvancedContent" Content="5" MinWidth="10" MinHeight="10" />
+                </Viewbox>
+                <Viewbox HorizontalAlignment="Right" Height="5" VerticalAlignment="Center">
+                    <Rectangle Fill="#FFF4F4F5" Height="5" Stroke="Black" Width="700"/>
+                </Viewbox>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="AdvancedOptions" Visibility="Collapsed" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Name="MultiUserRow" Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Viewbox x:Name="OsConfigText" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,5">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="OS Configuration File" Foreground="LightGray" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="OSFileLocationTextBox" MinWidth="200" Text="{Binding OSFileLocation, Mode=OneWay}" VerticalContentAlignment="Center" IsEnabled="False"/>
+                    </StackPanel>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox x:Name="OsConfig" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="OSBrowseButton" Content="Browse" Click="OSBrowseButton_Click" Margin="10,0"/>
+                    <Button x:Name="OSUpdateButton" Content="Update File" Click="OSUpdateButton_Click"  Margin="10,0"/>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="GUIDBrowseButton" Content="Browse" Click="GUIDBrowseButton_Click"  Margin="10,0"/>
+                    <Button x:Name="GUIDUpdateButton" Content="Update File" Click="GUIDUpdateButton_Click"  Margin="10,0"/>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,5">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="GUID Configuration File" Foreground="LightGray" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="GUIDFileLocationTextBox" MinWidth="200" Text="{Binding GUIDFileLocation, Mode=OneWay}" VerticalContentAlignment="Center" IsEnabled="False"/>
+                    </StackPanel>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,5">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="ShellItem Script Configuration File" Foreground="LightGray" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="ScriptFileLocationTextBox" MinWidth="200" Text="{Binding ScriptFileLocation, Mode=OneWay}" VerticalContentAlignment="Center" IsEnabled="False"/>
+                    </StackPanel>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,5">
+            <StackPanel Orientation="Horizontal">
+                    <Label Content="Parse All User Accounts:" Foreground="LightGray" />
+                    <CheckBox x:Name="multiUserCheck" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Viewbox>
+
+            <Viewbox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left"  VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="ScriptBrowseButton" Content="Browse" Click="ScriptBrowseButton_Click"  Margin="10,0"/>
+                    <Button x:Name="ScriptUpdateButton" Content="Update File" Click="ScriptUpdateButton_Click"  Margin="10,0"/>
+                </StackPanel>
+            </Viewbox>
+        </Grid>
+        <Viewbox x:Name="ParseView" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="25">
+            <Button x:Name="ParseButton" Content="Parse" Click="ParseButton_Click" Width="100" Height="50"/>
+        </Viewbox>
+    </Grid>
+</Page>

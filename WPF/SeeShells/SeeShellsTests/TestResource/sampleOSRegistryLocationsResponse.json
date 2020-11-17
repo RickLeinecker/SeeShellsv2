@@ -1,0 +1,23 @@
+{
+    "success": 1,
+    "json": [
+		{
+            "os": "Windows 7",
+            "files": [
+                "NTUSER.DAT\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                "NTUSER.DAT\\Software\\Microsoft\\Windows\\Shell\\Bags",
+                "UsrClass.dat\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                "UsrClass.dat\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags"
+            ]
+        },
+		{
+            "os": "Windows 10",
+            "files": [
+                "NTUSER.DAT\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                "NTUSER.DAT\\Software\\Microsoft\\Windows\\Shell\\Bags",
+                "UsrClass.dat\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                "UsrClass.dat\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags"
+            ]
+        }
+    ]
+}

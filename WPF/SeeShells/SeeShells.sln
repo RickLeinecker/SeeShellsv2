@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeShells", "SeeShells\SeeShells.csproj", "{7622EAE0-383A-483E-B648-45496E3A5C46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeShellsTests", "SeeShellsTests\SeeShellsTests.csproj", "{1DF46C07-46FB-47A2-BC86-2256CAE47AB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7622EAE0-383A-483E-B648-45496E3A5C46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7622EAE0-383A-483E-B648-45496E3A5C46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7622EAE0-383A-483E-B648-45496E3A5C46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7622EAE0-383A-483E-B648-45496E3A5C46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DF46C07-46FB-47A2-BC86-2256CAE47AB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DF46C07-46FB-47A2-BC86-2256CAE47AB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DF46C07-46FB-47A2-BC86-2256CAE47AB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DF46C07-46FB-47A2-BC86-2256CAE47AB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EF2BA58C-8C07-4FE5-B222-C5ADB7165445}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,9 @@
+AccessedDate,CreationDate,Description,ExtensionBlockCount,ExtensionOffset,FileAttributes,FileSize,Flags,Location,ModifiedDate,Name,ShortName,Size,Type,TypeName
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,,,,,,,,1/1/0001 12:00:00 AM,??,,21A,00,Unknown
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,VMware Shared Folders,,,,,129,\\vmware-host\Shared Folders,1/1/0001 12:00:00 AM,\\vmware-host\Shared Folders,,3A,C3,Network Location
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,,,,,,,,1/1/0001 12:00:00 AM,??,,02,00,Unknown
+5/9/2013 11:56:26 AM,10/31/2012 2:34:12 AM,,1,22,16,0,0,,10/31/2012 2:34:14 AM,Fiesta,Fiesta,50,31,File Entry - Directory
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,,,,,,,,1/1/0001 12:00:00 AM,??,,03,00,Unknown
+6/22/2013 5:14:24 PM,10/31/2012 2:34:14 AM,,1,24,16,4096,0,,6/22/2013 5:14:24 PM,SharpLauncher,SHAR~6AA,60,31,File Entry - Directory
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,,,,,,,,1/1/0001 12:00:00 AM,??,,04,00,Unknown
+1/1/0001 12:00:00 AM,1/1/0001 12:00:00 AM,,,,,,,,1/1/0001 12:00:00 AM,??,,FFFF,FF,
