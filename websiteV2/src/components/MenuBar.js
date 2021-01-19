@@ -8,6 +8,7 @@ const styles = {
         backgroundColor: '#424242',
         width: '100%',
         display: 'flex',
+        margin: '0px',
     },
     buttonContainer: {
         display: 'flex',
@@ -24,6 +25,7 @@ const styles = {
         margin: '10px',
         display: 'flex',
         paddingLeft: '10px',
+        color: 'white',
     },
     logo: {
         height: '50px',
