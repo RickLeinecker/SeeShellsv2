@@ -5,6 +5,7 @@ const styles = {
   root: {
     color: 'white',
     display: 'flex',
+    margin: '0px',
   }
 };
 
