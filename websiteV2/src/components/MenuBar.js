@@ -12,12 +12,15 @@ const styles = {
     },
     buttonContainer: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        float: 'right',
+        marginLeft: 'auto',
     },
     buttons: {
         display: 'flex',
         justifyContent: 'center',
         color: 'white',
+        fontSize: '20px',
+        fontFamily: 'Georgia',
     },
     title: {
         fontFamily: 'Georgia',
