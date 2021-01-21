@@ -1,9 +1,9 @@
-# SeeShells API
+# SeeShellsV2 API
 
-The SeeShells API facilitates optional configuration for the desktop application. With the ability to obtain updated configuration files and a new help file as they become available from the website. 
+The SeeShellsV2 API will continue to use the orginal API calls to obtain updated configuration files for each operating system as well as updating the help file as needed.  New API calls will be added to help keep track of the tagging features which will be created by each user. 
 
 ## Overview
-SeeShells uses Node.Js / Express.JS for serving the API and a Postgres database for storing all information related to the website and application.
+SeeShellsV2 will use the same deployment method as V1 which was as follows: Node.Js / Express.JS for serving the API and a Postgres database for storing all information related to the website and application.
 
 ![image](https://user-images.githubusercontent.com/17878901/79650682-29c7a180-817f-11ea-866d-f7e3119d3660.png)
 
@@ -14,7 +14,7 @@ SeeShells uses Node.Js / Express.JS for serving the API and a Postgres database 
 
 ### Instructions
 1. [Install Postgres](https://www.postgresqltutorial.com/install-postgresql/) and make it listenable 
-2. Create the SeeShells API tables with the following SQL queries:
+2. Create the SeeShellsV2 API tables with the following SQL queries:
 
 | Purpose                           | SQL Command                                                                                                                                                                                                                                                                      |
 |-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
