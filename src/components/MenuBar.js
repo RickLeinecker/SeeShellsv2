@@ -39,7 +39,6 @@ const styles = {
     },
 };
 
-// TODO: the buttons need to float right
 class MenuBar extends React.Component {
     render() {
         return(
