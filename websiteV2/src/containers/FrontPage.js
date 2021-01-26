@@ -10,27 +10,41 @@ const styles = {
         justifyContent: 'center',
     },
     image: {
+        display: 'flex',
+        position: 'relative',
         width: '100%',
         height: '400px',
+        textAlign: 'center',
+        justifyContent: 'center',
     },
     downloadButton: {
+        display: 'flex',
+        position: 'absolute',
         backgroundColor: '#1D70EB',
         color: 'white',
         fontSize: '20px',
         margin: '0px',
+        bottom: '0',
     },
     intro: {
+        display: 'flex',
+        position: 'absolute',
         color: '#1D70EB',
         fontSize: '100px',
         margin: '0px',
+        left: '10px',
     },
     introContainer: {
 
     },
     description: {
+        display: 'flex',
+        position: 'absolute',
         color: '#1D70EB',
         fontSize: '40px',
         margin: '0px',
+        left: '50px',
+        top: '100px',
     },
     infoContainer: {
 
@@ -49,7 +63,6 @@ class FrontPage extends React.Component {
                     <Button className={this.props.classes.downloadButton}>GET THE TOOL</Button>
                 </div>
                 <div className={this.props.classes.infoContainer}>
-                    <p>hwhuehtaishd</p>
                 </div>
             </div>
         );
