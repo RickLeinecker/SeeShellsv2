@@ -15,7 +15,5 @@ namespace SeeShellsV2.UI
     {
         [Dependency]
         public IShellCollection ShellItems { get; set; }
-
-
     }
 }

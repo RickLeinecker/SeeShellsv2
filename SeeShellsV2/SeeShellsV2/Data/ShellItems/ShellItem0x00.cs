@@ -32,7 +32,7 @@ namespace SeeShellsV2.Data
         {
             if (Size == 0x20)
             {
-                fields["Guid"] = Block.unpack_guid(buf, 0x0E);
+                fields["Guid"] = Block.UnpackGuid(buf, 0x0E);
 
                 if (KnownGuids.dict.ContainsKey(Guid))
                     fields["Name"] = string.Format("{{{0}}}", KnownGuids.dict[Guid]);

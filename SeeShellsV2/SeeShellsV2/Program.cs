@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 
 using Unity;
@@ -72,7 +73,7 @@ namespace SeeShellsV2
             container.RegisterType<IShellItem, ShellItem0xC3>("C3");
 
             // Create and run app with main window
-            MainWindow window = container.Resolve<MainWindow>();
+            Window window = container.Resolve<IWindow>("main") as Window;
 
             foreach (var child in (window.Content as Visual).GetChildren())
                 container.BuildUp(child.GetType(), child);

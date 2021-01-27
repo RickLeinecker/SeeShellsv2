@@ -23,28 +23,35 @@ namespace SeeShellsV2.Data
     {
         public DateTime CreationDate
         {
-            get => fields["CreationDate"] as DateTime? ?? DateTime.MinValue;
+            init => fields["CreationDate"] = value;
+            get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
         }
 
         public DateTime AccessedDate
         {
-            get => fields["AccessedDate"] as DateTime? ?? DateTime.MinValue;
+            init => fields["AccessedDate"] = value;
+            get => fields.GetStructOrDefault("AccessedDate", DateTime.MinValue);
         }
 
         public ushort LongNameSize
         {
-            get => fields["LongNameSize"] as ushort? ?? 0;
+            init => fields["LongNameSize"] = value;
+            get => fields.GetStructOrDefault<ushort>("LongNameSize", 0);
         }
 
         public string LongName
         {
-            get => fields["LongName"] as string ?? string.Empty;
+            init => fields["LongName"] = value;
+            get => fields.GetClassOrDefault("LongName", string.Empty);
         }
 
         public string LocalizedName
         {
-            get => fields["LocalizedName"] as string ?? string.Empty;
+            init => fields["LocalizedName"] = value;
+            get => fields.GetClassOrDefault("LocalizedName", string.Empty);
         }
+
+        public ExtensionBlockBEEF0004() { }
 
         public ExtensionBlockBEEF0004(byte[] buf, int offset) : base(buf, offset)
         {
@@ -52,9 +59,9 @@ namespace SeeShellsV2.Data
 
             if (ExtensionVersion >= 0x03)
             {
-                fields["CreationDate"] = Block.unpack_dosdate(buf, offset + off);
+                fields["CreationDate"] = Block.UnpackDosDateTime(buf, offset + off);
                 off += 4;
-                fields["AccessedDate"] = Block.unpack_dosdate(buf, offset + off);
+                fields["AccessedDate"] = Block.UnpackDosDateTime(buf, offset + off);
                 off += 4;
                 off += 2; // unknown
             }
@@ -68,7 +75,7 @@ namespace SeeShellsV2.Data
 
             if (ExtensionVersion >= 0x03)
             {
-                fields["LongNameSize"] = Block.unpack_word(buf, offset + off);
+                fields["LongNameSize"] = Block.UnpackWord(buf, offset + off);
                 off += 2;
             }
 
@@ -80,16 +87,16 @@ namespace SeeShellsV2.Data
 
             if (ExtensionVersion >= 0x03)
             {
-                fields["LongName"] = Block.unpack_wstring(buf, offset + off);
+                fields["LongName"] = Block.UnpackWString(buf, offset + off);
                 off += 2 * (LongName.Length + 1);
             }
             if (ExtensionVersion >= 0x03 && ExtensionVersion < 0x07 && LongNameSize > 0)
             {
-                fields["LocalizedName"] = Block.unpack_string(buf, offset + off);
+                fields["LocalizedName"] = Block.UnpackString(buf, offset + off);
             }
             else if (ExtensionVersion >= 0x07 && LongNameSize > 0)
             {
-                fields["LocalizedName"] = Block.unpack_wstring(buf, offset + off);
+                fields["LocalizedName"] = Block.UnpackWString(buf, offset + off);
             }
         }
     }

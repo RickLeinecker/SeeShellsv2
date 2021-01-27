@@ -39,12 +39,12 @@ namespace SeeShellsV2.Data
 
         public ShellItem0x71(byte[] buf) : base(buf)
         {
-            fields["Guid"] = Block.unpack_guid(buf, 0x0E);
-            fields["Flags"] = Block.unpack_byte(buf, 0x03);
+            fields["Guid"] = Block.UnpackGuid(buf, 0x0E);
+            fields["Flags"] = Block.UnpackByte(buf, 0x03);
             fields["TypeName"] = "Control Panel";
 
             if (KnownGuids.dict.ContainsKey(Guid))
-                fields["Name"] = string.Format("{ {CONTROL PANEL: {0}}}", KnownGuids.dict[Guid]);
+                fields["Name"] = string.Format("{{CONTROL PANEL: {0}}}", KnownGuids.dict[Guid]);
             else
                 fields["Name"] = string.Format("{{CONTROL PANEL: {0}}}", Guid);
         }

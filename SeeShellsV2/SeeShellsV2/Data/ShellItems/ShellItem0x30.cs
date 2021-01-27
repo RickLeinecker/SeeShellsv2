@@ -67,20 +67,20 @@ namespace SeeShellsV2.Data
 
             int offset = 0x03;
 
-            fields["Flags"] = Block.unpack_byte(buf, offset);
+            fields["Flags"] = Block.UnpackByte(buf, offset);
             offset += 1;
-            fields["FileSize"] = Block.unpack_dword(buf, offset);
+            fields["FileSize"] = Block.UnpackDWord(buf, offset);
             offset += 4;
-            fields["ModifiedDate"] = Block.unpack_dosdate(buf, offset);
+            fields["ModifiedDate"] = Block.UnpackDosDateTime(buf, offset);
             offset += 4;
-            fields["FileAttributes"] = Block.unpack_word(buf, offset);
+            fields["FileAttributes"] = Block.UnpackWord(buf, offset);
             offset += 2;
-            fields["ExtensionOffset"] = Block.unpack_word(buf, Size - 2);
+            fields["ExtensionOffset"] = Block.UnpackWord(buf, Size - 2);
 
             if ((Type & 0x04) != 0)
-                fields["ShortName"] = Block.unpack_wstring(buf, offset, ExtensionOffset - offset);
+                fields["ShortName"] = Block.UnpackWString(buf, offset);
             else
-                fields["ShortName"] = Block.unpack_string(buf, offset, ExtensionOffset - offset);
+                fields["ShortName"] = Block.UnpackString(buf, offset);
 
             ExtensionBlockBEEF0004 extensionBlock = new ExtensionBlockBEEF0004(buf, ExtensionOffset + offset);
             extensionBlocks.Add(extensionBlock);

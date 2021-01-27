@@ -22,19 +22,35 @@ namespace SeeShellsV2.Data
 {
     public static class Block
     {
-        public static byte unpack_byte(byte[] buf, int offset)
+        /// <summary>
+        /// Unpacks 8-bit unsigned integer
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the byte</param>
+        /// <returns>unsigned integer from buffer</returns>
+        /// </summary>
+        public static byte UnpackByte(byte[] buf, int offset)
         {
             return buf[offset];
         }
+
         /// <summary>
-        /// Unpacks a value equal to 2 bytes
+        /// Unpacks 16-bit unsigned integer
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the word</param>
+        /// <returns>unsigned integer from buffer</returns>
         /// </summary>
-        public static ushort unpack_word(byte[] buf, int offset)
+        public static ushort UnpackWord(byte[] buf, int offset)
         {
             return BitConverter.ToUInt16(buf, offset);
         }
 
-        public static string unpack_guid(byte[] buf, int offset)
+        /// <summary>
+        /// Unpacks 16 byte GUID string
+        /// </summary>
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the GUID string</param>
+        /// <returns>GUID string</returns>
+        public static string UnpackGuid(byte[] buf, int offset)
         {
             return string.Format("{0:x2}{1:x2}{2:x2}{3:x2}-{4:x2}{5:x2}-{6:x2}{7:x2}-{8:x2}{9:x2}-{10:x2}{11:x2}{12:x2}{13:x2}{14:x2}{15:x2}",
                 buf[offset + 3], buf[offset + 2], buf[offset + 1], buf[offset],
@@ -43,53 +59,36 @@ namespace SeeShellsV2.Data
                 buf[offset + 8], buf[offset + 9],
                 buf[offset + 10], buf[offset + 11], buf[offset + 12], buf[offset + 13], buf[offset + 14], buf[offset + 15]);
         }
+
         /// <summary>
-        /// Unpacks a Unicode encoded String of various sizing.
+        /// Unpacks a unicode string. Reads characters until null terminator or end of buffer
         /// </summary>
-        /// <param name="off"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public static string unpack_wstring(byte[] buf, int offset, int length = 0)
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the unicode string</param>
+        /// <returns>stringy string</returns>
+        public static string UnpackWString(byte[] buf, int offset)
         {
-            if (length == 0)
-            {
-                int end = offset;
-                for (int ind = offset; ind + 1 < buf.Length; ind += 2)
-                {
-                    if (buf[ind] == 0 && buf[ind + 1] == 0)
-                    {
-                        end = ind;
-                        break;
-                    }
-                }
-                length = end - offset;
-            }
-
-            while (buf[offset + length - 2] == 0 && buf[offset + length - 1] == 0) length -= 2;
-
-            return Encoding.Unicode.GetString(buf, offset, length);
+            return Encoding.Unicode.GetString(buf, offset, buf.Length - offset).Split('\0')[0];
         }
 
-        public static string unpack_string(byte[] buf, int offset, int length = 0)
+        /// <summary>
+        /// Unpacks an ascii string. Reads characters until null terminator or end of buffer
+        /// </summary>
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the ascii string</param>
+        /// <returns>stringy string</returns>
+        public static string UnpackString(byte[] buf, int offset)
         {
-            if (length == 0)
-            {
-                int end = Array.IndexOf(buf, (byte)0, offset);
-                length = end - offset;
-                if (length == 0) return string.Empty;
-            }
-
-            while (buf[offset + length - 1] == 0) --length;
-
-            return Encoding.ASCII.GetString(buf, offset, length);
+            return Encoding.ASCII.GetString(buf, offset, buf.Length - offset).Split('\0')[0];
         }
 
         /// <summary>
         /// unpacks a equivalent to 4 bytes
         /// </summary>
-        /// <param name="off"></param>
-        /// <returns></returns>
-        public static uint unpack_dword(byte[] buf, int offset)
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the dword</param>
+        /// <returns>unsigned integer from buffer</returns>
+        public static uint UnpackDWord(byte[] buf, int offset)
         {
             return BitConverter.ToUInt32(buf, offset);
         }
@@ -97,15 +96,21 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// unpacks a equivalent to 8 bytes
         /// </summary>
-        /// <param name="off"></param>
-        /// <returns></returns>
-        public static ulong UnpackQword(byte[] buf, int offset)
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the qword</param>
+        /// <returns>unsigned integer from buffer</returns>
+        public static ulong UnpackQWord(byte[] buf, int offset)
         {
             return BitConverter.ToUInt64(buf, offset);
         }
 
-
-        public static DateTime unpack_dosdate(byte[] buf, int offset)
+        /// <summary>
+        /// Unpack a DOS DateTime from the buffer
+        /// </summary>
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the dos datetime</param>
+        /// <returns>unpacked date in local time</returns>
+        public static DateTime UnpackDosDateTime(byte[] buf, int offset)
         {
             ushort dosdate = (ushort)(buf[offset + 1] << 8 | buf[offset]);
             ushort dostime = (ushort)(buf[offset + 3] << 8 | buf[offset + 2]);
@@ -131,20 +136,13 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// Pulls out a Windows File time from its byte representation
         /// FileTimes are shown to be represented in 8 Bytes(QWord)
-        /// <
         /// </summary>
-        /// <param name="off"></param>
-        /// <returns></returns>
+        /// <param name="buf">byte array to unpack from</param>
+        /// <param name="offset">offset of the first byte of the filetime</param>
+        /// <returns>unpacked date in local time</returns>
         public static DateTime UnpackFileTime(byte[] buf, int offset)
         {
-            return DateTime.FromFileTimeUtc(BitConverter.ToInt64(buf, offset));
-        }
-
-        public static int align(int off, int alignment)
-        {
-            if (off % alignment == 0)
-                return off;
-            return off + (alignment - off % alignment);
+            return DateTime.FromFileTime(BitConverter.ToInt64(buf, offset));
         }
     }
 }

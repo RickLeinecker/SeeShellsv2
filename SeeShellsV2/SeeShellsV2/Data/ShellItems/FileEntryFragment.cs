@@ -53,16 +53,20 @@ namespace SeeShellsV2.Data
 
         public FileEntryFragment() { }
 
-        public FileEntryFragment(byte[] buf, int offset, object parent, int filesize_offset) : base(buf)
+        public FileEntryFragment(byte[] buf, int off)
         {
-            int off = filesize_offset;
-            fields["FileSize"] = Block.unpack_dword(buf, off);
-            off += 4;
-            fields["ModifiedDate"] = Block.unpack_dosdate(buf, off);
-            off += 4;
-            fields["FileAttributes"] = Block.unpack_word(buf, off);
+            fields["Size"] = Block.UnpackWord(buf, off);
             off += 2;
-            fields["ShortName"] = Block.unpack_string(buf, off);
+            fields["Type"] = Block.UnpackByte(buf, off);
+            off += 1;
+            off += 1; // Unknown (empty value)
+            fields["FileSize"] = Block.UnpackDWord(buf, off);
+            off += 4;
+            fields["ModifiedDate"] = Block.UnpackDosDateTime(buf, off);
+            off += 4;
+            fields["FileAttributes"] = Block.UnpackWord(buf, off);
+            off += 2;
+            fields["ShortName"] = Block.UnpackString(buf, off);
 
             fields["Name"] = ShortName;
         }

@@ -49,10 +49,10 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("FTPPassword", string.Empty);
         }
 
-        public uint Flags
+        public byte Flags
         {
             init => fields["Flags"] = value;
-            get => fields.GetStructOrDefault<uint>("Flags", 0);
+            get => fields.GetStructOrDefault<byte>("Flags", 0);
         }
 
         public DateTime ConnectionDate
@@ -69,10 +69,10 @@ namespace SeeShellsV2.Data
 
             int off = 0x03;
 
-            fields["Flags"] = Block.unpack_byte(buf, off);
+            fields["Flags"] = Block.UnpackByte(buf, off);
             off += 1;
 
-            ushort dataSize = Block.unpack_word(buf, off); //0 if no data, does not include 2 bytes of the normal size indicator
+            ushort dataSize = Block.UnpackWord(buf, off); //0 if no data, does not include 2 bytes of the normal size indicator
             if (dataSize != 0)
             {
                 off += 2; //move past Size of Data
@@ -88,30 +88,30 @@ namespace SeeShellsV2.Data
                 off += 4; //unknown
                 if (off < Size) 
                 {
-                    uint hostnameSize = Block.unpack_dword(buf, off);
+                    uint hostnameSize = Block.UnpackDWord(buf, off);
                     off += 4; //move past hostnameSize
-                    fields["FTPHostname"] = Block.unpack_string(buf, off);
+                    fields["FTPHostname"] = Block.UnpackString(buf, off);
                     off += (int)hostnameSize; //move past Uri
                 }
                 if (off < Size)
                 {
-                    uint usernameSize = Block.unpack_dword(buf, off);
+                    uint usernameSize = Block.UnpackDWord(buf, off);
                     off += 4; //move past hostnameSize
-                    fields["FTPUsername"] = Block.unpack_string(buf, off);
+                    fields["FTPUsername"] = Block.UnpackString(buf, off);
                     off += (int)usernameSize; //move past Uri
 
                 }
                 if (off < Size)
                 {
-                    uint passwordSize = Block.unpack_dword(buf, off);
+                    uint passwordSize = Block.UnpackDWord(buf, off);
                     off += 4; //move past hostnameSize
-                    fields["FTPPassword"] = Block.unpack_string(buf, off);
+                    fields["FTPPassword"] = Block.UnpackString(buf, off);
                     off += (int)passwordSize; //move past Uri
 
                 }
                 if (off < Size) //immediately afterwards is a common Uri
                 {
-                    fields["Uri"] = Block.unpack_string(buf, off);
+                    fields["Uri"] = Block.UnpackString(buf, off);
                 }
             }
 

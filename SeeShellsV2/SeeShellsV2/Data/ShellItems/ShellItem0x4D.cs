@@ -33,7 +33,7 @@ namespace SeeShellsV2.Data
         public ShellItem0x4D(byte[] buf) : base(buf)
         {
             fields["TypeName"] = "Network Location - NetworkPlaces";
-            fields["Guid"] = Block.unpack_guid(buf, 0x04); // documentation lists this as flags
+            fields["Guid"] = Block.UnpackGuid(buf, 0x04); // documentation lists this as flags
 
             if (KnownGuids.dict.ContainsKey(Guid))
                 fields["Name"] = string.Format("{{{0}}}", KnownGuids.dict[Guid]);

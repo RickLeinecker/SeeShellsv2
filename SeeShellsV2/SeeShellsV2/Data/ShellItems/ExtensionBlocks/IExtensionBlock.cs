@@ -24,17 +24,17 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// Size of the extension block
         /// </summary>
-        ushort Size { get; }
+        ushort Size { init; get; }
 
         /// <summary>
         /// Version of the extension block
         /// </summary>
-        ushort ExtensionVersion { get; }
+        ushort ExtensionVersion { init; get; }
 
         /// <summary>
         /// extension block signature unique to each type of extension block
         /// </summary>
-        uint Signature { get; }
+        uint Signature { init; get; }
 
         /// <summary>
         /// all properties that exist in the ExtensionBlock in Key-Value Format.

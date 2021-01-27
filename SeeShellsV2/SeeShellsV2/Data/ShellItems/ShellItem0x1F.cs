@@ -37,14 +37,14 @@ namespace SeeShellsV2.Data
         public ShellItem0x1F(byte[] buf) : base(buf)
         {
             fields["TypeName"] = "Root Folder";
-            fields["Guid"] = Block.unpack_guid(buf, 0x04);
+            fields["Guid"] = Block.UnpackGuid(buf, 0x04);
 
             if (KnownGuids.dict.ContainsKey(Guid))
                 fields["Name"] = string.Format("{{{0}}}", KnownGuids.dict[Guid]);
             else
                 fields["Name"] = string.Format("{{{0}}}", Guid);
 
-            byte id = Block.unpack_byte(buf, 0x03);
+            byte id = Block.UnpackByte(buf, 0x03);
 
             switch (id)
             {

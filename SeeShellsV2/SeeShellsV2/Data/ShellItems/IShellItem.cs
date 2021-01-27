@@ -27,12 +27,12 @@ namespace SeeShellsV2.Data
         /// Has no effect on signature based Shell items.
         /// See <seealso cref="TypeName"/> for a Human readable interpretation of the Shell Item.
         /// </summary>
-        byte Type { get; }
+        byte Type { init; get; }
 
         /// <summary>
         /// Human readable interpretation of  <see cref="Type"/>
         /// </summary>
-        string TypeName { get; }
+        string TypeName { init; get; }
 
         /// <summary>
         /// A best effort value identifier for a particular ShellItem meant to give the most important / recognizable
@@ -44,30 +44,30 @@ namespace SeeShellsV2.Data
         /// <item>GUID (or the known correspondence of a GUID (see <see cref="KnownGuids"/>)</item>
         /// </list> 
         /// </summary>
-        string Name { get; }
+        string Name { init; get; }
 
         /// <summary>
         /// Tells the Size of the entire ShellItem. Includes the two bytes to represent the sie parameter.
         /// If Size is 0 it means the rest of the shell item is empty. (e.g. 2 byte array with the size value of 0x00 is an empty shellitem) 
         /// </summary>
-        ushort Size { get; }
+        ushort Size { init; get; }
 
         /// <summary>
         /// The last known modification date for the data represented in this ShellItem.
         /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
         /// </summary>
-        DateTime ModifiedDate { get; }
+        DateTime ModifiedDate { init; get; }
         /// <summary>
         /// The last known access date for the data represented in this ShellItem.
         /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
         /// </summary>
-        DateTime AccessedDate { get; }
+        DateTime AccessedDate { init; get; }
 
         /// <summary>
         /// The creation date for the data represented in this ShellItem.
         /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
         /// </summary>
-        DateTime CreationDate { get; }
+        DateTime CreationDate { init; get; }
 
         /// <summary>
         /// all properties that exist in the ShellItem in Key-Value Format.

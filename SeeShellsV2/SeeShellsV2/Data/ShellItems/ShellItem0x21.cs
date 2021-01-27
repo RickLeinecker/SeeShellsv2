@@ -22,7 +22,7 @@ namespace SeeShellsV2.Data
 
         public ShellItem0x21(byte[] buf) : base(buf)
         {
-            fields["Name"] = Block.unpack_string(buf, 0x03);
+            fields["Name"] = Block.UnpackString(buf, 0x03);
             fields["TypeName"] = "Volume - Named";
         }
     }

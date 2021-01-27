@@ -52,21 +52,21 @@ namespace SeeShellsV2.Data
 
         public ShellItem0x40(byte[] buf) : base(buf)
         {
-            fields["Flags"] = Block.unpack_byte(buf, 0x04);
-            fields["Location"] = Block.unpack_string(buf, 0x05);
+            fields["Flags"] = Block.UnpackByte(buf, 0x04);
+            fields["Location"] = Block.UnpackString(buf, 0x05);
 
             int off = 0x05;
             off += Name.Length + 1;
 
             if ((Flags & 0x80) != 0)
             {
-                fields["Description"] = Block.unpack_string(buf, off);
+                fields["Description"] = Block.UnpackString(buf, off);
                 off += Description.Length + 1;
             }
 
             if ((Flags & 0x40) != 0)
             {
-                fields["Comments"] = Block.unpack_string(buf, off);
+                fields["Comments"] = Block.UnpackString(buf, off);
             }
 
             fields["TypeName"] = "Network Location";

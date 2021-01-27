@@ -26,17 +26,20 @@ namespace SeeShellsV2.Data
     {
         public ushort Size
         {
-            get => fields["Size"] as ushort? ?? 0;
+            init => fields["Size"] = value;
+            get => fields.GetStructOrDefault<ushort>("Size", 0);
         }
 
         public ushort ExtensionVersion
         {
-            get => fields["ExtensionVersion"] as ushort? ?? 0;
+            init => fields["ExtensionVersion"] = value;
+            get => fields.GetStructOrDefault<ushort>("ExtensionVersion", 0);
         }
 
         public uint Signature
         {
-            get => fields["Signature"] as uint? ?? 0;
+            init => fields["Signature"] = value;
+            get => fields.GetStructOrDefault<uint>("Signature", 0);
         }
 
         public IReadOnlyDictionary<string, object> Fields
@@ -44,11 +47,13 @@ namespace SeeShellsV2.Data
             get => fields;
         }
 
+        public ExtensionBlock() { }
+
         public ExtensionBlock(byte[] buf, int offset)
         {
-            fields["Size"] = Block.unpack_word(buf, offset + 0x00);
-            fields["ExtensionVersion"] = Block.unpack_word(buf, offset + 0x02);
-            fields["Signature"] = Block.unpack_dword(buf, offset + 0x04);
+            fields["Size"] = Block.UnpackWord(buf, offset + 0x00);
+            fields["ExtensionVersion"] = Block.UnpackWord(buf, offset + 0x02);
+            fields["Signature"] = Block.UnpackDWord(buf, offset + 0x04);
         }
 
         protected Dictionary<string, object> fields = new Dictionary<string, object>();

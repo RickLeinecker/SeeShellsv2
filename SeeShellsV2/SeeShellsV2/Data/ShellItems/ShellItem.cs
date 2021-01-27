@@ -82,8 +82,8 @@ namespace SeeShellsV2.Data
 
         public ShellItem(byte[] buf)
         {
-            fields["Type"] = Block.unpack_byte(buf, 0x02);
-            fields["Size"] = Block.unpack_word(buf, 0x00);
+            fields["Size"] = Block.UnpackWord(buf, 0x00);
+            fields["Type"] = Block.UnpackByte(buf, 0x02);
         }
 
         protected Dictionary<string, object> fields = new Dictionary<string, object>();

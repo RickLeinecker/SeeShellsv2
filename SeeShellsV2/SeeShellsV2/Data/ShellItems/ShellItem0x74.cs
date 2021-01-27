@@ -55,19 +55,17 @@ namespace SeeShellsV2.Data
             // Unknown - Empty ( 1 byte)
             // Unknown - size? - 2 bytes
             // CFSF - 4 bytes
-            fields["Signature"] = Block.unpack_dword(buf, 0x06);
+            fields["Signature"] = Block.UnpackDWord(buf, 0x06);
             // sub shell item data size - 2 bytes
 
             int off = 0x0A;
-            fields["SubItem"] = new FileEntryFragment(buf, off, this, 0x04);
-            off += SubItem.Size;
-
-            off += 2; // Empty extension block?
+            fields["SubItem"] = new FileEntryFragment(buf, off);
+            off += SubItem.Size + 2; // subitem + 2 bytes for subitem size
 
             // 5e591a74-df96-48d3-8d67-1733bcee28ba
-            fields["DelegateItemIdentifier"] = Block.unpack_guid(buf, off);
+            fields["DelegateItemIdentifier"] = Block.UnpackGuid(buf, off);
             off += 16;
-            fields["ItemClassIdentifier"] = Block.unpack_guid(buf, off);
+            fields["ItemClassIdentifier"] = Block.UnpackGuid(buf, off);
             off += 16;
 
             var extensionBlock = new ExtensionBlockBEEF0004(buf, off);
