@@ -12,12 +12,15 @@ const styles = {
     },
     buttonContainer: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        float: 'right',
+        marginLeft: 'auto',
     },
     buttons: {
         display: 'flex',
         justifyContent: 'center',
         color: 'white',
+        fontSize: '20px',
+        fontFamily: 'Georgia',
     },
     title: {
         fontFamily: 'Georgia',
@@ -36,7 +39,6 @@ const styles = {
     },
 };
 
-// TODO: the buttons need to float right
 class MenuBar extends React.Component {
     render() {
         return(
