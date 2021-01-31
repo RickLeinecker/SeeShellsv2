@@ -2,6 +2,7 @@ import React from 'react';
 import oldLogo from '../assets/oldLogo.png';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 const styles = {
     root: {
@@ -42,17 +43,21 @@ const styles = {
 class MenuBar extends React.Component {
     render() {
         return(
-            <div className={this.props.classes.root}>
-                <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                <p className={this.props.classes.title}>SEESHELLS</p>
-                <div className={this.props.classes.buttonContainer}> 
-                    <Button className={this.props.classes.buttons}>About</Button>
-                    <Button className={this.props.classes.buttons}>Download</Button>
-                    <Button className={this.props.classes.buttons}>Documentation</Button>
-                    <Button className={this.props.classes.buttons}>Developers</Button>
-                    <Button className={this.props.classes.buttons}>Admin Login</Button>
+            <Router>
+                <div className={this.props.classes.root}>
+                    <Link to="/">
+                        <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                        <p className={this.props.classes.title}>SEESHELLS</p>
+                    </Link>
+                    <div className={this.props.classes.buttonContainer}> 
+                        <Link to="/about"><Button className={this.props.classes.buttons}>About</Button></Link>
+                        <Link to="/download"><Button className={this.props.classes.buttons}>Download</Button></Link>
+                        <Link to="/documentation"><Button className={this.props.classes.buttons}>Documentation</Button></Link>
+                        <Link to="/developers"><Button className={this.props.classes.buttons}>Developers</Button></Link>
+                        <Link to="/admin"><Button className={this.props.classes.buttons}>Admin Login</Button></Link>
+                    </div>
                 </div>
-            </div>
+            </Router>
         );
     }
 }
