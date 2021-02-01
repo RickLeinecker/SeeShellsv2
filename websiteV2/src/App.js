@@ -1,6 +1,8 @@
 import MenuBar from './components/MenuBar.js';
 import FrontPage from './containers/FrontPage.js';
+import AdminPage from './containers/AdminPage.js';
 import { withStyles } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const styles = {
   root: {
@@ -16,12 +18,19 @@ const styles = {
 function App(props) {
   return (
     <div>
-      <div className={props.classes.root}>
-        <MenuBar/>
-      </div>
-      <div className={props.classes.content}>
-        <FrontPage/>
-      </div>
+      <Router>
+        <div className={props.classes.root}>
+          <MenuBar/>
+        </div>
+        <div className={props.classes.content}>
+          <Route exact path="/">
+            <FrontPage/>
+          </Route>
+          <Route path="/admin">
+            <AdminPage/>
+          </Route>
+        </div>
+      </Router>
     </div>
   );
 }

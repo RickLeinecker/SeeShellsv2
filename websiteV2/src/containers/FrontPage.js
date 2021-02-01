@@ -2,6 +2,7 @@ import React from 'react';
 import beach from '../assets/beach.png';
 import pearl from '../assets/pearl.png';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 const styles = {
@@ -138,4 +139,4 @@ class FrontPage extends React.Component {
     }
 }
 
-export default withStyles(styles)(FrontPage);
+export default withStyles(styles)(withRouter(FrontPage));
