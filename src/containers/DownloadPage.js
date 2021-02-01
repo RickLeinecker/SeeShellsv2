@@ -3,10 +3,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 
 const styles = {
+};
 
-}
-
-class AdminPage extends React.Component {
+class DownloadPage extends React.Component {
     render() {
         return(
             <p>placeholder</p>
@@ -14,4 +13,4 @@ class AdminPage extends React.Component {
     }
 }
 
-export default withStyles(styles)(withRouter(AdminPage));
+export default withStyles(styles)(withRouter(DownloadPage));
