@@ -10,7 +10,7 @@ namespace SeeShellsV2.Factories
     /// Produces System.Windows.Window objects.
     /// Automatically resolves dependencies of the new window and its children.
     /// </summary>
-    public class WindowFactory : IAbstractFactory<IWindow>
+    public class WindowFactory : IWindowFactory
     {
         private readonly IUnityContainer container;
 

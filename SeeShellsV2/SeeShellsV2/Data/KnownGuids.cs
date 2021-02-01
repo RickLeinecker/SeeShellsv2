@@ -23,11 +23,12 @@ namespace SeeShellsV2.Data
 {
     public static class KnownGuids
     {
+        // TODO: Replace with entries from CLSID Windows Registry Keys
         public static IReadOnlyDictionary<string, string> dict = new Dictionary<string, string>()
         {
             {"008ca0b1-55b4-4c56-b8a8-4de4b299d3bE", "Account Pictures"},
             {"00bcfc5a-ed94-4e48-96a1-3f6217f21990", "RoamingTiles"},
-            {"00c6d95f-329c-409a-81d7-c46c66ea7f33", "Default Location"},
+            {"00c6d95f-329c-409a-81d7-c46c66ea7f33", "Default NetworkLocation"},
             {"00f2886f-cd64-4fc9-8ec5-30ef6cdbe8c3", "Scanners and Cameras"},
             {"0139d44e-6afe-49f2-8690-3dafcae6ffb8", "Programs"},
             {"0142e4d0-fb7a-11dc-ba4a-000ffe7ab428", "Biometric Devices"},
@@ -89,7 +90,7 @@ namespace SeeShellsV2.Data
             {"2559a1f6-21d7-11d4-bdaf-00c04f60b9f0", "OEM link"},
             {"2559a1f7-21d7-11d4-bdaf-00c04f60b9f0", "Set Program Access and Defaults"},
             {"259ef4b1-e6c9-4176-b574-481532c9bce8", "Game Controllers"},
-            {"267cf8a9-f4e3-41e6-95b1-af881be130ff", "Location Folder"},
+            {"267cf8a9-f4e3-41e6-95b1-af881be130ff", "NetworkLocation Folder"},
             {"26ee0668-a00a-44d7-9371-beb064c98683", "Control Panel"},
             {"2728520d-1ec8-4c68-a551-316b684c4ea7", "Network Setup Wizard"},
             {"27e2e392-a111-48e0-ab0c-e17705a05f85", "WPD Content Type Folder"},
@@ -369,7 +370,7 @@ namespace SeeShellsV2.Data
             {"e7e4bc40-e76a-11ce-a9bb-00aa004ae837", "Shell DocObject Viewer"},
             {"e88dcce0-b7b3-11d1-a9f0-00aa0060fa31", "Compressed Folder"},
             {"e95a4861-d57a-4be1-ad0f-35267e261739", "Windows Side Show"},
-            {"e9950154-c418-419e-a90a-20c5287ae24b", "Location and Other Sensors"},
+            {"e9950154-c418-419e-a90a-20c5287ae24b", "NetworkLocation and Other Sensors"},
             {"ea25fbd7-3bf7-409e-b97f-3352240903f4", "Videos Search Results"},
             {"ecdb0924-4208-451e-8ee0-373c0956de16", "Work Folders"},
             {"ed228fdf-9ea8-4870-83b1-96b02cfe0d52", "My Games"},

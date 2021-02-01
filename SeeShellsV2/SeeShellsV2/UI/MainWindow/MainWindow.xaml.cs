@@ -29,7 +29,7 @@ namespace SeeShellsV2.UI
         }
 
         [Dependency]
-        public IAbstractFactory<IWindow> windowFactory { private get; set; }
+        public IWindowFactory windowFactory { private get; set; }
 
         public MainWindow()
         {
@@ -46,7 +46,10 @@ namespace SeeShellsV2.UI
 
         private void Export_CSV_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                ViewModel.ExportToCSV(openFileDialog.FileName);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SeeShellsV2.UI
 
         public void ImportFromCSV(string path)
         {
-            importer.Import(path);
+            // importer.Import(path); => needs work
         }
 
         public void ExportToCSV(string path)

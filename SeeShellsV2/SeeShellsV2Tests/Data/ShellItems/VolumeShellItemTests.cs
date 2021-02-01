@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace SeeShellsV2.Data.Tests
 {
     [TestClass()]
-    public class ShellItemTests
+    public class VolumeShellItemTests
     {
         [TestMethod()]
-        public void ShellItemTest()
+        public void VolumeShellItemTest()
         {
-            IShellItem item = new ShellItem()
+            VolumeShellItem item = new VolumeShellItem()
             {
                 Type = 0x00,
                 TypeName = "TestType",
@@ -22,10 +22,11 @@ namespace SeeShellsV2.Data.Tests
                 Size = 10,
                 ModifiedDate = new DateTime(90810298),
                 AccessedDate = new DateTime(908123802123),
-                CreationDate = new DateTime(4865846)
+                CreationDate = new DateTime(4865846),
+                VolumeName = "Hello, World!",
             };
 
-            Assert.IsTrue(item.Fields.Count == 7);
+            Assert.IsTrue(item.Fields.Count == 8);
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields["Type"] as byte? == item.Type);
             Assert.IsTrue(item.Type == 0x00);
@@ -47,13 +48,15 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue(item.CreationDate == new DateTime(4865846));
+            Assert.IsTrue(item.Fields.ContainsKey("VolumeName"));
+            Assert.IsTrue(item.Fields["VolumeName"] as string == item.VolumeName);
+            Assert.IsTrue(item.VolumeName == "Hello, World!");
             Assert.IsTrue(item.Parent == null);
         }
 
         [TestMethod()]
-        public void FromByteArrayTest()
+        public void VolumeShellItemTest1()
         {
-            // copy of VolumeShellItem test, but using FromByteArray
             byte[] buf = new byte[] {
                 0x19, 0x00, 0x2F, 0x46, 0x3A, 0x5C, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -61,7 +64,7 @@ namespace SeeShellsV2.Data.Tests
                 0x00, 0x00, 0x00
             };
 
-            VolumeShellItem item = ShellItem.FromByteArray(buf) as VolumeShellItem;
+            VolumeShellItem item = new VolumeShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 6);
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
@@ -86,6 +89,20 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.AccessedDate == DateTime.MinValue);
             Assert.IsTrue(item.CreationDate == DateTime.MinValue);
             Assert.IsTrue(item.Parent == null);
+        }
+
+        [TestMethod()]
+        public void VolumeShellItemTest2()
+        {
+            byte[] buf = new byte[] {
+                0x19, 0x00, 0x2F, 0x46, 0x3A, 0x5C, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00
+            };
+
+            IShellItem item = ShellItem.FromByteArray(buf);
+            Assert.IsTrue(item is VolumeShellItem);
         }
     }
 }

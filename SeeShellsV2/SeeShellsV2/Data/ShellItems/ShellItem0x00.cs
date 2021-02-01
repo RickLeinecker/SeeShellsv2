@@ -18,9 +18,11 @@ using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
 {
+    // TODO (Devon): Figure out what this ShellItem is supposed to be
+    //               Maybe Signature based items? https://github.com/libyal/libfwsi/blob/main/documentation/Windows%20Shell%20Item%20format.asciidoc#4-signature-based-shell-items
     public class ShellItem0x00 : ShellItem, IShellItem
     {
-        public string Guid
+        public string Guid // Signature?
         {
             init => fields["Guid"] = value;
             get => fields.GetClassOrDefault("Guid", string.Empty);
@@ -28,16 +30,19 @@ namespace SeeShellsV2.Data
 
         public ShellItem0x00() { }
 
-        public ShellItem0x00(byte[] buf) : base(buf)
+        public ShellItem0x00(byte[] buf)
         {
+            fields["Size"] = Block.UnpackWord(buf, 0x00);
+            fields["Type"] = Block.UnpackByte(buf, 0x02);
+
             if (Size == 0x20)
             {
                 fields["Guid"] = Block.UnpackGuid(buf, 0x0E);
 
                 if (KnownGuids.dict.ContainsKey(Guid))
-                    fields["Name"] = string.Format("{{{0}}}", KnownGuids.dict[Guid]);
+                    fields["Description"] = string.Format("{{{0}}}", KnownGuids.dict[Guid]);
                 else
-                    fields["Name"] = string.Format("{{{0}}}", Guid);
+                    fields["Description"] = string.Format("{{{0}}}", Guid);
             }
         }
     }

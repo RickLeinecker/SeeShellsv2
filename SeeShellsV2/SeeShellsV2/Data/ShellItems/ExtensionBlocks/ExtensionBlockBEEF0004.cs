@@ -33,12 +33,6 @@ namespace SeeShellsV2.Data
             get => fields.GetStructOrDefault("AccessedDate", DateTime.MinValue);
         }
 
-        public ushort LongNameSize
-        {
-            init => fields["LongNameSize"] = value;
-            get => fields.GetStructOrDefault<ushort>("LongNameSize", 0);
-        }
-
         public string LongName
         {
             init => fields["LongName"] = value;
@@ -73,9 +67,10 @@ namespace SeeShellsV2.Data
                 off += 8; // unknown
             }
 
+            int longNameSize = 0;
             if (ExtensionVersion >= 0x03)
             {
-                fields["LongNameSize"] = Block.UnpackWord(buf, offset + off);
+                longNameSize = Block.UnpackWord(buf, offset + off);
                 off += 2;
             }
 
@@ -90,11 +85,11 @@ namespace SeeShellsV2.Data
                 fields["LongName"] = Block.UnpackWString(buf, offset + off);
                 off += 2 * (LongName.Length + 1);
             }
-            if (ExtensionVersion >= 0x03 && ExtensionVersion < 0x07 && LongNameSize > 0)
+            if (ExtensionVersion >= 0x03 && ExtensionVersion < 0x07 && longNameSize > 0)
             {
                 fields["LocalizedName"] = Block.UnpackString(buf, offset + off);
             }
-            else if (ExtensionVersion >= 0x07 && LongNameSize > 0)
+            else if (ExtensionVersion >= 0x07 && longNameSize > 0)
             {
                 fields["LocalizedName"] = Block.UnpackWString(buf, offset + off);
             }

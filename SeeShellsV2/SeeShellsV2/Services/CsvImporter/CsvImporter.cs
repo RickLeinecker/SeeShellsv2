@@ -17,11 +17,11 @@ namespace SeeShellsV2.Services
     public class CsvImporter : ICsvImporter
     {
         private readonly IShellCollection shellItems;
-        private readonly IAbstractFactory<IShellItem> shellFactory;
+        private readonly IShellItemFactory shellFactory;
 
         public CsvImporter(
             [Dependency] IShellCollection shellItems,
-            [Dependency] IAbstractFactory<IShellItem> shellFactory
+            [Dependency] IShellItemFactory shellFactory
         )
         {
             this.shellItems = shellItems;
@@ -33,6 +33,7 @@ namespace SeeShellsV2.Services
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 MissingFieldFound = null,
+                UseNewObjectForNullReferenceMembers = false
             };
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader, config))
@@ -45,9 +46,16 @@ namespace SeeShellsV2.Services
 
                 while (csv.Read())
                 {
-                    var type = csv.GetField<string>("Type");
-                    IShellItem item = shellFactory.Create(type);
-                    shellItems.Add(csv.GetRecord(item.GetType()) as IShellItem);
+                    var typeId = csv.GetField<string>("Type");
+                    Type type = shellFactory.GetShellType(byte.Parse(typeId, NumberStyles.HexNumber));
+
+                    if (type == null)
+                    {
+                        csv.Read();
+                        continue;
+                    }
+
+                    shellItems.Add((IShellItem)csv.GetRecord(type));
                 }
             }
         }

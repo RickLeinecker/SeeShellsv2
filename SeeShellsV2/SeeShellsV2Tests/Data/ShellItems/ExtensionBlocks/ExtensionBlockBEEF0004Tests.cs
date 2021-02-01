@@ -97,7 +97,6 @@ namespace SeeShellsV2.Data.Tests
             {
                 CreationDate = new DateTime(1000200020),
                 AccessedDate = new DateTime(1289012842900),
-                LongNameSize = 5,
                 LongName = "EXTNS",
                 LocalizedName = "Hello, World!",
                 Size = 42,
@@ -105,7 +104,7 @@ namespace SeeShellsV2.Data.Tests
                 Signature = 1000
             };
 
-            Assert.IsTrue(block.Fields.Count == 8);
+            Assert.IsTrue(block.Fields.Count == 7);
             Assert.IsTrue(block.Fields.ContainsKey("Size"));
             Assert.IsTrue(block.Fields["Size"] as ushort? == block.Size);
             Assert.IsTrue(block.Size == 42);
@@ -121,9 +120,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Fields.ContainsKey("AccessedDate"));
             Assert.IsTrue(block.Fields["AccessedDate"] as DateTime? == block.AccessedDate);
             Assert.IsTrue(block.AccessedDate == new DateTime(1289012842900));
-            Assert.IsTrue(block.Fields.ContainsKey("LongNameSize"));
-            Assert.IsTrue(block.Fields["LongNameSize"] as ushort? == block.LongNameSize);
-            Assert.IsTrue(block.LongNameSize == 5);
             Assert.IsTrue(block.Fields.ContainsKey("LongName"));
             Assert.IsTrue(block.Fields["LongName"] as string == block.LongName);
             Assert.IsTrue(block.LongName == "EXTNS");
@@ -146,7 +142,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Signature == numericDefault);
             Assert.IsTrue(block.CreationDate == dateDefault);
             Assert.IsTrue(block.AccessedDate == dateDefault);
-            Assert.IsTrue(block.LongNameSize == numericDefault);
             Assert.IsTrue(block.LongName == stringDefault);
             Assert.IsTrue(block.LocalizedName == stringDefault);
         }
@@ -159,7 +154,7 @@ namespace SeeShellsV2.Data.Tests
         {
             ExtensionBlockBEEF0004 block = new ExtensionBlockBEEF0004(testBufferVersion3, testOffset);
 
-            Assert.IsTrue(block.Fields.Count == 8);
+            Assert.IsTrue(block.Fields.Count == 7);
             Assert.IsTrue(block.Fields.ContainsKey("Size"));
             Assert.IsTrue(block.Fields["Size"] as ushort? == block.Size);
             Assert.IsTrue(block.Size == testBufferVersion3.Length);
@@ -175,9 +170,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Fields.ContainsKey("AccessedDate"));
             Assert.IsTrue(block.Fields["AccessedDate"] as DateTime? == block.AccessedDate);
             Assert.IsTrue(block.AccessedDate == new DateTime(1992, 4, 9, 0, 5, 22));
-            Assert.IsTrue(block.Fields.ContainsKey("LongNameSize"));
-            Assert.IsTrue(block.Fields["LongNameSize"] as ushort? == block.LongNameSize);
-            Assert.IsTrue(block.LongNameSize == 4);
             Assert.IsTrue(block.Fields.ContainsKey("LongName"));
             Assert.IsTrue(block.Fields["LongName"] as string == block.LongName);
             Assert.IsTrue(block.LongName == "BEEF");
@@ -194,7 +186,7 @@ namespace SeeShellsV2.Data.Tests
         {
             ExtensionBlockBEEF0004 block = new ExtensionBlockBEEF0004(testBufferVersion7, testOffset);
 
-            Assert.IsTrue(block.Fields.Count == 8);
+            Assert.IsTrue(block.Fields.Count == 7);
             Assert.IsTrue(block.Fields.ContainsKey("Size"));
             Assert.IsTrue(block.Fields["Size"] as ushort? == block.Size);
             Assert.IsTrue(block.Size == testBufferVersion7.Length);
@@ -210,9 +202,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Fields.ContainsKey("AccessedDate"));
             Assert.IsTrue(block.Fields["AccessedDate"] as DateTime? == block.AccessedDate);
             Assert.IsTrue(block.AccessedDate == new DateTime(1992, 4, 9, 0, 5, 22));
-            Assert.IsTrue(block.Fields.ContainsKey("LongNameSize"));
-            Assert.IsTrue(block.Fields["LongNameSize"] as ushort? == block.LongNameSize);
-            Assert.IsTrue(block.LongNameSize == 4);
             Assert.IsTrue(block.Fields.ContainsKey("LongName"));
             Assert.IsTrue(block.Fields["LongName"] as string == block.LongName);
             Assert.IsTrue(block.LongName == "BEEF");
@@ -229,7 +218,7 @@ namespace SeeShellsV2.Data.Tests
         {
             ExtensionBlockBEEF0004 block = new ExtensionBlockBEEF0004(testBufferVersion8, testOffset);
 
-            Assert.IsTrue(block.Fields.Count == 8);
+            Assert.IsTrue(block.Fields.Count == 7);
             Assert.IsTrue(block.Fields.ContainsKey("Size"));
             Assert.IsTrue(block.Fields["Size"] as ushort? == block.Size);
             Assert.IsTrue(block.Size == testBufferVersion8.Length);
@@ -245,9 +234,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Fields.ContainsKey("AccessedDate"));
             Assert.IsTrue(block.Fields["AccessedDate"] as DateTime? == block.AccessedDate);
             Assert.IsTrue(block.AccessedDate == new DateTime(1992, 4, 9, 0, 5, 22));
-            Assert.IsTrue(block.Fields.ContainsKey("LongNameSize"));
-            Assert.IsTrue(block.Fields["LongNameSize"] as ushort? == block.LongNameSize);
-            Assert.IsTrue(block.LongNameSize == 4);
             Assert.IsTrue(block.Fields.ContainsKey("LongName"));
             Assert.IsTrue(block.Fields["LongName"] as string == block.LongName);
             Assert.IsTrue(block.LongName == "BEEF");
@@ -264,7 +250,7 @@ namespace SeeShellsV2.Data.Tests
         {
             ExtensionBlockBEEF0004 block = new ExtensionBlockBEEF0004(testBufferVersion9, testOffset);
 
-            Assert.IsTrue(block.Fields.Count == 8);
+            Assert.IsTrue(block.Fields.Count == 7);
             Assert.IsTrue(block.Fields.ContainsKey("Size"));
             Assert.IsTrue(block.Fields["Size"] as ushort? == block.Size);
             Assert.IsTrue(block.Size == testBufferVersion9.Length);
@@ -280,9 +266,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(block.Fields.ContainsKey("AccessedDate"));
             Assert.IsTrue(block.Fields["AccessedDate"] as DateTime? == block.AccessedDate);
             Assert.IsTrue(block.AccessedDate == new DateTime(1992, 4, 9, 0, 5, 22));
-            Assert.IsTrue(block.Fields.ContainsKey("LongNameSize"));
-            Assert.IsTrue(block.Fields["LongNameSize"] as ushort? == block.LongNameSize);
-            Assert.IsTrue(block.LongNameSize == 4);
             Assert.IsTrue(block.Fields.ContainsKey("LongName"));
             Assert.IsTrue(block.Fields["LongName"] as string == block.LongName);
             Assert.IsTrue(block.LongName == "BEEF");
