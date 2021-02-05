@@ -64,7 +64,13 @@ class AdminPage extends React.Component {
     login() {
         const email = this.state.email;
         const password = this.state.password;
-        
+
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener('load', () => {
+            console.log(xhr.responseText)
+        });
+        xhr.open('POST', );
+        xhr.send(JSON.stringify({ email, password }));
     }
 
     render() {

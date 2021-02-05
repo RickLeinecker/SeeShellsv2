@@ -93,7 +93,6 @@ const styles = {
     }
 };
 
-// TODO: float the text and button over the image
 class FrontPage extends React.Component {
     constructor(props) {
         super(props);
