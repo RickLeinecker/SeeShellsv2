@@ -45,12 +45,13 @@ const styles = {
     }
 }
 
-class AdminPage extends React.Component {
+class AdminLogin extends React.Component {
     constructor(props) {
         super(props);
 
         this.handleEmail = this.handleEmail.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
+        this.login = this.login.bind(this);
     }
     
     handleEmail(event) {
@@ -94,4 +95,4 @@ class AdminPage extends React.Component {
     }
 }
 
-export default withStyles(styles)(withRouter(AdminPage));
+export default withStyles(styles)(withRouter(AdminLogin));
