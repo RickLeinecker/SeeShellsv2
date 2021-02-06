@@ -62,7 +62,7 @@ class MenuBar extends React.Component {
                         <Button className={this.props.classes.buttons} onClick={this.handleClick} id="download">Download</Button>
                         <Button className={this.props.classes.buttons} onClick={this.handleClick} id="documentation">Documentation</Button>
                         <Button className={this.props.classes.buttons} onClick={this.handleClick} id="developers">Developers</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="admin">Admin Login</Button>
+                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="login">Admin Login</Button>
                     </div>
                 </div>
             </Router>

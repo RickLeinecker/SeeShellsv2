@@ -1,10 +1,10 @@
 import MenuBar from './components/MenuBar.js';
 import FrontPage from './containers/FrontPage.js';
-import AboutPage from './containers/AdminPage.js';
+import AboutPage from './containers/AboutPage.js';
 import DownloadPage from './containers/DownloadPage.js';
 import DocumentationPage from './containers/DocumentationPage.js';
 import DeveloperPage from './containers/DeveloperPage.js';
-import AdminPage from './containers/AdminPage.js';
+import AdminLogin from './containers/AdminLogin.js';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -42,8 +42,8 @@ function App(props) {
           <Route path="/developers">
             <DeveloperPage/>
           </Route>
-          <Route path="/admin">
-            <AdminPage/>
+          <Route path="/login">
+            <AdminLogin/>
           </Route>
         </div>
       </Router>
