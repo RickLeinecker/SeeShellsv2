@@ -7,11 +7,11 @@ import Button from '@material-ui/core/Button';
 
 const styles = {
     frontPage: {
-        backgroundColor: '#F2F2F2',
         display: 'flex',
         flexFlow: 'column wrap',
         justifyContent: 'center',
         height: '100%',
+        width: '100%',
     },
     image: {
         display: 'flex',
@@ -37,6 +37,7 @@ const styles = {
     barContent: {
         display: 'flex',
         flexFlow: 'column wrap',
+        paddingTop: '2%',
     },
     intro: {
         display: 'flex',
@@ -62,10 +63,11 @@ const styles = {
     },
     title: {
         color: '#082998',
-        fontSize: '70px',
-        marginTop: '10px',
-        marginBottom: '10px',
+        fontSize: '50px',
+        marginTop: '1%',
+        marginBottom: '1%',
         textDecoration: 'underline',
+        fontWeight: 'bold',
     },
     infoContainer: {
         display: 'flex',
@@ -89,6 +91,8 @@ const styles = {
     featuresContainer: {
         display: 'flex',
         justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
     featuresButton: {
         display: 'flex',
@@ -135,31 +139,31 @@ class FrontPage extends React.Component {
                     </div>
                     <div className={this.props.classes.featuresContainer}>
                         <p className={this.props.classes.title}>Why SeeShells?</p>
-                    </div>
-                    <div className={this.props.classes.infoContainer}>
-                        <div className={this.props.classes.column}>
-                            <div className={this.props.classes.info}>
-                                <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                <span className={this.props.classes.descriptionAlt}>Quick parsing</span> of Windows Registry artifacts
+                        <div className={this.props.classes.infoContainer}>
+                            <div className={this.props.classes.column}>
+                                <div className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <span className={this.props.classes.descriptionAlt}>Quick parsing</span> of Windows Registry artifacts
+                                </div>
+                                <div className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging
+                                </div>
                             </div>
-                            <div className={this.props.classes.info}>
-                                <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                <span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging
+                            <div className={this.props.classes.column}>
+                                <div className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <span className={this.props.classes.descriptionAlt}>Timeline View</span> for a holistic view of computer activity
+                                </div>
+                                <div className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends
+                                </div>
                             </div>
                         </div>
-                        <div className={this.props.classes.column}>
-                            <div className={this.props.classes.info}>
-                                <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                <span className={this.props.classes.descriptionAlt}>Timeline View</span> for a holistic view of computer activity
-                            </div>
-                            <div className={this.props.classes.info}>
-                                <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                <span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends
-                            </div>
+                        <div>
+                            <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
                         </div>
-                    </div>
-                    <div className={this.props.classes.featuresContainer}>
-                        <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
                     </div>
                 </div>
             </Router>
