@@ -5,8 +5,8 @@ import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 const styles = {
-    root: {
-        backgroundColor: '#424242',
+    menuBar: {
+        backgroundColor: '#212121',
         width: '100%',
         display: 'flex',
         margin: '0px',
@@ -19,7 +19,10 @@ const styles = {
     buttons: {
         display: 'flex',
         justifyContent: 'center',
-        color: 'white',
+        color: '#F2F2F2',
+        '&:hover': {
+            color: '#33A1FD',
+        },
         fontSize: '20px',
         fontFamily: 'Georgia',
     },
@@ -29,7 +32,7 @@ const styles = {
         margin: '10px',
         display: 'flex',
         paddingLeft: '10px',
-        color: 'white',
+        color: '#F2F2F2',
     },
     logo: {
         height: '50px',
@@ -54,7 +57,7 @@ class MenuBar extends React.Component {
     render() {
         return(
             <Router>
-                <div className={this.props.classes.root}>
+                <div className={this.props.classes.menuBar}>
                     <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
                     <p className={this.props.classes.title}>SEESHELLS</p>
                     <div className={this.props.classes.buttonContainer}> 
