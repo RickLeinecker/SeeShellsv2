@@ -1,6 +1,7 @@
 import React from 'react';
-import beach from '../assets/beach2.png';
+import beach from '../../assets/beach2.png';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -24,13 +25,17 @@ const styles = {
         justifyContent: 'center',
         flexDirection: 'column',
         backgroundColor: '#424242',
-        width: '40%',
+        width: '30%',
         alignItems: 'center',
         color: 'white',
         fontSize: '40px',
-        height: '80%',
+        height: '70%',
         position: 'absolute',
         alignSelf: 'center',
+    },
+    loginTitle: {
+        fontSize: '50px',
+        fontWeight: 'bold',
     },
     field: {
         display: 'flex',
@@ -38,6 +43,7 @@ const styles = {
         color: 'white',
         fontSize: '20px',
         width: '80%',
+        padding: '3%',
     },
     button: {
         display: 'flex',
@@ -46,9 +52,22 @@ const styles = {
             backgroundColor: '#EF476F',
         },
         color: 'white',
+        fontSize: '20px',
         margin: '0px',
-        fontWeight: 'bold',
-        paddingTop: '1%',
+        justifyContent: 'center',
+        marginTop: '5%',
+    },
+    register: {
+        display: 'flex',
+        backgroundColor: '#EF476F',
+        '&:hover': {
+            backgroundColor: '#33A1FD',
+        },
+        color: 'white',
+        fontSize: '20px',
+        margin: '0px',
+        justifyContent: 'center',
+        marginTop: '5%',
     },
     input: {
         backgroundColor: 'white',
@@ -62,6 +81,7 @@ class AdminLogin extends React.Component {
         this.handleEmail = this.handleEmail.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
         this.login = this.login.bind(this);
+        this.register = this.register.bind(this);
     }
     
     handleEmail(event) {
@@ -80,8 +100,12 @@ class AdminLogin extends React.Component {
         xhr.addEventListener('load', () => {
             console.log(xhr.responseText)
         });
-        xhr.open('POST', );
+        xhr.open('POST', this.props.history.pathname);
         xhr.send(JSON.stringify({ email, password }));
+    }
+
+    register(event) {
+        this.props.history.push("/" + event.currentTarget.id);
     }
 
     render() {
@@ -89,7 +113,7 @@ class AdminLogin extends React.Component {
             <div className={this.props.classes.loginContainer}>
                 <div className={this.props.classes.image}/>
                 <div className={this.props.classes.login}>
-                    Admin Login
+                    <p className={this.props.classes.loginTitle}>Administrative Login</p>
                     <div className={this.props.classes.field}>
                         Email:
                         <TextField variant="filled" color="#1D70EB" className={this.props.classes.input} onChange={this.handleEmail}/>
@@ -99,10 +123,11 @@ class AdminLogin extends React.Component {
                         <TextField variant="filled" color="#1D70EB" className={this.props.classes.input} onChange={this.handlePassword} type="password"/>
                     </div>
                     <Button className={this.props.classes.button} onClick={this.login}>Login</Button>
+                    <Button className={this.props.classes.register} onClick={this.register} id="register">Not registered? Sign up</Button>
                 </div>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(AdminLogin);
+export default withStyles(styles)(withRouter(AdminLogin));
