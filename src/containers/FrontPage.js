@@ -1,58 +1,67 @@
 import React from 'react';
-import beach from '../assets/beach.png';
+import beach from '../assets/beach2.png';
 import pearl from '../assets/pearl.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 const styles = {
-    root: {
+    frontPage: {
+        backgroundColor: '#F2F2F2',
         display: 'flex',
         flexFlow: 'column wrap',
         justifyContent: 'center',
+        height: '100%',
     },
     image: {
         display: 'flex',
         position: 'relative',
         width: '100%',
-        height: '400px',
+        height: '350px',
         textAlign: 'center',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), url(' + beach + ')',
+        backgroundImage: 'url(' + beach + ')',
     },
     downloadButton: {
         display: 'flex',
         position: 'absolute',
-        backgroundColor: '#1D70EB',
+        backgroundColor: '#33A1FD',
+        '&:hover': {
+            backgroundColor: '#EF476F',
+        },
         color: 'white',
         fontSize: '20px',
         margin: '0px',
         bottom: '10px',
     },
+    barContent: {
+        display: 'flex',
+        flexFlow: 'column wrap',
+    },
     intro: {
         display: 'flex',
-        position: 'absolute',
-        color: '#1D70EB',
+        color: '#F2F2F2',
         fontSize: '100px',
         margin: '0px',
         left: '10px',
     },
     description: {
         display: 'flex',
-        position: 'absolute',
-        color: 'black',
+        color: '#F2F2F2',
         fontSize: '40px',
         margin: '0px',
         left: '50px',
         top: '100px',
+        paddingLeft: '200px',
+        paddingRight: '200px',
     },
     descriptionAlt: {
-        color: '#1D70EB',
+        color: '#33A1FD',
         fontWeight: 'bold',
         display: 'contents',
     },
     title: {
-        color: 'black',
+        color: '#082998',
         fontSize: '70px',
         marginTop: '10px',
         marginBottom: '10px',
@@ -61,12 +70,16 @@ const styles = {
     infoContainer: {
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'flex-start',
+        width: '70%',
+        alignSelf: 'center',
     },
     info: {
         display: 'flex',
         alignItems: 'center',
         fontSize: '30px',
         margin: '30px',
+        color: '#3E3E3E',
     },
     column: {
         display: 'flex',
@@ -79,7 +92,10 @@ const styles = {
     },
     featuresButton: {
         display: 'flex',
-        backgroundColor: '#1D70EB',
+        backgroundColor: '#33A1FD',
+        '&:hover': {
+            backgroundColor: '#EF476F',
+        },
         color: 'white',
         fontSize: '20px',
         margin: '0px',
@@ -107,13 +123,14 @@ class FrontPage extends React.Component {
     render() {
         return(
             <Router>
-                <div className={this.props.classes.root}>
+                <div className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
-                        <div className={this.props.classes.image}/>
-                        <p className={this.props.classes.intro}>SEESHELLS</p>
-                        <p className={this.props.classes.description}>
-                            A <span className={this.props.classes.descriptionAlt}>digital forensics tool</span> for analyzing Windows Registry Artifacts.
-                        </p>
+                        <div className={this.props.classes.barContent}>
+                            <p className={this.props.classes.intro}>SEESHELLS</p>
+                            <p className={this.props.classes.description}>
+                                A <span className={this.props.classes.descriptionAlt}>digital forensics tool</span> for analyzing Windows Registry Artifacts.
+                            </p>
+                        </div>
                         <Button className={this.props.classes.downloadButton} onClick={this.handleClick} id="download">GET THE TOOL</Button>
                     </div>
                     <div className={this.props.classes.featuresContainer}>

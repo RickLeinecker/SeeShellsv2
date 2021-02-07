@@ -1,5 +1,5 @@
 import React from 'react';
-import beach from '../assets/beach.png';
+import beach from '../assets/beach2.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +13,7 @@ const styles = {
         height: '600px',
         textAlign: 'center',
         justifyContent: 'center',
-        backgroundImage: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%), url(' + beach + ')',
+        backgroundImage: 'url(' + beach + ')',
     },
     loginContainer: {
         display: 'flex',

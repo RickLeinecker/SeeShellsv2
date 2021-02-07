@@ -5,14 +5,28 @@ import DownloadPage from './containers/DownloadPage.js';
 import DocumentationPage from './containers/DocumentationPage.js';
 import DeveloperPage from './containers/DeveloperPage.js';
 import AdminLogin from './containers/AdminLogin.js';
+import Footer from './components/Footer.js';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const styles = {
-  root: {
+  application: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  topBar: {
     color: 'white',
     display: 'flex',
     margin: '0px',
+  },
+  bottomBar: {
+    color: 'white',
+    display: 'flex',
+    margin: '0px',
+    width: '100%',
+    alignSelf: 'flex-end',
   },
   content: {
     color: 'black',
@@ -21,9 +35,9 @@ const styles = {
 
 function App(props) {
   return (
-    <div>
+    <div className={props.classes.application}>
       <Router>
-        <div className={props.classes.root}>
+        <div className={props.classes.topBar}>
           <MenuBar/>
         </div>
         <div className={props.classes.content}>
@@ -45,6 +59,9 @@ function App(props) {
           <Route path="/login">
             <AdminLogin/>
           </Route>
+        </div>
+        <div className={props.classes.bottomBar}>
+          <Footer/>
         </div>
       </Router>
     </div>
