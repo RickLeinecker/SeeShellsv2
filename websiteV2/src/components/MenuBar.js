@@ -15,6 +15,7 @@ const styles = {
         display: 'flex',
         float: 'right',
         marginLeft: 'auto',
+        marginRight: '1%',
     },
     buttons: {
         display: 'flex',

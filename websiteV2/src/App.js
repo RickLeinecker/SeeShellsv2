@@ -15,6 +15,7 @@ const styles = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
+    flex: '1',
   },
   topBar: {
     color: 'white',
@@ -26,10 +27,12 @@ const styles = {
     display: 'flex',
     margin: '0px',
     width: '100%',
-    alignSelf: 'flex-end',
+    marginTop: 'auto',
   },
   content: {
     color: 'black',
+    display: 'flex',
+    width: '100%',
   },
 };
 
