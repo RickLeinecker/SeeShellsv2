@@ -1,33 +1,36 @@
 import React from 'react';
 import beach from '../assets/beach2.png';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 const styles = {
     image: {
         display: 'flex',
-        position: 'relative',
         width: '100%',
         height: '600px',
         textAlign: 'center',
         justifyContent: 'center',
+        alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
     },
     loginContainer: {
         display: 'flex',
         justifyContent: 'center',
+        width: '100%',
     },
     login: {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
         backgroundColor: '#424242',
-        width: '50%',
+        width: '40%',
         alignItems: 'center',
         color: 'white',
         fontSize: '40px',
+        height: '80%',
+        position: 'absolute',
+        alignSelf: 'center',
     },
     field: {
         display: 'flex',
@@ -37,8 +40,15 @@ const styles = {
         width: '80%',
     },
     button: {
-        backgroundColor: '#1D70EB',
+        display: 'flex',
+        backgroundColor: '#33A1FD',
+        '&:hover': {
+            backgroundColor: '#EF476F',
+        },
         color: 'white',
+        margin: '0px',
+        fontWeight: 'bold',
+        paddingTop: '1%',
     },
     input: {
         backgroundColor: 'white',
@@ -95,4 +105,4 @@ class AdminLogin extends React.Component {
     }
 }
 
-export default withStyles(styles)(withRouter(AdminLogin));
+export default withStyles(styles)(AdminLogin);
