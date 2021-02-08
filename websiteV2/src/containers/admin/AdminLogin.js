@@ -100,7 +100,7 @@ class AdminLogin extends React.Component {
         xhr.addEventListener('load', () => {
             console.log(xhr.responseText)
         });
-        xhr.open('POST', this.props.history.pathname);
+        xhr.open('POST', this.props.history.location.pathname);
         xhr.send(JSON.stringify({ email, password }));
     }
 
