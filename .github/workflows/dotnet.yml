@@ -1,0 +1,25 @@
+name: .NET
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore SeeShellsV2
+    - name: Build
+      run: dotnet build SeeShellsV2 --no-restore
+    - name: Test
+      run: dotnet test SeeShellsV2 --no-build --verbosity normal

@@ -1,0 +1,28 @@
+﻿<Window x:Class="SeeShellsV2.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SeeShellsV2.UI"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top">
+                <Grid>
+                    <Menu Background="DarkGray">
+                        <MenuItem Header="File" Foreground="Black" >
+                            <MenuItem Header="Import" Foreground="Black">
+                                <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
+                            </MenuItem>
+                            <MenuItem Header="Export" Foreground="Black">
+                                <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
+                </Grid>
+            </StackPanel>
+            <local:TableView></local:TableView>
+        </DockPanel>
+    </Grid>
+</Window>
