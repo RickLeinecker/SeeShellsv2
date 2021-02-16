@@ -12,14 +12,14 @@ namespace SeeShellsV2.Factories
     public class ShellItemFactory : IShellItemFactory
     {
 
-        public Type GetShellType(byte type)
+        public Type GetShellType(byte type, IShellItem parent = null)
         {
-            return ShellItem.GetShellType(type);
+            return ShellItem.GetShellType(type, parent);
         }
 
-        public IShellItem Create(byte[] buf)
+        public IShellItem Create(byte[] buf, IShellItem parent = null)
         {
-            return ShellItem.FromByteArray(buf);
+            return ShellItem.FromByteArray(buf, parent);
         }
     }
 }

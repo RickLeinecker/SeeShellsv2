@@ -47,7 +47,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue(item.CreationDate == new DateTime(4865846));
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
 
         [TestMethod()]
@@ -85,7 +85,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.ModifiedDate == DateTime.MinValue);
             Assert.IsTrue(item.AccessedDate == DateTime.MinValue);
             Assert.IsTrue(item.CreationDate == DateTime.MinValue);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
     }
 }

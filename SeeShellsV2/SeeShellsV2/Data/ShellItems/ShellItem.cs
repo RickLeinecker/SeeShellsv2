@@ -28,10 +28,21 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("Description", "??");
         }
 
+        public RegistryKeyWrapper RegistryKey
+        {
+            set => fields["RegistryKey"] = value;
+            get => fields.GetClassOrDefault<RegistryKeyWrapper>("RegistryKey", null);
+        }
+
         public IShellItem Parent
         {
-            // set => fields["Parent"] = value;
-            get => fields.GetClassOrDefault<IShellItem>("Parent", null);
+            set => parent = value;
+            get => parent;
+        }
+
+        public IList<IShellItem> Children
+        {
+            get => children;
         }
 
         public ushort Size
@@ -102,8 +113,44 @@ namespace SeeShellsV2.Data
         /// </summary>
         /// <param name="buf">the byte array containing shell item data</param>
         /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        public static IShellItem FromByteArray(byte[] buf)
+        public static IShellItem FromByteArray(byte[] buf, IShellItem parent = null)
         {
+            // attempt to deduce type by parent type
+            try
+            {
+                FileEntryShellItem fileEntryParent = parent as FileEntryShellItem;
+                FileEntryShellItem.FileAttributeFlags compressed = FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_COMPRESSED | FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_ARCHIVE;
+
+                if (parent is CompressedFolderShellItem || (fileEntryParent != null && (fileEntryParent.FileAttributes & compressed) != 0))
+                {
+                    return new CompressedFolderShellItem(buf);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
+            { }
+
+            // attempt to deduce type by shell signature (uint located at offset 0x06)
+            try
+            {
+                uint signature = Block.UnpackDWord(buf, 0x06);
+
+                if (MtpDeviceShellItem.KnownSignatures.Contains(signature))
+                {
+                    return new MtpDeviceShellItem(buf);
+                }
+                else if (MtpVolumeShellItem.KnownSignatures.Contains(signature))
+                {
+                    return new MtpVolumeShellItem(buf);
+                }
+                else if (MtpFileEntryShellItem.KnownSignatures.Contains(signature))
+                {
+                    return new MtpFileEntryShellItem(buf);
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
+            { }
+
+            // Attempt to deduce type by type field (byte located at offset 0x02)
             try
             {
                 byte type = Block.UnpackByte(buf, 0x02);
@@ -118,27 +165,16 @@ namespace SeeShellsV2.Data
                         return new FileEntryShellItem(buf);
                     case 0x40 when NetworkShellItem.KnownTypes.Contains(type):
                         return new NetworkShellItem(buf);
-                    // case 0x30 when CompressedFolderShellItem.KnownTypes.Contains(type):
-                    // case 0x50 when CompressedFolderShellItem.KnownTypes.Contains(type):
-                    //     return new CompressedFolderShellItem(buf);
                     case 0x60 when type == 0x61:
                         return new UriShellItem(buf);
-                    // case 0x70 when type == 0x71:
-                    //     return new ControlPanelShellItem(buf);
-                    // case 0x70 when type == 0x74:
-                    //     return new DelegateShellItem(buf);
                     default:
                         break;
                 }
-
-                // TODO (Devon): implement signature based shell items
-
-                return null;
             }
-            catch (ArgumentException)
-            {
-                return null;
-            }
+            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
+            { }
+
+            return null;
         }
 
         /// <summary>
@@ -146,7 +182,7 @@ namespace SeeShellsV2.Data
         /// </summary>
         /// <param name="buf">the byte array containing shell item data</param>
         /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        public static Type GetShellType(byte type)
+        public static Type GetShellType(byte type, IShellItem parent = null)
         {
             switch (type & 0x70) // 0x70 is the assumed mask for the shell class type
             {
@@ -158,24 +194,25 @@ namespace SeeShellsV2.Data
                     return typeof(FileEntryShellItem);
                 case 0x40 when NetworkShellItem.KnownTypes.Contains(type):
                     return typeof(NetworkShellItem);
-                // case 0x30 when CompressedFolderShellItem.KnownTypes.Contains(type):
-                // case 0x50 when CompressedFolderShellItem.KnownTypes.Contains(type):
-                //     return typeof(CompressedFolderShellItem);
                 case 0x60 when type == 0x61:
                     return typeof(UriShellItem);
-                // case 0x70 when type == 0x71:
-                //     return typeof(ControlPanelShellItem);
-                // case 0x70 when type == 0x74:
-                //     return typeof(DelegateShellItem);
                 default:
                     break;
             }
 
-            // TODO (Devon): implement signature based shell items
+            FileEntryShellItem fileEntryParent = parent as FileEntryShellItem;
+            FileEntryShellItem.FileAttributeFlags compressed = FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_COMPRESSED | FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_ARCHIVE;
+
+            if (fileEntryParent != null && (fileEntryParent.FileAttributes & compressed) != 0)
+            {
+                return typeof(CompressedFolderShellItem);
+            }
 
             return null;
         }
 
+        protected IShellItem parent = null;
+        protected List<IShellItem> children = new List<IShellItem>();
         protected Dictionary<string, object> fields = new Dictionary<string, object>();
         protected List<IExtensionBlock> extensionBlocks = new List<IExtensionBlock>();
         protected SortedSet<IShellTag> tags = new SortedSet<IShellTag>();

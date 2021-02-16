@@ -51,7 +51,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("VolumeName"));
             Assert.IsTrue(item.Fields["VolumeName"] as string == item.VolumeName);
             Assert.IsTrue(item.VolumeName == "Hello, World!");
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
 
         [TestMethod()]
@@ -88,7 +88,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.ModifiedDate == DateTime.MinValue);
             Assert.IsTrue(item.AccessedDate == DateTime.MinValue);
             Assert.IsTrue(item.CreationDate == DateTime.MinValue);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
 
         [TestMethod()]

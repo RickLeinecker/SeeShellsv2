@@ -31,7 +31,7 @@ namespace SeeShellsV2.Data.Tests
             };
 
             Assert.IsTrue(item.Fields.Count == 12);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
@@ -89,7 +89,7 @@ namespace SeeShellsV2.Data.Tests
             NetworkShellItem item = new NetworkShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 9);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));

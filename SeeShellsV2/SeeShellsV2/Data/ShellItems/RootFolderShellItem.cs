@@ -76,12 +76,39 @@ namespace SeeShellsV2.Data
 
                 fields["TypeName"] = "Root Folder";
 
-                fields["RootFolderGuid"] = Block.UnpackGuid(buf, 0x04);
+                string guid = Block.UnpackGuid(buf, 0x04);
+                string maybeSearchFolderGuid = (Size > 113+16) ? Block.UnpackGuid(buf, 113) : "n/a";
 
-                if (KnownGuids.dict.ContainsKey(RootFolderGuid))
+                if (KnownGuids.dict.ContainsKey(guid))
+                {
+                    fields["Subtype"] = "GUID";
+                    fields["RootFolderGuid"] = guid;
                     fields["Description"] = fields["RootFolderName"] = KnownGuids.dict[RootFolderGuid];
+                }
+                else if (Block.UnpackDWord(buf, 0x06) == 0xf5a6b710 && Block.UnpackWord(buf, 0x0A) > 0)
+                {
+                    fields["Subtype"] = "Delegate";
+                    fields["Signature"] = 0xf5a6b710;
+                    fields["Description"] = fields["RootFolderName"] = Block.UnpackString(buf, 0x0D);
+                }
+                else if (Block.UnpackDWord(buf, 0x06) == 0x23a3dfd5 && KnownGuids.dict.ContainsKey(maybeSearchFolderGuid) && KnownGuids.dict[maybeSearchFolderGuid] == "Search Folder")
+                {
+                    /*
+                    fields["Subtype"] = "Search Folder";
+                    fields["Signature"] = 0x23a3dfd5;
+
+                    byte[] internalBuf = new byte[Size - 167];
+                    Array.Copy(buf, 167, internalBuf, 0, internalBuf.Length);
+
+                    IShellItem a = ShellItem.FromByteArray(internalBuf);
+                    */
+
+                    throw new ArgumentException("byte array could not be parsed into RootFolderShellItem", new NotImplementedException("Search Folder shell item not implemented"));
+                }
                 else
-                    fields["Description"] = fields["RootFolderName"] = RootFolderGuid;
+                {
+                    throw new ArgumentException("byte array could not be parsed into RootFolderShellItem", new ArgumentException(string.Format("Unknown Root Folder GUID {0}", guid)));
+                }
 
                 fields["SortIndex"] = Block.UnpackByte(buf, 0x03);
 

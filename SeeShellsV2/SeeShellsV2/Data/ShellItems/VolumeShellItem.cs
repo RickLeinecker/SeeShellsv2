@@ -65,6 +65,18 @@ namespace SeeShellsV2.Data
                     fields["VolumeName"] = Block.UnpackString(buf, 0x03);
                     fields["Description"] = VolumeName;
                 }
+                else
+                {
+                    string guid = Block.UnpackGuid(buf, 0x04);
+                    if (KnownGuids.dict.ContainsKey(guid))
+                    {
+                        fields["Description"] = fields["VolumeName"] = KnownGuids.dict[guid];
+                    }
+                    else
+                    {
+                        fields["Description"] = fields["VolumeName"] = guid;
+                    }
+                }
 
                 // if IsRemovable bit is true
                 if (((TypeFlags)Type & TypeFlags.IsRemovable) != TypeFlags.None)

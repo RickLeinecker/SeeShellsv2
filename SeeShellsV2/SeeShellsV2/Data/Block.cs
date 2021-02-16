@@ -207,7 +207,7 @@ namespace SeeShellsV2.Data
         {
             try
             {
-                return DateTime.FromFileTime(BitConverter.ToInt64(buf, offset)).ToLocalTime();
+                return DateTime.FromFileTime(BitConverter.ToInt64(buf, offset));
             }
             catch (Exception ex)
             {

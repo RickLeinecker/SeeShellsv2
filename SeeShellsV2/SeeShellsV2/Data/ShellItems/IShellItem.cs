@@ -34,9 +34,19 @@ namespace SeeShellsV2.Data
         string Description { init; get; }
 
         /// <summary>
-        /// Parent shell item in the shell item hierarchy
+        /// Registry Key from which the shell item was parsed
         /// </summary>
-        IShellItem Parent { get; }
+        RegistryKeyWrapper RegistryKey { get; set; }
+
+        /// <summary>
+        /// Parent of this shell item
+        /// </summary>
+        IShellItem Parent { get; set; }
+
+        /// <summary>
+        /// Children of this shell item
+        /// </summary>
+        IList<IShellItem> Children { get; }
 
         /// <summary>
         /// Tells the Size of the entire ShellItem. Includes the two bytes to represent the sie parameter.

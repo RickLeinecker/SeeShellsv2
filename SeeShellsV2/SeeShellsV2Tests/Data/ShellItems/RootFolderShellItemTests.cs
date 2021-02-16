@@ -57,7 +57,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("SortIndexDescription"));
             Assert.IsTrue(item.Fields["SortIndexDescription"] as string == item.SortIndexDescription);
             Assert.IsTrue(item.SortIndexDescription == "123abc");
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
             Assert.IsTrue(item.Fields.ContainsKey("RootFolderGuid"));
             Assert.IsTrue(item.Fields["RootFolderGuid"] as string == item.RootFolderGuid);
             Assert.IsTrue(item.RootFolderGuid == "Hello, World!");
@@ -77,7 +77,7 @@ namespace SeeShellsV2.Data.Tests
 
             RootFolderShellItem item = new RootFolderShellItem(buf);
 
-            Assert.IsTrue(item.Fields.Count == 8);
+            Assert.IsTrue(item.Fields.Count == 9);
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields["Type"] as byte? == item.Type);
             Assert.IsTrue(item.Type == 0x1F);
@@ -105,7 +105,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.ModifiedDate == DateTime.MinValue);
             Assert.IsTrue(item.AccessedDate == DateTime.MinValue);
             Assert.IsTrue(item.CreationDate == DateTime.MinValue);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
 
         [TestMethod()]

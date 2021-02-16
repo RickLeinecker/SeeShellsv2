@@ -24,8 +24,9 @@ namespace SeeShellsV2.Data
     public static class KnownGuids
     {
         // TODO: Replace with entries from CLSID Windows Registry Keys
-        public static IReadOnlyDictionary<string, string> dict = new Dictionary<string, string>()
+        public static IDictionary<string, string> dict = new Dictionary<string, string>()
         {
+            {"0db7e03f-fc29-4dc6-9020-ff41b59e513a", "3D Objects"},
             {"008ca0b1-55b4-4c56-b8a8-4de4b299d3bE", "Account Pictures"},
             {"00bcfc5a-ed94-4e48-96a1-3f6217f21990", "RoamingTiles"},
             {"00c6d95f-329c-409a-81d7-c46c66ea7f33", "Default NetworkLocation"},
@@ -403,7 +404,12 @@ namespace SeeShellsV2.Data
             {"fdd39ad0-238f-46af-adb4-6c85480369c7", "Documents"},
             {"fe1290f0-cfbd-11cf-a330-00aa00c16e65", "Directory"},
             {"ff393560-c2a7-11cf-bff4-444553540000", "History"},
-            {"088e3905-0323-4b02-9826-5d99428e115f", "Downloads" }
+            {"088e3905-0323-4b02-9826-5d99428e115f", "Downloads"},
+            {"d3162b92-9365-467a-956b-92703aca08af", "Documents"},
+            {"3dfdf296-dbec-4fb4-81d1-6a3438bcf4de", "Music"},
+            {"24ad3ad4-a569-4530-98e1-ab02f9417aa8", "Pictures"},
+            {"f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a", "Videos"},
+            {"384ea5ae-ade1-4e8a-8a9b-7bea78fff1e9", "Search Folder"}
         };
     }
 }
