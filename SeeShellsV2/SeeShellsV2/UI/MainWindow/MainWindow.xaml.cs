@@ -14,6 +14,7 @@ namespace SeeShellsV2.UI
         public string Title { get; }
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
+        public void ExportWindow();
     }
 
     /// <summary>
@@ -42,6 +43,11 @@ namespace SeeShellsV2.UI
             openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 ViewModel.ImportFromCSV(openFileDialog.FileName);
+        }
+
+        private void Export_Window_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ExportWindow();
         }
 
         private void Export_CSV_Click(object sender, RoutedEventArgs e)

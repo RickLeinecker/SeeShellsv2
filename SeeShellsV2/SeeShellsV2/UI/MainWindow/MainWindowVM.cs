@@ -20,6 +20,12 @@ namespace SeeShellsV2.UI
             // importer.Import(path); => needs work
         }
 
+        public void ExportWindow()
+        {
+            ExportWindow win = new ExportWindow();
+            win.Show();
+        }
+
         public void ExportToCSV(string path)
         {
         
