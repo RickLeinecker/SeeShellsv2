@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Unity;
 using SeeShellsV2.Data;
-using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
-    public class ExportWindowVM : ViewModel, IExportWindowVM
+    public class InspectorViewVM : ViewModel, IInspectorViewVM
     {
-        private IShellCollection collection = new ShellCollection();
+        private IShellItem item = new ShellItem();
 
-        public IShellCollection ExportShellCollection
+        public IShellItem SelectedShell
         {
-            get => collection;
+            get => item;
             set
             {
-                collection = value;
+                item = value;
                 NotifyPropertyChanged();
             }
         }
-
     }
 }

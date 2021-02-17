@@ -10,26 +10,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Unity;
-using SeeShellsV2.Repositories;
+using SeeShellsV2.Data;
 
 namespace SeeShellsV2.UI
 {
-    public interface IExportWindowVM : IViewModel
+    public interface IFileSystemViewVM : IViewModel
     {
-        IShellCollection ExportShellCollection { get; }
+        IShellItem SelectedShell { get; }
     }
 
     /// <summary>
-    /// Interaction logic for ExportWindow.xaml
+    /// Interaction logic for FileSystemView.xaml
     /// </summary>
-    public partial class ExportWindow : Window, IWindow
+    public partial class FileSystemView : UserControl
     {
         [Dependency]
-        public IExportWindowVM ViewModel { set => DataContext = value; }
-        public ExportWindow()
+        public IFileSystemViewVM ViewModel { set => DataContext = value; }
+        public FileSystemView()
         {
             InitializeComponent();
         }

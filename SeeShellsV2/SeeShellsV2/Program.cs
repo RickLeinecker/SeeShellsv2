@@ -34,10 +34,17 @@ namespace SeeShellsV2
 
             // Register Window Types
             container.RegisterType<IWindow, MainWindow>("main");
+            container.RegisterType<IWindow, ExportWindow>("export");
 
             // Register ViewModel Types
             container.RegisterType<IMainWindowVM, MainWindowVM>();
+            container.RegisterType<IExportWindowVM, ExportWindowVM>();
             container.RegisterType<ITableViewVM, TableViewVM>();
+            container.RegisterType<IInspectorViewVM, InspectorViewVM>();
+            container.RegisterType<ITimelineViewVM, TimelineViewVM>();
+            container.RegisterType<IRegistryViewVM, RegistryViewVM>();
+            container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
+            container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
 
             // Create and run app with main window
             Window window = container.Resolve<IWindow>("main") as Window;
