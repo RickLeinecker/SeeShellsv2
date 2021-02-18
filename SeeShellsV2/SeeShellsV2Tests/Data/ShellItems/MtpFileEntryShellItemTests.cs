@@ -158,8 +158,8 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Signature == 0x07192006);
             Assert.IsTrue(item.TypeName == "Media Transfer Protocol");
             Assert.IsTrue(item.SubtypeName == "File Entry");
-            Assert.IsTrue(item.ModifiedDate == new DateTime(0x08d3059e16829480));
-            Assert.IsTrue(item.CreationDate == new DateTime(0x08d3059e16829480));
+            Assert.IsTrue(item.ModifiedDate == new DateTime(635858328930000000, DateTimeKind.Utc).ToLocalTime());
+            Assert.IsTrue(item.CreationDate == new DateTime(635858328930000000, DateTimeKind.Utc).ToLocalTime());
             Assert.IsTrue(item.FolderName == "DCIM");
             Assert.IsTrue(item.FolderId == "{00000001-0000-0000-0100-000000000000}");
             Assert.IsTrue(item.Description == item.FolderName);

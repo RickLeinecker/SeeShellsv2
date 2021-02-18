@@ -188,7 +188,7 @@ namespace SeeShellsV2.Data
                 int minute = (dostime & 0x7E0) >> 5;
                 int hour = (dostime & 0xF800) >> 11;
 
-                return new DateTime(year, month, day, hour, minute, sec);
+                return new DateTime(year, month, day, hour, minute, sec, DateTimeKind.Local);
             }
             catch (Exception ex)
             {
