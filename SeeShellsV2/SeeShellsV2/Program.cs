@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -49,8 +50,27 @@ namespace SeeShellsV2
             // Create and run app with main window
             Window window = container.Resolve<IWindow>("main") as Window;
 
+            // Hack to resolve UI children of main window
             foreach (var child in (window.Content as Visual).GetChildren())
-                container.BuildUp(child.GetType(), child);
+            {
+                if (child is Xceed.Wpf.AvalonDock.DockingManager)
+                {
+                    var dockableEnumerator = (child as Xceed.Wpf.AvalonDock.DockingManager).LogicalChildrenPublic;
+                    while (dockableEnumerator.MoveNext())
+                    {
+                        container.BuildUp(dockableEnumerator.Current.GetType(), dockableEnumerator.Current);
+
+                        foreach (var child2 in (dockableEnumerator.Current as Visual).GetChildren())
+                        {
+                            container.BuildUp(child2.GetType(), child2);
+                        }
+                    }
+                }
+                else
+                {
+                    container.BuildUp(child.GetType(), child);
+                }
+            }
 
             App app = container.Resolve<App>();
             app.Run(window);

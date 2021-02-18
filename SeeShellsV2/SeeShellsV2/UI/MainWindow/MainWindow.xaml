@@ -8,27 +8,6 @@
         xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="800">
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type local:InspectorViewVM}">
-            <local:InspectorView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:TimelineViewVM}">
-            <local:TimelineView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:TableViewVM}">
-            <local:TableView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:FileSystemViewVM}">
-            <local:FileSystemView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:RegistryViewVM}">
-            <local:RegistryView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type local:FilterControlViewVM}">
-            <local:FilterControlView/>
-        </DataTemplate>
-    </Window.Resources>
-
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -88,17 +67,17 @@
                         
                         <xcad:LayoutAnchorablePane DockWidth="200">
                             <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                <ContentControl Content="{Binding InspectorView}"/>
+                                <local:InspectorView />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                         
                         <xcad:LayoutDocumentPaneGroup >
                             <xcad:LayoutDocumentPane>
                                 <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" IconSource="../Images/SeeShells.png">
-                                    <ContentControl Content="{Binding TimelineView}"/>
+                                    <local:TimelineView />
                                 </xcad:LayoutDocument>
                                 <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" IconSource="../Images/SeeShells.png">
-                                    <ContentControl Content="{Binding TableView}"/>
+                                    <local:TableView />
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
                         </xcad:LayoutDocumentPaneGroup >
@@ -106,10 +85,10 @@
                         <xcad:LayoutAnchorablePaneGroup DockWidth="125">
                             <xcad:LayoutAnchorablePane>
                                 <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <ContentControl Content="{Binding FileView}"/>
+                                    <local:FileSystemView />
                                 </xcad:LayoutAnchorable>
                                 <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <ContentControl Content="{Binding RegistryView}"/>
+                                    <local:RegistryView />
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
@@ -119,7 +98,7 @@
                         <xcad:LayoutAnchorSide>
                             <xcad:LayoutAnchorGroup>
                                 <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <ContentControl Content="{Binding FilterControlView}"/>
+                                    <local:FilterControlView />
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorGroup>
                         </xcad:LayoutAnchorSide>

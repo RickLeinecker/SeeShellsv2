@@ -12,12 +12,6 @@ namespace SeeShellsV2.UI
     public interface IMainWindowVM : IViewModel
     {
         public string Title { get; }
-        public IInspectorViewVM InspectorView { get; }
-        public ITimelineViewVM TimelineView { get; }
-        public ITableViewVM TableView { get; }
-        public IFileSystemViewVM FileView { get; }
-        public IRegistryViewVM RegistryView { get; }
-        public IFilterControlViewVM FilterControlView { get; }
 
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
