@@ -14,6 +14,8 @@ namespace SeeShellsV2.UI
         public string Title { get; }
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
+        public void ImportFromOnlineRegistry();
+        public void ImportFromOfflineRegistry(string hiveLocation);
     }
 
     /// <summary>
@@ -50,6 +52,20 @@ namespace SeeShellsV2.UI
             openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 ViewModel.ExportToCSV(openFileDialog.FileName);
+        }
+
+        private void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ImportFromOnlineRegistry();
+        }
+
+        private void Import_Offline_Registry_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.ValidateNames = false;
+            openFileDialog.ReadOnlyChecked = true;
+            if (openFileDialog.ShowDialog() == true)
+                ViewModel.ImportFromOfflineRegistry(openFileDialog.FileName);
         }
     }
 }

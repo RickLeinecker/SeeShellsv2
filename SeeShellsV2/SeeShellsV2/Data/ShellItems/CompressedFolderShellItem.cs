@@ -25,6 +25,12 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("PathName", string.Empty);
         }
 
+        public DateTime ModifiedDate
+        {
+            init => fields["ModifiedDate"] = value;
+            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+        }
+
         public CompressedFolderShellItem() { }
 
         public CompressedFolderShellItem(byte[] buf)
@@ -52,7 +58,7 @@ namespace SeeShellsV2.Data
                 fields["PathName"] = Block.UnpackWString(buf, offset);
                 offset += 2 * (PathName.Length + 1); // path name string size
 
-                fields["Description"] = PathName + FileName;
+                fields["Description"] = FileName;
             }
             catch (Exception ex) when (ex is ShellParserException || ex is FormatException)
             {

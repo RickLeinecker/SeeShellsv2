@@ -30,7 +30,9 @@ namespace SeeShellsV2
             container.RegisterSingleton<IShellCollection, ShellCollection>();
 
             // Register Service Types
+            container.RegisterType<IConfigParser, ConfigParser>();
             container.RegisterType<ICsvImporter, CsvImporter>();
+            container.RegisterType<IRegistryImporter, RegistryImporter>();
 
             // Register Window Types
             container.RegisterType<IWindow, MainWindow>("main");

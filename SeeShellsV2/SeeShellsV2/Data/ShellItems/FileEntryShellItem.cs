@@ -83,6 +83,24 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("FilePrimaryName", string.Empty);
         }
 
+        public DateTime ModifiedDate
+        {
+            init => fields["ModifiedDate"] = value;
+            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+        }
+
+        public DateTime AccessedDate
+        {
+            init => fields["AccessedDate"] = value;
+            get => fields.GetStructOrDefault("AccessedDate", DateTime.MinValue);
+        }
+
+        public DateTime CreationDate
+        {
+            init => fields["CreationDate"] = value;
+            get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
+        }
+
         public FileEntryShellItem() { }
 
         public FileEntryShellItem(byte[] buf)

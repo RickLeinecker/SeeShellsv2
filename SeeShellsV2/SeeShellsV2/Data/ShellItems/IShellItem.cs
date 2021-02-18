@@ -79,24 +79,6 @@ namespace SeeShellsV2.Data
         string SubtypeName { init; get; }
 
         /// <summary>
-        /// The last known modification date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime ModifiedDate { init; get; }
-
-        /// <summary>
-        /// The last known access date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime AccessedDate { init; get; }
-
-        /// <summary>
-        /// The creation date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime CreationDate { init; get; }
-
-        /// <summary>
         /// all properties that exist in the ShellItem in Key-Value Format.
         /// </summary>
         IReadOnlyDictionary<string, object> Fields { get; }

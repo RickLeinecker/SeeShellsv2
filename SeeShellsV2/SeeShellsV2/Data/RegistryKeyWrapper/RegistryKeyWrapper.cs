@@ -15,8 +15,13 @@
 // if not, see <https://www.gnu.org/licenses>
 #endregion
 using System;
-using Microsoft.Win32;
-// using NLog;
+
+using LiveRegistryKey = Microsoft.Win32.RegistryKey;
+using LiveRegistryHive = Microsoft.Win32.RegistryHive;
+
+using OfflineRegistryHive = Registry.RegistryHiveOnDemand;
+using OfflineRegistryKey = Registry.Abstractions.RegistryKey;
+using OfflineKeyValue = Registry.Abstractions.KeyValue;
 
 using SeeShellsV2.Utilities;
 
@@ -24,7 +29,6 @@ namespace SeeShellsV2.Data
 {
     public class RegistryKeyWrapper
     {
-
         // private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public string RegistryUser { get; internal set; }
@@ -70,29 +74,27 @@ namespace SeeShellsV2.Data
         /// <param name="registryKey">A Registry Key associated with a Shellbag, retrieved via Win32 API </param>
         /// <param name="keyValue">The Value of a Registry key containing Shellbag information. Found in the Parent of the registryKey being inspected</param>
         /// <param name="parent">The parent of the currently inspected registryKey. Can be null.</param>
-        public RegistryKeyWrapper(RegistryKey registryKey, byte[] keyValue, RegistryKeyWrapper parent = null) : this(keyValue)
+        public RegistryKeyWrapper(LiveRegistryKey registryKey, byte[] keyValue, RegistryKeyWrapper parent = null) : this(keyValue)
         {
             Parent = parent;
             RegistryPath = registryKey.Name;
             AdaptWin32Key(registryKey);
         }
 
-        /*
         /// <summary>
         /// Adapts a ShellBag RegistryKey to a common standard for retrieval of important information independent of key retrieval methodologies
         /// </summary>
         /// <param name="registryKey">A Registry Key associated with a Shellbag, retrieved from a offline registry reader API</param>
         /// <param name="keyValue">The Value of a Registry key containing Shellbag information. Found in the Parent of the registryKey being inspected</param>
         /// <param name="parent">The parent of the currently inspected registryKey. Can be null.</param>
-        public RegistryKeyWrapper(global::Registry.Abstractions.RegistryKey registryKey, byte[] keyValue, global::Registry.RegistryHiveOnDemand hive, RegistryKeyWrapper parent = null) : this(keyValue)
+        public RegistryKeyWrapper(OfflineRegistryKey registryKey, byte[] keyValue, OfflineRegistryHive hive, RegistryKeyWrapper parent = null) : this(keyValue)
         {
             Parent = parent;
             RegistryPath = registryKey.KeyPath;
             AdaptOfflineKey(registryKey, hive);
         }
-        */
 
-        private void AdaptWin32Key(RegistryKey registryKey)
+        private void AdaptWin32Key(LiveRegistryKey registryKey)
         {
             //obtain SID and Username(?)
 
@@ -122,17 +124,16 @@ namespace SeeShellsV2.Data
 
                 if (registryKey.Name.StartsWith("HKEY_USERS"))
                 {
-                    SlotModifiedDate = RegistryHelper.GetDateModified(RegistryHive.Users, ShellbagPath.Replace("HKEY_USERS\\", "")) ?? DateTime.MinValue;
+                    SlotModifiedDate = RegistryHelper.GetDateModified(LiveRegistryHive.Users, ShellbagPath.Replace("HKEY_USERS\\", "")) ?? DateTime.MinValue;
                 }
             }
 
             //obtain the date the registry last wrote this key
-            LastRegistryWriteDate = RegistryHelper.GetDateModified(RegistryHive.Users, registryKey.Name.Replace("HKEY_USERS\\", "")) ?? DateTime.MinValue;
+            LastRegistryWriteDate = RegistryHelper.GetDateModified(LiveRegistryHive.Users, registryKey.Name.Replace("HKEY_USERS\\", "")) ?? DateTime.MinValue;
 
         }
 
-        /*
-        private void AdaptOfflineKey(global::Registry.Abstractions.RegistryKey registryKey, global::Registry.RegistryHiveOnDemand hive)
+        private void AdaptOfflineKey(OfflineRegistryKey registryKey, OfflineRegistryHive hive)
         {
             //obtain SID and Username(?)
 
@@ -153,7 +154,7 @@ namespace SeeShellsV2.Data
             try
             {
                 var values = registryKey.Values;
-                foreach (global::Registry.Abstractions.KeyValue kv in registryKey.Values)
+                foreach (OfflineKeyValue kv in registryKey.Values)
                 {
                     if (kv.ValueName.Equals("NodeSlot"))
                     {
@@ -166,12 +167,11 @@ namespace SeeShellsV2.Data
             }
             catch (Exception ex)
             {
-                logger.Trace(ex, $"NodeSlot was not found for registry key at {RegistryPath}");
+                // logger.Trace(ex, $"NodeSlot was not found for registry key at {RegistryPath}");
             }
 
             //obtain the date the registry last wrote this key
             LastRegistryWriteDate = registryKey.LastWriteTime.Value.LocalDateTime;
         }
-        */
     }
 }

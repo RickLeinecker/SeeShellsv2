@@ -21,14 +21,11 @@ namespace SeeShellsV2.Data.Tests
                 SubtypeName = "123",
                 Description = "Test",
                 Size = 10,
-                ModifiedDate = new DateTime(90810298),
-                AccessedDate = new DateTime(908123802123),
-                CreationDate = new DateTime(4865846),
                 Uri = "uri",
                 FTPHostname = "192.168.1.1"
             };
 
-            Assert.IsTrue(item.Fields.Count == 10);
+            Assert.IsTrue(item.Fields.Count == 7);
             Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
@@ -36,9 +33,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("SubtypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("Description"));
             Assert.IsTrue(item.Fields.ContainsKey("Size"));
-            Assert.IsTrue(item.Fields.ContainsKey("ModifiedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("AccessedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields.ContainsKey("Uri"));
             Assert.IsTrue(item.Fields.ContainsKey("FTPHostname"));
 
@@ -47,9 +41,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields["SubtypeName"] as string == item.SubtypeName);
             Assert.IsTrue(item.Fields["Description"] as string == item.Description);
             Assert.IsTrue(item.Fields["Size"] as ushort? == item.Size);
-            Assert.IsTrue(item.Fields["ModifiedDate"] as DateTime? == item.ModifiedDate);
-            Assert.IsTrue(item.Fields["AccessedDate"] as DateTime? == item.AccessedDate);
-            Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue(item.Fields["Uri"] as string == item.Uri);
             Assert.IsTrue(item.Fields["FTPHostname"] as string == item.FTPHostname);
 
@@ -58,9 +49,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.SubtypeName == "123");
             Assert.IsTrue(item.Description == "Test");
             Assert.IsTrue(item.Size == 10);
-            Assert.IsTrue(item.ModifiedDate == new DateTime(90810298));
-            Assert.IsTrue(item.AccessedDate == new DateTime(908123802123));
-            Assert.IsTrue(item.CreationDate == new DateTime(4865846));
             Assert.IsTrue(item.Uri == "uri");
             Assert.IsTrue(item.FTPHostname == "192.168.1.1");
         }

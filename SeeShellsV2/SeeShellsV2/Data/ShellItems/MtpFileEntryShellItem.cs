@@ -29,6 +29,18 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("FolderId", string.Empty);
         }
 
+        public DateTime ModifiedDate
+        {
+            init => fields["ModifiedDate"] = value;
+            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+        }
+
+        public DateTime CreationDate
+        {
+            init => fields["CreationDate"] = value;
+            get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
+        }
+
         public MtpFileEntryShellItem() { }
 
         public MtpFileEntryShellItem(byte[] buf)

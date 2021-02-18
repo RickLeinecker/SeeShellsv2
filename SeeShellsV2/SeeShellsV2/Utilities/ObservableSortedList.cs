@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Collections;
-using System.Windows;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
@@ -36,13 +35,8 @@ namespace SeeShellsV2.Utilities
                 comparer = value;
                 data = data.OrderBy(t => t, comparer).ToList();
 
-                Application.Current.Dispatcher.BeginInvoke(
-                    new Action<ObservableSortedList<T>>((sender) => {
-                        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Comparer"));
-                    }),
-                    this
-                );
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Comparer"));
             }
         }
 
@@ -57,13 +51,8 @@ namespace SeeShellsV2.Utilities
 
             data.Insert(idx, item);
 
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action<ObservableSortedList<T>>((sender) => {
-                    sender.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, idx));
-                    sender.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
-                }),
-                this
-            );
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, idx));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public void AddRange(IEnumerable<T> collection)
@@ -77,26 +66,16 @@ namespace SeeShellsV2.Utilities
                 data.Insert(idx, item);
             }
 
-            Application.Current.Dispatcher.BeginInvoke(
-                System.Windows.Threading.DispatcherPriority.Background,
-                new Action<ObservableSortedList<T>>((sender) => {
-                    sender.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    sender.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
-                }),
-                this
-            );
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public void Clear()
         {
             data.Clear();
-            Application.Current.Dispatcher.BeginInvoke(
-                new Action<ObservableSortedList<T>>((sender) => {
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
-                }),
-                this
-            );
+
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public bool Contains(T item)
@@ -118,13 +97,8 @@ namespace SeeShellsV2.Utilities
             {
                 data.RemoveAt(idx);
 
-                Application.Current.Dispatcher.BeginInvoke(
-                    new Action<ObservableSortedList<T>>((sender) => {
-                        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, idx));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
-                    }),
-                    this
-                );
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, idx));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
             }
 
             return idx >= 0;

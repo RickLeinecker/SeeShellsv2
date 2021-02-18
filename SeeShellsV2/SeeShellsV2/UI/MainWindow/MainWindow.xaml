@@ -14,6 +14,8 @@
                         <MenuItem Header="File" Foreground="Black" >
                             <MenuItem Header="Import" Foreground="Black">
                                 <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
+                                <MenuItem Header="From Live Registry" Foreground="Black" Click="Import_Live_Registry_Click"/>
+                                <MenuItem Header="From Offline Registry" Foreground="Black" Click="Import_Offline_Registry_Click"/>
                             </MenuItem>
                             <MenuItem Header="Export" Foreground="Black">
                                 <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
@@ -22,7 +24,7 @@
                     </Menu>
                 </Grid>
             </StackPanel>
-            <local:TableView></local:TableView>
+            <local:TableView />
         </DockPanel>
     </Grid>
 </Window>
