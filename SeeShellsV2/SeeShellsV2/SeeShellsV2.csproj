@@ -8,8 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="UI\Images\SeeShells.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="21.1.1" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.2" />
     <PackageReference Include="Unity" Version="5.11.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="UI\Images\SeeShells.png" />
   </ItemGroup>
 
 </Project>
