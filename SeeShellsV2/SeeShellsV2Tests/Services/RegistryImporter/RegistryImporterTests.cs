@@ -40,9 +40,9 @@ namespace SeeShellsV2.Services.Tests
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
-            IRegistryImporter.Result res = await regImporter.ImportOnlineRegistry();
+            (int parsed, _, _) = await regImporter.ImportOnlineRegistry();
 
-            Assert.IsTrue(shellItems.Count == res.parsed);
+            Assert.IsTrue(shellItems.Count == parsed);
         }
 
         [TestMethod()]
@@ -57,9 +57,9 @@ namespace SeeShellsV2.Services.Tests
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
-            IRegistryImporter.Result res = await regImporter.ImportOfflineRegistry("Resources\\UsrClass.dat");
+            (int parsed, _, _) = await regImporter.ImportOfflineRegistry("Resources\\UsrClass.dat");
 
-            Assert.IsTrue(shellItems.Count == res.parsed);
+            Assert.IsTrue(shellItems.Count == parsed);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Threading.Tasks;
 using Microsoft.Win32;
 
 using SeeShellsV2.Factories;
@@ -14,8 +15,8 @@ namespace SeeShellsV2.UI
         public string Title { get; }
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
-        public void ImportFromOnlineRegistry();
-        public void ImportFromOfflineRegistry(string hiveLocation);
+        public Task<(int, int, long)> ImportFromOnlineRegistry();
+        public Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation);
     }
 
     /// <summary>
@@ -54,18 +55,23 @@ namespace SeeShellsV2.UI
                 ViewModel.ExportToCSV(openFileDialog.FileName);
         }
 
-        private void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
+        private async void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.ImportFromOnlineRegistry();
+            (int parsed, int failed, long elapsedMillis) = await ViewModel.ImportFromOnlineRegistry();
+
+            MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", parsed, failed, elapsedMillis));
         }
 
-        private void Import_Offline_Registry_Click(object sender, RoutedEventArgs e)
+        private async void Import_Offline_Registry_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.ValidateNames = false;
             openFileDialog.ReadOnlyChecked = true;
             if (openFileDialog.ShowDialog() == true)
-                ViewModel.ImportFromOfflineRegistry(openFileDialog.FileName);
+            {
+                (int parsed, int failed, long elapsedMillis) = await ViewModel.ImportFromOfflineRegistry(openFileDialog.FileName);
+                MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", parsed, failed, elapsedMillis));
+            }
         }
     }
 }

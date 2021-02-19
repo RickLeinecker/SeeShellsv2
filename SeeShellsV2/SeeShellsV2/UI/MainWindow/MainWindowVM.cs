@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows;
+using System.Threading.Tasks;
 
 using Unity;
 
@@ -24,17 +24,15 @@ namespace SeeShellsV2.UI
         
         }
 
-        public async void ImportFromOnlineRegistry()
+        public async Task<(int, int, long)> ImportFromOnlineRegistry()
         {
-            IRegistryImporter.Result t = await RegImporter.ImportOnlineRegistry(true);
-            MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", t.parsed, t.failed, t.elapsedMilliseconds));
+            return await RegImporter.ImportOnlineRegistry(true);
         }
 
-        public async void ImportFromOfflineRegistry(string hiveLocation)
+        public async Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation)
         {
             
-            IRegistryImporter.Result t = await RegImporter.ImportOfflineRegistry(hiveLocation);
-            MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", t.parsed, t.failed, t.elapsedMilliseconds));
+            return await RegImporter.ImportOfflineRegistry(hiveLocation);
         }
     }
 }

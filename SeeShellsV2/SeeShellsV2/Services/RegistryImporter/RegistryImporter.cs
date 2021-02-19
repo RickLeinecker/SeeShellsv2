@@ -61,7 +61,7 @@ namespace SeeShellsV2.Services
             ShellFactory = shellFactory;
         }
 
-        public Task<IRegistryImporter.Result> ImportOnlineRegistry(bool parseAllUsers = false)
+        public Task<(int, int, long)> ImportOnlineRegistry(bool parseAllUsers = false)
         {
             if (!registeredCancellation && Application.Current != null)
             {
@@ -116,7 +116,7 @@ namespace SeeShellsV2.Services
 
                             // finish parsing if the parser task was cancelled
                             if (tokenSource.IsCancellationRequested)
-                                return new IRegistryImporter.Result(parsed, nulled, stopwatch.ElapsedMilliseconds);
+                                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
 
                             if (syncher != null)
                                 syncher.Post(delegate { ShellItems.Add(shellItem); }, null);
@@ -128,11 +128,11 @@ namespace SeeShellsV2.Services
 
                 stopwatch.Stop();
 
-                return new IRegistryImporter.Result(parsed, nulled, stopwatch.ElapsedMilliseconds);
+                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
             }, tokenSource.Token);
         }
 
-        public Task<IRegistryImporter.Result> ImportOfflineRegistry(string registryFilePath)
+        public Task<(int, int, long)> ImportOfflineRegistry(string registryFilePath)
         {
             if (!registeredCancellation && Application.Current != null)
             {
@@ -187,7 +187,7 @@ namespace SeeShellsV2.Services
 
                             // finish parsing if the parser task was cancelled
                             if (tokenSource.IsCancellationRequested)
-                                return new IRegistryImporter.Result(parsed, nulled, stopwatch.ElapsedMilliseconds);
+                                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
 
                             // add the shell item to the collection in the caller's thread
                             if (syncher != null)
@@ -200,7 +200,7 @@ namespace SeeShellsV2.Services
 
                 stopwatch.Stop();
 
-                return new IRegistryImporter.Result(parsed, nulled, stopwatch.ElapsedMilliseconds);
+                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
             }, tokenSource.Token);
         }
 
