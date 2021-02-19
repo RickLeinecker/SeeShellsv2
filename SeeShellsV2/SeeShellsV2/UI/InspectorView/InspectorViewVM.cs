@@ -11,16 +11,6 @@ namespace SeeShellsV2.UI
 {
     public class InspectorViewVM : ViewModel, IInspectorViewVM
     {
-        private IShellItem item = new ShellItem();
-
-        public IShellItem SelectedShell
-        {
-            get => item;
-            set
-            {
-                item = value;
-                NotifyPropertyChanged();
-            }
-        }
+        
     }
 }

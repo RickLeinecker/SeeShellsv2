@@ -20,7 +20,7 @@ namespace SeeShellsV2.UI
 {
     public interface ITimelineViewVM : IViewModel
     {
-        IShellItem SelectedShell { get; }
+        
     }
 
     /// <summary>

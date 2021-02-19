@@ -18,8 +18,8 @@ using SeeShellsV2.Repositories;
 namespace SeeShellsV2.UI
 {
     public interface IExportWindowVM : IViewModel
-    {
-        IShellCollection ExportShellCollection { get; }
+    { 
+        
     }
 
     /// <summary>

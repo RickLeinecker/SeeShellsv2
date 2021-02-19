@@ -20,7 +20,7 @@ namespace SeeShellsV2.UI
 {
     public interface IFileSystemViewVM : IViewModel
     {
-        IShellItem SelectedShell { get; }
+        
     }
 
     /// <summary>

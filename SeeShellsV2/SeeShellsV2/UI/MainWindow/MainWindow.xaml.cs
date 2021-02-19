@@ -31,12 +31,16 @@ namespace SeeShellsV2.UI
         }
 
         [Dependency]
+        public ExportWindow win {get; set;}
+
+        [Dependency]
         public IWindowFactory windowFactory { private get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
         }
+
 
         private void Import_CSV_Click(object sender, RoutedEventArgs e)
         {
@@ -48,7 +52,8 @@ namespace SeeShellsV2.UI
 
         private void Export_Window_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.ExportWindow();
+            IWindow win = windowFactory.Create("export");
+            win.Show();
         }
 
         private void Export_CSV_Click(object sender, RoutedEventArgs e)

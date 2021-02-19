@@ -21,9 +21,8 @@ namespace SeeShellsV2.UI
         }
 
         public void ExportWindow()
-        {
-            ExportWindow win = new ExportWindow();
-            win.Show();
+        { 
+            
         }
 
         public void ExportToCSV(string path)

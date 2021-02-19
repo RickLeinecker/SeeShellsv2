@@ -10,18 +10,7 @@ using SeeShellsV2.Repositories;
 namespace SeeShellsV2.UI
 {
     public class ExportWindowVM : ViewModel, IExportWindowVM
-    {
-        private IShellCollection collection = new ShellCollection();
-
-        public IShellCollection ExportShellCollection
-        {
-            get => collection;
-            set
-            {
-                collection = value;
-                NotifyPropertyChanged();
-            }
-        }
-
+    { 
+        
     }
 }
