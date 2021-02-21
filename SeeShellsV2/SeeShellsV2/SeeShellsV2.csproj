@@ -3,21 +3,35 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
+	<PublishSingleFile>true</PublishSingleFile>
+	<SelfContained>true</SelfContained>
+	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <UseWPF>true</UseWPF>
     <StartupObject>SeeShellsV2.Program</StartupObject>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\defaultOS.json" />
+    <None Remove="Resources\xceedLogo.png" />
     <None Remove="UI\Images\SeeShells.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="21.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.2" />
     <PackageReference Include="Unity" Version="5.11.9" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\defaultOS.json" />
+    <EmbeddedResource Include="Resources\xceedLogo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Registry\Registry.csproj" />
     <Resource Include="UI\Images\SeeShells.png" />
   </ItemGroup>
 

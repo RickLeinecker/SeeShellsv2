@@ -34,9 +34,19 @@ namespace SeeShellsV2.Data
         string Description { init; get; }
 
         /// <summary>
-        /// Parent shell item in the shell item hierarchy
+        /// Registry Key from which the shell item was parsed
         /// </summary>
-        IShellItem Parent { get; }
+        RegistryKeyWrapper RegistryKey { get; set; }
+
+        /// <summary>
+        /// Parent of this shell item
+        /// </summary>
+        IShellItem Parent { get; set; }
+
+        /// <summary>
+        /// Children of this shell item
+        /// </summary>
+        IList<IShellItem> Children { get; }
 
         /// <summary>
         /// Tells the Size of the entire ShellItem. Includes the two bytes to represent the sie parameter.
@@ -67,24 +77,6 @@ namespace SeeShellsV2.Data
         /// Human readable interpretation of <see cref="Type"/>
         /// </summary>
         string SubtypeName { init; get; }
-
-        /// <summary>
-        /// The last known modification date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime ModifiedDate { init; get; }
-
-        /// <summary>
-        /// The last known access date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime AccessedDate { init; get; }
-
-        /// <summary>
-        /// The creation date for the data represented in this ShellItem.
-        /// If the value was not found or unreadable, the value returned is <see cref="DateTime.MinValue"/>
-        /// </summary>
-        DateTime CreationDate { init; get; }
 
         /// <summary>
         /// all properties that exist in the ShellItem in Key-Value Format.

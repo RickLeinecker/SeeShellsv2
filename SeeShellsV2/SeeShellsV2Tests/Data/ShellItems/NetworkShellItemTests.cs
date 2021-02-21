@@ -21,26 +21,20 @@ namespace SeeShellsV2.Data.Tests
                 SubtypeName = "123",
                 Description = "Test",
                 Size = 10,
-                ModifiedDate = new DateTime(90810298),
-                AccessedDate = new DateTime(908123802123),
-                CreationDate = new DateTime(4865846),
                 NetworkFlags = NetworkShellItem.NetworkFlagBits.HasDescription | NetworkShellItem.NetworkFlagBits.HasComments,
                 NetworkLocation = "192.168.1.1",
                 NetworkDescription = "description",
                 NetworkComments = "comments"
             };
 
-            Assert.IsTrue(item.Fields.Count == 12);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.Fields.Count == 9);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("SubtypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("Description"));
             Assert.IsTrue(item.Fields.ContainsKey("Size"));
-            Assert.IsTrue(item.Fields.ContainsKey("ModifiedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("AccessedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields.ContainsKey("NetworkFlags"));
             Assert.IsTrue(item.Fields.ContainsKey("NetworkLocation"));
             Assert.IsTrue(item.Fields.ContainsKey("NetworkDescription"));
@@ -51,9 +45,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields["SubtypeName"] as string == item.SubtypeName);
             Assert.IsTrue(item.Fields["Description"] as string == item.Description);
             Assert.IsTrue(item.Fields["Size"] as ushort? == item.Size);
-            Assert.IsTrue(item.Fields["ModifiedDate"] as DateTime? == item.ModifiedDate);
-            Assert.IsTrue(item.Fields["AccessedDate"] as DateTime? == item.AccessedDate);
-            Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue((NetworkShellItem.NetworkFlagBits)item.Fields["NetworkFlags"] == item.NetworkFlags);
             Assert.IsTrue(item.Fields["NetworkLocation"] as string == item.NetworkLocation);
             Assert.IsTrue(item.Fields["NetworkDescription"] as string == item.NetworkDescription);
@@ -64,9 +55,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.SubtypeName == "123");
             Assert.IsTrue(item.Description == "Test");
             Assert.IsTrue(item.Size == 10);
-            Assert.IsTrue(item.ModifiedDate == new DateTime(90810298));
-            Assert.IsTrue(item.AccessedDate == new DateTime(908123802123));
-            Assert.IsTrue(item.CreationDate == new DateTime(4865846));
             Assert.IsTrue(item.NetworkFlags == (NetworkShellItem.NetworkFlagBits.HasDescription | NetworkShellItem.NetworkFlagBits.HasComments));
             Assert.IsTrue(item.NetworkLocation == "192.168.1.1");
             Assert.IsTrue(item.NetworkDescription == "description");
@@ -89,7 +77,7 @@ namespace SeeShellsV2.Data.Tests
             NetworkShellItem item = new NetworkShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 9);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));

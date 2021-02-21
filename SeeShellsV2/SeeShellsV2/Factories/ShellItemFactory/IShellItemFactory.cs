@@ -16,13 +16,13 @@ namespace SeeShellsV2.Factories
         /// </summary>
         /// <param name="type">shell item type identifier</param>
         /// <returns>shell item type if it exists, or null otherwise</returns>
-        Type GetShellType(byte type);
+        Type GetShellType(byte type, IShellItem parent = null);
 
         /// <summary>
         /// Create a new shell item from a byte array
         /// </summary>
         /// <param name="buf">the byte array containing shell item data</param>
         /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        IShellItem Create(byte[] buf);
+        IShellItem Create(byte[] buf, IShellItem parent = null);
     }
 }

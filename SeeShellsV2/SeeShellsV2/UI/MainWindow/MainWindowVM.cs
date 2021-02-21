@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 using Unity;
 
-using SeeShellsV2.Repositories;
 using SeeShellsV2.Services;
 
 namespace SeeShellsV2.UI
 {
     public class MainWindowVM : ViewModel, IMainWindowVM
     {
-        [Dependency] public ICsvImporter importer { get; set; }
+        [Dependency] public ICsvImporter CsvImporter { get; set; }
+        [Dependency] public IRegistryImporter RegImporter { get; set; }
 
         public string Title { get { return "SeeShells"; } }
 
@@ -28,6 +27,17 @@ namespace SeeShellsV2.UI
         public void ExportToCSV(string path)
         {
 
+        }
+
+        public async Task<(int, int, long)> ImportFromOnlineRegistry()
+        {
+            return await RegImporter.ImportOnlineRegistry(true);
+        }
+
+        public async Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation)
+        {
+            
+            return await RegImporter.ImportOfflineRegistry(hiveLocation);
         }
     }
 }

@@ -21,24 +21,18 @@ namespace SeeShellsV2.Data.Tests
                 SubtypeName = "123",
                 Description = "Test",
                 Size = 10,
-                ModifiedDate = new DateTime(90810298),
-                AccessedDate = new DateTime(908123802123),
-                CreationDate = new DateTime(4865846),
                 Uri = "uri",
                 FTPHostname = "192.168.1.1"
             };
 
-            Assert.IsTrue(item.Fields.Count == 10);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.Fields.Count == 7);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("SubtypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("Description"));
             Assert.IsTrue(item.Fields.ContainsKey("Size"));
-            Assert.IsTrue(item.Fields.ContainsKey("ModifiedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("AccessedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields.ContainsKey("Uri"));
             Assert.IsTrue(item.Fields.ContainsKey("FTPHostname"));
 
@@ -47,9 +41,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields["SubtypeName"] as string == item.SubtypeName);
             Assert.IsTrue(item.Fields["Description"] as string == item.Description);
             Assert.IsTrue(item.Fields["Size"] as ushort? == item.Size);
-            Assert.IsTrue(item.Fields["ModifiedDate"] as DateTime? == item.ModifiedDate);
-            Assert.IsTrue(item.Fields["AccessedDate"] as DateTime? == item.AccessedDate);
-            Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue(item.Fields["Uri"] as string == item.Uri);
             Assert.IsTrue(item.Fields["FTPHostname"] as string == item.FTPHostname);
 
@@ -58,9 +49,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.SubtypeName == "123");
             Assert.IsTrue(item.Description == "Test");
             Assert.IsTrue(item.Size == 10);
-            Assert.IsTrue(item.ModifiedDate == new DateTime(90810298));
-            Assert.IsTrue(item.AccessedDate == new DateTime(908123802123));
-            Assert.IsTrue(item.CreationDate == new DateTime(4865846));
             Assert.IsTrue(item.Uri == "uri");
             Assert.IsTrue(item.FTPHostname == "192.168.1.1");
         }
@@ -87,7 +75,7 @@ namespace SeeShellsV2.Data.Tests
             UriShellItem item = new UriShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 10);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
@@ -117,7 +105,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Size == 0x62);
             Assert.IsTrue(item.UriFlags == (UriShellItem.UriFlagBits)0x03);
             Assert.IsTrue(item.Uri == "ftp");
-            Assert.IsTrue(item.ConnectionDate.ToString() == "1/17/2017 6:53:14 PM");
+            Assert.IsTrue(item.ConnectionDate == new DateTime(636202939949621621, DateTimeKind.Utc).ToLocalTime());
             Assert.IsTrue(item.FTPHostname == "sonicfan1.tk");
             Assert.IsTrue(item.FTPUsername == "a8849466");
             Assert.IsTrue(item.FTPPassword == string.Empty);
@@ -143,7 +131,7 @@ namespace SeeShellsV2.Data.Tests
             UriShellItem item = new UriShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 10);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.Fields.ContainsKey("Type"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
@@ -173,7 +161,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Size == 0x52);
             Assert.IsTrue(item.UriFlags == (UriShellItem.UriFlagBits)0x03);
             Assert.IsTrue(item.Uri == "ftp");
-            Assert.IsTrue(item.ConnectionDate.ToString() == "2/25/2017 11:30:53 PM");
+            Assert.IsTrue(item.ConnectionDate == new DateTime(636236802532428509, DateTimeKind.Utc).ToLocalTime());
             Assert.IsTrue(item.FTPHostname == "192.168.132.192");
             Assert.IsTrue(item.FTPUsername == string.Empty);
             Assert.IsTrue(item.FTPPassword == string.Empty);

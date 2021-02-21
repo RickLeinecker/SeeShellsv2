@@ -15,11 +15,13 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+              <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Menu Background="DarkGray">
                     <MenuItem Header="File" Foreground="Black" >
                         <MenuItem Header="Import" Foreground="Black">
                             <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
+                            <MenuItem Header="From Live Registry" Foreground="Black" Click="Import_Live_Registry_Click"/>
+                            <MenuItem Header="From Offline Registry" Foreground="Black" Click="Import_Offline_Registry_Click"/>
                         </MenuItem>
                         <MenuItem Header="Export" Foreground="Black">
                             <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
@@ -45,7 +47,7 @@
                     </ComboBoxItem>
                 </ComboBox>
                 </Menu>
-            </StackPanel>
+              </StackPanel>
             </DockPanel>
 
             <xcad:DockingManager Grid.Row="1" Height="Auto"

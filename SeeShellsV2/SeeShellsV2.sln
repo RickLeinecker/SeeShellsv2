@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeeShellsV2", "SeeShellsV2\SeeShellsV2.csproj", "{60961918-8016-4864-976A-426D5992DD23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeeShellsV2Tests", "SeeShellsV2Tests\SeeShellsV2Tests.csproj", "{44002F03-312A-423E-840E-4949F9EB922B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeeShellsV2Tests", "SeeShellsV2Tests\SeeShellsV2Tests.csproj", "{44002F03-312A-423E-840E-4949F9EB922B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Registry", "Registry\Registry.csproj", "{82AF26D1-68E0-4032-8DAF-A35FE1E351CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{44002F03-312A-423E-840E-4949F9EB922B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44002F03-312A-423E-840E-4949F9EB922B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44002F03-312A-423E-840E-4949F9EB922B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82AF26D1-68E0-4032-8DAF-A35FE1E351CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82AF26D1-68E0-4032-8DAF-A35FE1E351CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82AF26D1-68E0-4032-8DAF-A35FE1E351CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82AF26D1-68E0-4032-8DAF-A35FE1E351CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,5 +12,10 @@ namespace SeeShellsV2.Repositories
 {
     public interface IShellCollection : ICollection<IShellItem>, INotifyPropertyChanged, INotifyCollectionChanged
     {
+        /// <summary>
+        /// adds a collection of shell items to the shell collection
+        /// </summary>
+        /// <param name="collection"></param>
+        void AddRange(IEnumerable<IShellItem> collection);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace SeeShellsV2.UI
 {
     public interface ITableViewVM : IViewModel
     {
-        IShellCollection ShellItems { get; }
+        ICollectionView ShellItems { get; }
     }
 
     /// <summary>

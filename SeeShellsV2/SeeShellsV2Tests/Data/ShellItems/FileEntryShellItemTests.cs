@@ -59,7 +59,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields.ContainsKey("FilePrimaryName"));
             Assert.IsTrue(item.Fields["FilePrimaryName"] as string == item.FilePrimaryName);
             Assert.IsTrue(item.FilePrimaryName == "My Stuff");
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
         }
 
         [TestMethod()]
@@ -89,7 +89,7 @@ namespace SeeShellsV2.Data.Tests
             FileEntryShellItem item = new FileEntryShellItem(buf);
 
             Assert.IsTrue(item.Fields.Count == 11);
-            Assert.IsTrue(item.Parent == null);
+            Assert.IsTrue(item.RegistryKey == null);
 
             Assert.IsTrue(item.ExtensionBlocks.Count == 1);
             Assert.IsTrue(item.ExtensionBlocks[0].Signature == 0xBEEF0004);

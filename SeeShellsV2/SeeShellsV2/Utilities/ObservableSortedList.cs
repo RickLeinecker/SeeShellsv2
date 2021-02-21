@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace SeeShellsV2.Utilities
             {
                 comparer = value;
                 data = data.OrderBy(t => t, comparer).ToList();
+
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Comparer"));
             }
@@ -48,13 +50,30 @@ namespace SeeShellsV2.Utilities
             idx = idx >= 0 ? idx + 1 : ~idx;
 
             data.Insert(idx, item);
+
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, idx));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+        }
+
+        public void AddRange(IEnumerable<T> collection)
+        {
+            foreach (T item in collection)
+            {
+                int idx = data.BinarySearch(item, comparer);
+
+                idx = idx >= 0 ? idx + 1 : ~idx;
+
+                data.Insert(idx, item);
+            }
+
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
 
         public void Clear()
         {
             data.Clear();
+
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
         }
@@ -77,6 +96,7 @@ namespace SeeShellsV2.Utilities
             if (idx >= 0)
             {
                 data.RemoveAt(idx);
+
                 CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, idx));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
             }

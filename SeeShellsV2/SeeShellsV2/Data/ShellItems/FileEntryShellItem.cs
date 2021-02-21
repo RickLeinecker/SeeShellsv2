@@ -28,8 +28,7 @@ namespace SeeShellsV2.Data
     public class FileEntryShellItem : ShellItem, IShellItem
     {
         public static IReadOnlySet<byte> KnownTypes = new HashSet<byte> {
-        /*  0x30, 0x31, 0x32, 0x35, 0x36, 0xB1  */   // libwsi
-            0x30, 0x31, 0x32, 0x34, 0x35, 0x36, 0xB1 // v1 team
+            0x30, 0x31, 0x32, 0x34, 0x35, 0x36, 0x39, 0xB1
         };
 
         [Flags]
@@ -82,6 +81,24 @@ namespace SeeShellsV2.Data
         {
             init => fields["FilePrimaryName"] = value;
             get => fields.GetClassOrDefault("FilePrimaryName", string.Empty);
+        }
+
+        public DateTime ModifiedDate
+        {
+            init => fields["ModifiedDate"] = value;
+            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+        }
+
+        public DateTime AccessedDate
+        {
+            init => fields["AccessedDate"] = value;
+            get => fields.GetStructOrDefault("AccessedDate", DateTime.MinValue);
+        }
+
+        public DateTime CreationDate
+        {
+            init => fields["CreationDate"] = value;
+            get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
         }
 
         public FileEntryShellItem() { }
