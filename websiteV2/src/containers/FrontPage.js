@@ -121,7 +121,7 @@ class FrontPage extends React.Component {
     }
 
     handleClick(event) {
-        this.props.history.push("/" + event.currentTarget.id);
+        this.props.history.push(event.currentTarget.id);
     }
 
     render() {
