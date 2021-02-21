@@ -40,7 +40,7 @@ const styles = {
 function App(props) {
   return (
     <div className={props.classes.application}>
-      <Router>
+      <Router basename="/v2">
         <div className={props.classes.topBar}>
           <MenuBar/>
         </div>

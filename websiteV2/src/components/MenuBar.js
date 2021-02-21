@@ -52,12 +52,12 @@ class MenuBar extends React.Component {
     }
 
     handleClick(event) {
-        this.props.history.push(event.currentTarget.id);
+        this.props.history.push("/" + event.currentTarget.id);
     }
 
     render() {
         return(
-            <Router>
+            <Router basename="/v2">
                 <div className={this.props.classes.menuBar}>
                     <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
                     <p className={this.props.classes.title}>SEESHELLS</p>
