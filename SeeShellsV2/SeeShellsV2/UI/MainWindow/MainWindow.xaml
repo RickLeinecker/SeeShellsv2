@@ -4,27 +4,109 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeeShellsV2.UI"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="450" Width="800">
     <Grid>
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Top">
-                <Grid>
-                    <Menu Background="DarkGray">
-                        <MenuItem Header="File" Foreground="Black" >
-                            <MenuItem Header="Import" Foreground="Black">
-                                <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
-                                <MenuItem Header="From Live Registry" Foreground="Black" Click="Import_Live_Registry_Click"/>
-                                <MenuItem Header="From Offline Registry" Foreground="Black" Click="Import_Offline_Registry_Click"/>
-                            </MenuItem>
-                            <MenuItem Header="Export" Foreground="Black">
-                                <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
-                            </MenuItem>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DockPanel>
+              <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Menu Background="DarkGray">
+                    <MenuItem Header="File" Foreground="Black" >
+                        <MenuItem Header="Import" Foreground="Black">
+                            <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
+                            <MenuItem Header="From Live Registry" Foreground="Black" Click="Import_Live_Registry_Click"/>
+                            <MenuItem Header="From Offline Registry" Foreground="Black" Click="Import_Offline_Registry_Click"/>
                         </MenuItem>
-                    </Menu>
-                </Grid>
-            </StackPanel>
-            <local:TableView />
-        </DockPanel>
+                        <MenuItem Header="Export" Foreground="Black">
+                            <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
+                        </MenuItem>
+                    </MenuItem>
+                    <TextBlock Text="Theme:" VerticalAlignment="Center" Foreground="Black"/>
+                <ComboBox x:Name="_themeCombo" SelectedIndex="0" Width="200" Foreground="Black">
+                    <ComboBoxItem Content="Generic" Foreground="Black"/>
+                    <ComboBoxItem Content="Aero" Foreground="Black">
+                        <ComboBoxItem.Tag>
+                            <xcad:AeroTheme />
+                        </ComboBoxItem.Tag>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="VS2010" Foreground="Black">
+                        <ComboBoxItem.Tag>
+                            <xcad:VS2010Theme />
+                        </ComboBoxItem.Tag>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="Metro" Foreground="Black">
+                        <ComboBoxItem.Tag>
+                            <xcad:MetroTheme />
+                        </ComboBoxItem.Tag>
+                    </ComboBoxItem>
+                </ComboBox>
+                </Menu>
+              </StackPanel>
+            </DockPanel>
+
+            <xcad:DockingManager Grid.Row="1" Height="Auto"
+                           AllowMixedOrientation="True"
+                           BorderBrush="Black"
+                           BorderThickness="1"
+                           Theme="{Binding ElementName=_themeCombo, Path=SelectedItem.Tag}">
+                <xcad:DockingManager.DocumentHeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding Title}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </xcad:DockingManager.DocumentHeaderTemplate>
+                
+                <xcad:LayoutRoot x:Name="_layoutRoot">
+                    <xcad:LayoutPanel Orientation="Horizontal">
+                        
+                        <xcad:LayoutAnchorablePane DockWidth="200">
+                            <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                                <local:InspectorView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                        
+                        <xcad:LayoutDocumentPaneGroup >
+                            <xcad:LayoutDocumentPane>
+                                <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" IconSource="../Images/SeeShells.png">
+                                    <local:TimelineView />
+                                </xcad:LayoutDocument>
+                                <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" IconSource="../Images/SeeShells.png">
+                                    <local:TableView />
+                                </xcad:LayoutDocument>
+                            </xcad:LayoutDocumentPane>
+                        </xcad:LayoutDocumentPaneGroup >
+
+                        <xcad:LayoutAnchorablePaneGroup DockWidth="125">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                                    <local:FileSystemView />
+                                </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                                    <local:RegistryView />
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup>
+                    </xcad:LayoutPanel>
+
+                    <xcad:LayoutRoot.LeftSide>
+                        <xcad:LayoutAnchorSide>
+                            <xcad:LayoutAnchorGroup>
+                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                                    <local:FilterControlView />
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorGroup>
+                        </xcad:LayoutAnchorSide>
+                    </xcad:LayoutRoot.LeftSide>
+                </xcad:LayoutRoot>
+            </xcad:DockingManager>
+        </Grid>
     </Grid>
 </Window>

@@ -19,9 +19,14 @@ namespace SeeShellsV2.UI
             // importer.Import(path); => needs work
         }
 
+        public void ExportWindow()
+        { 
+            
+        }
+
         public void ExportToCSV(string path)
         {
-        
+
         }
 
         public async Task<(int, int, long)> ImportFromOnlineRegistry()

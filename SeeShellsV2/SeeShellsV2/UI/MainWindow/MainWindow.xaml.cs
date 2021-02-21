@@ -13,8 +13,10 @@ namespace SeeShellsV2.UI
     public interface IMainWindowVM : IViewModel
     {
         public string Title { get; }
+
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
+        public void ExportWindow();
         public Task<(int, int, long)> ImportFromOnlineRegistry();
         public Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation);
     }
@@ -32,6 +34,9 @@ namespace SeeShellsV2.UI
         }
 
         [Dependency]
+        public ExportWindow win {get; set;}
+
+        [Dependency]
         public IWindowFactory windowFactory { private get; set; }
 
         public MainWindow()
@@ -39,12 +44,19 @@ namespace SeeShellsV2.UI
             InitializeComponent();
         }
 
+
         private void Import_CSV_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 ViewModel.ImportFromCSV(openFileDialog.FileName);
+        }
+
+        private void Export_Window_Click(object sender, RoutedEventArgs e)
+        {
+            IWindow win = windowFactory.Create("export");
+            win.Show();
         }
 
         private void Export_CSV_Click(object sender, RoutedEventArgs e)
