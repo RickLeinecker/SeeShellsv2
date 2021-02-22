@@ -4,6 +4,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 
 const styles = {
+    downloadPage: {
+        display: 'flex',
+        flexFlow: 'column wrap',
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
+    },
     image: {
         display: 'flex',
         width: '100%',
@@ -75,10 +82,12 @@ const styles = {
 class DownloadPage extends React.Component {
     render() {
         return(
-            <div className={this.props.classes.downloadContainer}>
-                <div className={this.props.classes.image}/>
-                <div className={this.props.classes.login}>
-                    <p className={this.props.classes.title}>Download SeeShells</p>
+            <div className={this.props.classes.downloadPage}>
+                <div className={this.props.classes.downloadContainer}>
+                    <div className={this.props.classes.image}/>
+                    <div className={this.props.classes.login}>
+                        <p className={this.props.classes.title}>Download SeeShells</p>
+                    </div>
                 </div>
             </div>
         );

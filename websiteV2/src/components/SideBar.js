@@ -3,6 +3,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 
 const styles = {
+    sidebarContainer: {
+        width: '20%',
+        height: '100%',
+        backgroundColor: '#424242',
+        margin: '0px',
+        display: 'flex',
+        justifyContent: 'center',
+    },
 };
 
 class SideBar extends React.Component {
@@ -19,7 +27,9 @@ class SideBar extends React.Component {
     render() {
         return(
             <Router>
-
+                <div className={this.props.classes.sidebarContainer}>
+                    <p> ajksdhga9dughaidgahugikahksjghasjkg</p>
+                </div>
             </Router>
         );
     }
