@@ -44,7 +44,7 @@ namespace SeeShellsV2.Services
     public class RegistryImporter : IRegistryImporter
     {
         private IConfigParser Config { get; set; }
-        private IShellCollection ShellItems { get; set; }
+        private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
         private CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -52,7 +52,7 @@ namespace SeeShellsV2.Services
 
         public RegistryImporter(
             [Dependency] IConfigParser config,
-            [Dependency] IShellCollection shellItems,
+            [Dependency] IShellItemCollection shellItems,
             [Dependency] IShellItemFactory shellFactory
         )
         {
@@ -75,6 +75,7 @@ namespace SeeShellsV2.Services
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
+
                 int parsed = 0, nulled = 0;
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOnlineRegistryKeyIterator(parseAllUsers))
