@@ -13,10 +13,8 @@ namespace SeeShellsV2.UI
     public interface IMainWindowVM : IViewModel
     {
         public string Title { get; }
-
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
-        public void ExportWindow();
         public Task<(int, int, long)> ImportFromOnlineRegistry();
         public Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation);
     }
@@ -32,9 +30,6 @@ namespace SeeShellsV2.UI
             private get { return DataContext as IMainWindowVM; }
             set { DataContext = value; }
         }
-
-        [Dependency]
-        public ExportWindow win {get; set;}
 
         [Dependency]
         public IWindowFactory windowFactory { private get; set; }

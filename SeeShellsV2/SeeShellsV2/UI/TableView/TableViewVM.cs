@@ -8,24 +8,25 @@ using System.Threading.Tasks;
 
 using Unity;
 
-using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
+using SeeShellsV2.Services;
 
 namespace SeeShellsV2.UI
 {
     public class TableViewVM : ViewModel, ITableViewVM
     {
-        private IShellCollection Collection { get; set; }
-        private CollectionViewSource ShellView { get; set; }
 
-        public ICollectionView ShellItems { get => ShellView.View; }
+        [Dependency]
+        public IShellEventCollection ShellEvents { get; set; }
 
-        public TableViewVM([Dependency] IShellCollection collection)
+        [Dependency]
+        public TemporaryShellEventGeneratorDontUseMe EventGenerator { get; set; }
+
+        public TableViewVM() { }
+
+        public void GenerateRandomShellEvents()
         {
-            Collection = collection;
-            ShellView = new CollectionViewSource();
-            ShellView.Source = Collection;
-            ShellView.Filter += (object sender, FilterEventArgs e) => e.Accepted = e.Item as IShellItem != null && (e.Item as IShellItem).Parent == null;
+            EventGenerator.Generate();
         }
     }
 }

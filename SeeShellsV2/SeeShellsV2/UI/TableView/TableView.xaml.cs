@@ -23,7 +23,9 @@ namespace SeeShellsV2.UI
 {
     public interface ITableViewVM : IViewModel
     {
-        ICollectionView ShellItems { get; }
+        IShellEventCollection ShellEvents { get; }
+
+        void GenerateRandomShellEvents();
     }
 
     /// <summary>
@@ -41,6 +43,11 @@ namespace SeeShellsV2.UI
         public TableView()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.GenerateRandomShellEvents();
         }
     }
 }

@@ -16,11 +16,11 @@ namespace SeeShellsV2.Services
 {
     public class CsvImporter : ICsvImporter
     {
-        private readonly IShellCollection shellItems;
+        private readonly IShellItemCollection shellItems;
         private readonly IShellItemFactory shellFactory;
 
         public CsvImporter(
-            [Dependency] IShellCollection shellItems,
+            [Dependency] IShellItemCollection shellItems,
             [Dependency] IShellItemFactory shellFactory
         )
         {
