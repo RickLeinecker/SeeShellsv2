@@ -126,7 +126,7 @@ class FrontPage extends React.Component {
 
     render() {
         return(
-            <Router>
+            <Router basename="/v2">
                 <div className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
                         <div className={this.props.classes.barContent}>

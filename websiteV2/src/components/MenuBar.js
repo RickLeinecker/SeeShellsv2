@@ -57,7 +57,7 @@ class MenuBar extends React.Component {
 
     render() {
         return(
-            <Router>
+            <Router basename="/v2">
                 <div className={this.props.classes.menuBar}>
                     <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
                     <p className={this.props.classes.title}>SEESHELLS</p>

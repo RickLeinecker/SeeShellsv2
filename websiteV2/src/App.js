@@ -34,13 +34,14 @@ const styles = {
     display: 'flex',
     width: '100%',
     height: '100%',
+    overflow: 'scroll',
   },
 };
 
 function App(props) {
   return (
     <div className={props.classes.application}>
-      <Router>
+      <Router basename="/v2">
         <div className={props.classes.topBar}>
           <MenuBar/>
         </div>
