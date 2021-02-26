@@ -15,12 +15,15 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
     public interface ITimelineViewVM : IViewModel
     {
-        
+        IShellEventCollection ShellEvents { get; }
+
+        void GenerateRandomShellEvents();
     }
 
     /// <summary>
@@ -29,10 +32,15 @@ namespace SeeShellsV2.UI
     public partial class TimelineView : UserControl
     {
         [Dependency]
-        public ITimelineViewVM ViewModel { set => DataContext = value; }
+        public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
         public TimelineView()
         {
             InitializeComponent();
+        }
+
+        private void GenerateTimeline(object sender, RoutedEventArgs e)
+        {
+            ViewModel.GenerateRandomShellEvents();
         }
     }
 }
