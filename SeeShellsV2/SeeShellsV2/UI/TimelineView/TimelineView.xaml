@@ -5,18 +5,31 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SeeShellsV2.UI"
              xmlns:data="clr-namespace:SeeShellsV2.Data"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type data:ShellItem}">
-            <StackPanel>
-                <TextBlock Text="{Binding TypeName}"></TextBlock>
-                <TextBlock Text="{Binding CreationDate}"></TextBlock>
-            </StackPanel>
+        <DataTemplate DataType="{x:Type data:ShellEvent}">
+            <Border BorderBrush="Gainsboro" BorderThickness="1" CornerRadius="4,4,4,4">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#0F830C" Offset="0.0" />
+                        <GradientStop Color="#0F730C" Offset="0.5" />
+                        <GradientStop Color="#0F830C" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TypeName}"/>
+                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="3,0,3,0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TimeStamp}"/>
+                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Description}"/>
+                </StackPanel>
+            </Border>
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Text="This is where we create the timeline view"/>
-        <ContentControl Content="{Binding SelectedShell}"></ContentControl>
+        <Button Click="GenerateTimeline">Click</Button>
+        <ScrollViewer>
+            <ListView ItemsSource="{Binding ShellEvents}"/>
+        </ScrollViewer>
     </StackPanel>
 </UserControl>
