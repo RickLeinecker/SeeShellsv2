@@ -9,7 +9,12 @@ namespace SeeShellsV2.Repositories
 {
     public class ShellItemCollection : ObservableSortedList<IShellItem>, IShellItemCollection
     {
-        public ShellItemCollection() : base(new ShellItemComparer()) { }
+        public ObservableCollection<RegistryShellbagRoot> RegistryRoots { get; init; }
+
+        public ShellItemCollection() : base(new ShellItemComparer())
+        {
+            RegistryRoots = new ObservableCollection<RegistryShellbagRoot>();
+        }
     }
 
     internal class ShellItemComparer : IComparer<IShellItem>

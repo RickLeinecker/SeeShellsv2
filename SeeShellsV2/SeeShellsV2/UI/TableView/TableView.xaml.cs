@@ -23,9 +23,7 @@ namespace SeeShellsV2.UI
 {
     public interface ITableViewVM : IViewModel
     {
-        IShellEventCollection ShellEvents { get; }
-
-        void GenerateRandomShellEvents();
+        ISelected Selected { get; }
     }
 
     /// <summary>
@@ -45,9 +43,9 @@ namespace SeeShellsV2.UI
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ViewModel.GenerateRandomShellEvents();
+            ViewModel.Selected.Current = e.AddedCells[0].Item;
         }
     }
 }

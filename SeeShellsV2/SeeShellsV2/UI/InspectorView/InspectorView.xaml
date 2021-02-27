@@ -15,8 +15,5 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-        <StackPanel>
-            <TextBlock Text="This is where we will create the shellbag inspector"/>
-            <ContentControl Content="{Binding SelectedShell}"></ContentControl>
-        </StackPanel>
+    <ContentControl Content="{ Binding Selected.Current }"></ContentControl>
 </UserControl>

@@ -30,6 +30,7 @@ namespace SeeShellsV2
             // Register Repository Types
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
             container.RegisterSingleton<IShellEventCollection, ShellEventCollection>();
+            container.RegisterSingleton<ISelected, Selected>();
 
             // Register Service Types
             container.RegisterType<IConfigParser, ConfigParser>();

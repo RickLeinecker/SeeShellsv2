@@ -15,12 +15,14 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
     public interface IRegistryViewVM : IViewModel
     {
-        
+        ISelected Selected { get; }
+        IShellItemCollection ShellItems { get; }
     }
 
     /// <summary>
@@ -29,10 +31,15 @@ namespace SeeShellsV2.UI
     public partial class RegistryView : UserControl
     {
         [Dependency]
-        public IRegistryViewVM ViewModel { set => DataContext = value; }
+        public IRegistryViewVM ViewModel { set => DataContext = value; get => DataContext as IRegistryViewVM; }
         public RegistryView()
         {
             InitializeComponent();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Selected.CurrentEnumerable = (sender as FrameworkElement).Tag as IEnumerable<object>;
         }
     }
 }

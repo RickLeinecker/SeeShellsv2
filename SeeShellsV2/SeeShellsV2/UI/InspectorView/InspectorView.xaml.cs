@@ -14,13 +14,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Unity;
-using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
     public interface IInspectorViewVM : IViewModel
     {
-        
+        ISelected Selected { get; }
     }
 
     /// <summary>
@@ -30,6 +30,7 @@ namespace SeeShellsV2.UI
     {
         [Dependency]
         public IInspectorViewVM ViewModel { set => DataContext = value; }
+
         public InspectorView()
         {
             InitializeComponent();
