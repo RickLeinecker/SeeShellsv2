@@ -1,4 +1,5 @@
 import React from 'react';
+import oldLogo from '../assets/oldLogo.png';
 import beach from '../assets/beach2.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
@@ -23,6 +24,12 @@ const styles = {
         alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
     },
+    logo: {
+        height: '100px',
+        width: '100px',
+        display: 'flex',
+        float: 'left',
+    },
     downloadContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -46,6 +53,9 @@ const styles = {
         fontSize: '50px',
         fontWeight: 'bold',
         textAlign: 'center',
+        padding: '0px',
+        margin: '0px',
+        marginBottom: '5%',
     },
     button: {
         display: 'flex',
@@ -74,6 +84,7 @@ class DownloadPage extends React.Component {
                     <div className={this.props.classes.image}/>
                     <Paper className={this.props.classes.contentContainer}>
                         <p className={this.props.classes.title}>Download SeeShells</p>
+                        <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
                         <Button className={this.props.classes.button}>SEESHELLS.EXE</Button>
                         <div className={this.props.classes.video}>
                             <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
