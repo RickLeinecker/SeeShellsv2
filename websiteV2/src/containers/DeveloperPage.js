@@ -49,11 +49,11 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
                     <DeveloperProfile name="Bridget Woodye" role="V1 Team: WPF GUI and Timeline"/>
                     <DeveloperProfile name="Yara As-Saidi" role="V1 Team: WPF and Website Content"/>
-                    <DeveloperProfile name="Devon Gadarowski" role="V2 Team:"/>
+                    <DeveloperProfile name="Devon Gadarowski" role="V2 Team: Shellbag Data Collection and Analysis"/>
                     <DeveloperProfile name="Kaylee Hoyt" role="V2 Team: Website Developer"/>
-                    <DeveloperProfile name="Jake Meyer" role="V2 Team:"/>
+                    <DeveloperProfile name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
                     <DeveloperProfile name="Spencer Ross" role="V2 Team:"/>
-                    <DeveloperProfile name="Joshua Rueda" role="V2 Team:"/>
+                    <DeveloperProfile name="Joshua Rueda" role="V2 Team: Video Producer"/>
                 </div>
             </div>
         );

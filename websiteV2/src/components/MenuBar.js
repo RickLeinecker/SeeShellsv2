@@ -3,6 +3,8 @@ import oldLogo from '../assets/oldLogo.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const styles = {
     menuBar: {
@@ -37,9 +39,8 @@ const styles = {
     },
     logo: {
         height: '50px',
+        width: '50px',
         display: 'flex',
-        paddingTop: '15px',
-        paddingLeft: '10px',
         float: 'left',
     },
 };
@@ -58,16 +59,18 @@ class MenuBar extends React.Component {
     render() {
         return(
             <Router basename="/v2">
-                <div className={this.props.classes.menuBar}>
-                    <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
-                    <p className={this.props.classes.title}>SEESHELLS</p>
-                    <div className={this.props.classes.buttonContainer}> 
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="about">About</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="download">Download</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="documentation">Documentation</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="developers">Developers</Button>
-                    </div>
-                </div>
+                <AppBar position="static" className={this.props.classes.menuBar}>
+                    <Toolbar>
+                        <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
+                        <p className={this.props.classes.title}>SEESHELLS</p>
+                        <div className={this.props.classes.buttonContainer}> 
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="about">About</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="download">Download</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="documentation">Documentation</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="developers">Developers</Button>
+                        </div>
+                    </Toolbar>
+                </AppBar>
             </Router>
         );
     }

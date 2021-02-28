@@ -4,6 +4,7 @@ import pearl from '../assets/pearl.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, BrowserRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 const styles = {
     frontPage: {
@@ -127,7 +128,7 @@ class FrontPage extends React.Component {
     render() {
         return(
             <Router basename="/v2">
-                <div className={this.props.classes.frontPage}>
+                <Paper className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
                         <div className={this.props.classes.barContent}>
                             <p className={this.props.classes.intro}>SEESHELLS</p>
@@ -165,7 +166,7 @@ class FrontPage extends React.Component {
                             <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
                         </div>
                     </div>
-                </div>
+                </Paper>
             </Router>
         );
     }
