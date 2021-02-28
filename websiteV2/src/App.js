@@ -4,7 +4,6 @@ import AboutPage from './containers/AboutPage.js';
 import DownloadPage from './containers/DownloadPage.js';
 import DocumentationPage from './containers/DocumentationPage.js';
 import DeveloperPage from './containers/DeveloperPage.js';
-import AdminLogin from './containers/admin/AdminLogin.js';
 import Footer from './components/Footer.js';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
