@@ -1,7 +1,7 @@
 import React from 'react';
 import oldLogo from '../assets/oldLogo.png';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter, BrowserRouter as Router } from 'react-router-dom';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -58,7 +58,7 @@ class MenuBar extends React.Component {
 
     render() {
         return(
-            <Router basename="/v2">
+            <Router basename="/">
                 <AppBar position="static" className={this.props.classes.menuBar}>
                     <Toolbar>
                         <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>

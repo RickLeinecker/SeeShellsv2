@@ -2,7 +2,7 @@ import React from 'react';
 import beach from '../assets/beach2.png';
 import pearl from '../assets/pearl.png';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter, BrowserRouter as Router } from 'react-router-dom';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 
@@ -127,7 +127,7 @@ class FrontPage extends React.Component {
 
     render() {
         return(
-            <Router basename="/v2">
+            <Router basename="/">
                 <Paper className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
                         <div className={this.props.classes.barContent}>

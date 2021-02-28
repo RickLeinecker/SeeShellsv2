@@ -3,6 +3,7 @@ import DeveloperProfile from '../components/DeveloperProfile.js';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
 const styles = {
     devContainer: {
@@ -12,7 +13,7 @@ const styles = {
         alignContent: 'center',
         width: '100%',
     },
-    dev: {
+    devs: {
         display: 'flex',
         height: '90%',
         justifyContent: 'space-evenly',
@@ -35,15 +36,15 @@ const styles = {
 class DeveloperPage extends React.Component {
     render() {
         return(
-            <div className={this.props.classes.devContainer}>
-                <div className={this.props.classes.devIntro}>
+            <Paper className={this.props.classes.devContainer}>
+                <Paper className={this.props.classes.devIntro}>
                     <Typography variant="title" className={this.props.classes.title}>SeeShells Development Teams</Typography>
                     <Typography variant="subtitle1">
                         The SeeShells application is a Senior Design project built by two teams of five Computer Science students at UCF.
                         The V1 team designed the original application, while the V2 team enhanced the project.
                     </Typography>
-                </div>
-                <div className={this.props.classes.dev}>
+                </Paper>
+                <div className={this.props.classes.devs}>
                     <DeveloperProfile name="Sara Frackiewicz" role="V1 Team: API, Scripting, and Administrative Website"/>
                     <DeveloperProfile name="Klayton Killough" role="V1 Team: WPF Shellbag Parser and IO"/>
                     <DeveloperProfile name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
@@ -55,7 +56,7 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile name="Spencer Ross" role="V2 Team:"/>
                     <DeveloperProfile name="Joshua Rueda" role="V2 Team: Video Producer"/>
                 </div>
-            </div>
+            </Paper>
         );
     }
 }

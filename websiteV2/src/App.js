@@ -6,7 +6,7 @@ import DocumentationPage from './containers/DocumentationPage.js';
 import DeveloperPage from './containers/DeveloperPage.js';
 import Footer from './components/Footer.js';
 import { withStyles } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 const styles = {
   application: {
@@ -40,7 +40,7 @@ const styles = {
 function App(props) {
   return (
     <div className={props.classes.application}>
-      <Router basename="/v2">
+      <Router basename="/">
         <div className={props.classes.topBar}>
           <MenuBar/>
         </div>
@@ -48,16 +48,16 @@ function App(props) {
           <Route exact path="/">
             <FrontPage/>
           </Route>
-          <Route path="/about">
+          <Route exact path="/about">
             <AboutPage/>
           </Route>
-          <Route path="/download">
+          <Route exact path="/download">
             <DownloadPage/>
           </Route>
-          <Route path="/documentation">
+          <Route exact path="/documentation">
             <DocumentationPage/>
           </Route>
-          <Route path="/developers">
+          <Route exact path="/developers">
             <DeveloperPage/>
           </Route>
         </div>
