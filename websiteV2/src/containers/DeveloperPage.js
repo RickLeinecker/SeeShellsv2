@@ -44,7 +44,7 @@ class DeveloperPage extends React.Component {
                         The V1 team designed the original application, while the V2 team enhanced the project.
                     </Typography>
                 </Paper>
-                <div className={this.props.classes.devs}>
+                <Paper className={this.props.classes.devs}>
                     <DeveloperProfile name="Sara Frackiewicz" role="V1 Team: API, Scripting, and Administrative Website"/>
                     <DeveloperProfile name="Klayton Killough" role="V1 Team: WPF Shellbag Parser and IO"/>
                     <DeveloperProfile name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
@@ -55,7 +55,7 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
                     <DeveloperProfile name="Spencer Ross" role="V2 Team:"/>
                     <DeveloperProfile name="Joshua Rueda" role="V2 Team: Video Producer"/>
-                </div>
+                </Paper>
             </Paper>
         );
     }

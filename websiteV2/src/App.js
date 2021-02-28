@@ -7,6 +7,7 @@ import DeveloperPage from './containers/DeveloperPage.js';
 import Footer from './components/Footer.js';
 import { withStyles } from '@material-ui/core/styles';
 import { HashRouter as Router, Route } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 
 const styles = {
   application: {
@@ -33,18 +34,17 @@ const styles = {
     display: 'flex',
     width: '100%',
     height: '100%',
-    overflow: 'scroll',
   },
 };
 
 function App(props) {
   return (
-    <div className={props.classes.application}>
+    <Paper className={props.classes.application}>
       <Router basename="/">
         <div className={props.classes.topBar}>
           <MenuBar/>
         </div>
-        <div className={props.classes.content}>
+        <Paper className={props.classes.content}>
           <Route exact path="/">
             <FrontPage/>
           </Route>
@@ -60,12 +60,12 @@ function App(props) {
           <Route exact path="/developers">
             <DeveloperPage/>
           </Route>
-        </div>
+        </Paper>
         <div className={props.classes.bottomBar}>
           <Footer/>
         </div>
       </Router>
-    </div>
+    </Paper>
   );
 }
 
