@@ -45,7 +45,7 @@ namespace SeeShellsV2.UI
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ViewModel.Selected.Current = e.AddedCells[0].Item;
+            ViewModel.Selected.Current = e.AddedCells.Count > 0 ? e.AddedCells[0].Item : null;
         }
     }
 }

@@ -12,8 +12,6 @@ namespace SeeShellsV2.UI
         [Dependency] public ICsvImporter CsvImporter { get; set; }
         [Dependency] public IRegistryImporter RegImporter { get; set; }
 
-        public string Title { get { return "SeeShells"; } }
-
         public void ImportFromCSV(string path)
         {
             // importer.Import(path); => needs work

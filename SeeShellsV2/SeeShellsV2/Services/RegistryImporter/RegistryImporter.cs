@@ -83,6 +83,8 @@ namespace SeeShellsV2.Services
 
                 RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", string.Empty);
 
+                Selected.CurrentEnumerable = root.Children;
+
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOnlineRegistryKeyIterator(parseAllUsers))
                 {
@@ -125,14 +127,26 @@ namespace SeeShellsV2.Services
                             if (tokenSource.IsCancellationRequested)
                                 return (parsed, nulled, stopwatch.ElapsedMilliseconds);
 
-                            // if the shell item has no parent then it belongs to root
-                            if (shellItem.Parent == null)
-                                root.Children.Add(shellItem);
-
+                            // add the shell item to the collection in the caller's thread
                             if (syncher != null)
-                                syncher.Post(delegate { ShellItems.Add(shellItem); }, null);
+                            {
+                                syncher.Post(delegate 
+                                {
+                                    ShellItems.Add(shellItem);
+
+                                    // if the shell item has no parent then it belongs to root
+                                    if (shellItem.Parent == null)
+                                        root.Children.Add(shellItem);
+                                }, null);
+                            }
                             else
+                            {
                                 ShellItems.Add(shellItem);
+
+                                // if the shell item has no parent then it belongs to root
+                                if (shellItem.Parent == null)
+                                    root.Children.Add(shellItem);
+                            }
                         }
                     }
                 }
@@ -142,8 +156,6 @@ namespace SeeShellsV2.Services
                     syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
                 else if (root.Children.Count > 0)
                     ShellItems.RegistryRoots.Add(root);
-
-                Selected.CurrentEnumerable = root.Children;
 
                 stopwatch.Stop();
 
@@ -168,6 +180,8 @@ namespace SeeShellsV2.Services
                 stopwatch.Start();
 
                 RegistryShellbagRoot root = new RegistryShellbagRoot(Path.GetFileName(registryFilePath), registryFilePath);
+
+                Selected.CurrentEnumerable = root.Children;
 
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOfflineRegistryKeyIterator(registryFilePath))
@@ -211,15 +225,26 @@ namespace SeeShellsV2.Services
                             if (tokenSource.IsCancellationRequested)
                                 return (parsed, nulled, stopwatch.ElapsedMilliseconds);
 
-                            // if the shell item has no parent then it belongs to root
-                            if (shellItem.Parent == null)
-                                root.Children.Add(shellItem);
-
                             // add the shell item to the collection in the caller's thread
                             if (syncher != null)
-                                syncher.Post(delegate { ShellItems.Add(shellItem); }, null);
+                            {
+                                syncher.Post(delegate
+                                {
+                                    ShellItems.Add(shellItem);
+
+                                    // if the shell item has no parent then it belongs to root
+                                    if (shellItem.Parent == null)
+                                        root.Children.Add(shellItem);
+                                }, null);
+                            }
                             else
+                            {
                                 ShellItems.Add(shellItem);
+
+                                // if the shell item has no parent then it belongs to root
+                                if (shellItem.Parent == null)
+                                    root.Children.Add(shellItem);
+                            }
                         }
                     }
                 }
@@ -229,8 +254,6 @@ namespace SeeShellsV2.Services
                     syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
                 else if (root.Children.Count > 0)
                     ShellItems.RegistryRoots.Add(root);
-
-                Selected.CurrentEnumerable = root.Children;
 
                 stopwatch.Stop();
 
