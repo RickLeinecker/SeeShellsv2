@@ -61,9 +61,6 @@ function App(props) {
           <Route path="/developers">
             <DeveloperPage/>
           </Route>
-          <Route path="/login">
-            <AdminLogin/>
-          </Route>
         </div>
         <div className={props.classes.bottomBar}>
           <Footer/>
