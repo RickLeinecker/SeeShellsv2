@@ -25,7 +25,7 @@ const styles = {
         justifyContent: 'center',
         width: '100%',
     },
-    login: {
+    contentContainer: {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -42,14 +42,6 @@ const styles = {
         fontSize: '50px',
         fontWeight: 'bold',
     },
-    field: {
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'white',
-        fontSize: '20px',
-        width: '80%',
-        padding: '3%',
-    },
     button: {
         display: 'flex',
         backgroundColor: '#33A1FD',
@@ -62,21 +54,6 @@ const styles = {
         justifyContent: 'center',
         marginTop: '5%',
     },
-    register: {
-        display: 'flex',
-        backgroundColor: '#EF476F',
-        '&:hover': {
-            backgroundColor: '#33A1FD',
-        },
-        color: 'white',
-        fontSize: '20px',
-        margin: '0px',
-        justifyContent: 'center',
-        marginTop: '5%',
-    },
-    input: {
-        backgroundColor: 'white',
-    }
 }
 
 class DownloadPage extends React.Component {
@@ -85,7 +62,7 @@ class DownloadPage extends React.Component {
             <div className={this.props.classes.downloadPage}>
                 <div className={this.props.classes.downloadContainer}>
                     <div className={this.props.classes.image}/>
-                    <div className={this.props.classes.login}>
+                    <div className={this.props.classes.contentContainer}>
                         <p className={this.props.classes.title}>Download SeeShells</p>
                     </div>
                 </div>
