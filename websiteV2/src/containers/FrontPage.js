@@ -16,12 +16,11 @@ const styles = {
         width: '100%',
     },
     image: {
-        display: 'flex',
+        display: 'grid',
         position: 'relative',
         width: '100%',
         height: '350px',
         textAlign: 'center',
-        justifyContent: 'center',
         backgroundImage: 'url(' + beach + ')',
         overflow: 'hidden',
     },
@@ -36,11 +35,14 @@ const styles = {
         fontSize: '20px',
         margin: '0px',
         bottom: '10px',
+        justifySelf: 'center',
     },
     barContent: {
         display: 'flex',
         flexFlow: 'column wrap',
+        justifySelf: 'center',
         paddingTop: '2%',
+        paddingBottom: '10%',
     },
     intro: {
         display: 'flex',

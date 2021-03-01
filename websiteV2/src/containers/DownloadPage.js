@@ -1,6 +1,7 @@
 import React from 'react';
 import oldLogo from '../assets/oldLogo.png';
 import beach from '../assets/beach2.png';
+import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
@@ -23,6 +24,7 @@ const styles = {
         justifyContent: 'center',
         alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
+        overflow: 'hidden',
     },
     logo: {
         height: '100px',
@@ -81,15 +83,20 @@ class DownloadPage extends React.Component {
         return(
             <Paper className={this.props.classes.downloadPage}>
                 <Paper className={this.props.classes.downloadContainer}>
-                    <div className={this.props.classes.image}/>
-                    <Paper className={this.props.classes.contentContainer}>
-                        <p className={this.props.classes.title}>Download SeeShells</p>
-                        <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                        <Button className={this.props.classes.button}>SEESHELLS.EXE</Button>
-                        <div className={this.props.classes.video}>
-                            <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        </div>
-                    </Paper>
+                    <div className={this.props.classes.image}>
+                        <div id='stars'/>
+                        <div id='stars2'/>
+                        <div id='stars3'/>
+                    
+                        <Paper className={this.props.classes.contentContainer}>
+                            <p className={this.props.classes.title}>Download SeeShells</p>
+                            <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                            <Button className={this.props.classes.button}>SEESHELLS.EXE</Button>
+                            <div className={this.props.classes.video}>
+                                <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                            </div>
+                        </Paper>
+                    </div>
                 </Paper>
             </Paper>
         );
