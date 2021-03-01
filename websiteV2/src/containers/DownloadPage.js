@@ -17,11 +17,10 @@ const styles = {
         width: '100%',
     },
     image: {
-        display: 'flex',
+        display: 'grid',
         width: '100%',
         height: '600px',
         textAlign: 'center',
-        justifyContent: 'center',
         alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
         overflow: 'hidden',
@@ -50,6 +49,7 @@ const styles = {
         position: 'absolute',
         alignSelf: 'center',
         minWidth: '300px',
+        justifySelf: 'center',
     },
     title: {
         fontSize: '50px',
