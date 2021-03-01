@@ -45,16 +45,16 @@ class DeveloperPage extends React.Component {
                     </Typography>
                 </Paper>
                 <Paper className={this.props.classes.devs}>
-                    <DeveloperProfile name="Sara Frackiewicz" role="V1 Team: API, Scripting, and Administrative Website"/>
-                    <DeveloperProfile name="Klayton Killough" role="V1 Team: WPF Shellbag Parser and IO"/>
-                    <DeveloperProfile name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
-                    <DeveloperProfile name="Bridget Woodye" role="V1 Team: WPF GUI and Timeline"/>
-                    <DeveloperProfile name="Yara As-Saidi" role="V1 Team: WPF and Website Content"/>
-                    <DeveloperProfile name="Devon Gadarowski" role="V2 Team: Shellbag Data Collection and Analysis"/>
-                    <DeveloperProfile name="Kaylee Hoyt" role="V2 Team: Website Developer"/>
-                    <DeveloperProfile name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
-                    <DeveloperProfile name="Spencer Ross" role="V2 Team:"/>
-                    <DeveloperProfile name="Joshua Rueda" role="V2 Team: Video Producer"/>
+                    <DeveloperProfile version={1} name="Sara Frackiewicz" role="V1 Team: API, Scripting, and Administrative Website"/>
+                    <DeveloperProfile version={1} name="Klayton Killough" role="V1 Team: WPF Shellbag Parser and IO"/>
+                    <DeveloperProfile version={1} name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
+                    <DeveloperProfile version={1} name="Bridget Woodye" role="V1 Team: WPF GUI and Timeline"/>
+                    <DeveloperProfile version={1} name="Yara As-Saidi" role="V1 Team: WPF and Website Content"/>
+                    <DeveloperProfile version={2} name="Devon Gadarowski" role="V2 Team: Shellbag Data Collection and Analysis"/>
+                    <DeveloperProfile version={2} name="Kaylee Hoyt" role="V2 Team: Website Developer"/>
+                    <DeveloperProfile version={2} name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
+                    <DeveloperProfile version={2} name="Spencer Ross" role="V2 Team:"/>
+                    <DeveloperProfile version={2} name="Joshua Rueda" role="V2 Team: Video Producer"/>
                 </Paper>
             </Paper>
         );

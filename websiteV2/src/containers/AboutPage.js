@@ -22,11 +22,11 @@ const styles = {
 class AboutPage extends React.Component {
     render() {
         return(
-            <div className={this.props.classes.aboutPage}>
+            <Paper className={this.props.classes.aboutPage}>
                 <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
 
                 </Paper>
-            </div>
+            </Paper>
         );
     }
 }

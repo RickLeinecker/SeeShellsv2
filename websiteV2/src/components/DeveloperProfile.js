@@ -1,5 +1,6 @@
 import React from 'react';
 import croppedLogo from '../assets/croppedLogo.png';
+import croppedV2Logo from '../assets/croppedV2Logo.png';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -20,8 +21,15 @@ const styles = {
         maxWidth: '400px',
         minHeight: '200px',
     },
-    background: {
+    backgroundV1: {
         backgroundImage: 'linear-gradient(180deg, #424242 0%, rgba(255, 255, 255, 0) 100%), url(' + croppedLogo + ')',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        width: '100%',
+        height: '100%',
+    },
+    backgroundV2: {
+        backgroundImage: 'linear-gradient(180deg, #424242 0%, rgba(255, 255, 255, 0) 100%), url(' + croppedV2Logo + ')',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         width: '100%',
@@ -49,12 +57,22 @@ class DeveloperProfile extends React.Component {
     render() {
         return(
             <Card className={this.props.classes.devContainer}>
-                <div className={this.props.classes.background}>
-                    <CardContent>
-                        <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
-                        <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
-                    </CardContent>
-                </div>
+                {this.props.version === 1 &&
+                    <div className={this.props.classes.backgroundV1}>
+                        <CardContent>
+                            <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
+                        </CardContent>
+                    </div>
+                }
+                {this.props.version === 2 &&
+                    <div className={this.props.classes.backgroundV2}>
+                        <CardContent>
+                            <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
+                        </CardContent>
+                    </div>
+                }
             </Card>
         );
     }
