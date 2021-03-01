@@ -1,6 +1,7 @@
 import React from 'react';
 import beach from '../assets/beach2.png';
 import pearl from '../assets/pearl.png';
+import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -130,6 +131,9 @@ class FrontPage extends React.Component {
             <Router basename="/">
                 <Paper className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
+                        <div id='stars'/>
+                        <div id='stars2'/>
+                        <div id='stars3'/>
                         <div className={this.props.classes.barContent}>
                             <p className={this.props.classes.intro}>SEESHELLS</p>
                             <p className={this.props.classes.description}>
