@@ -23,6 +23,7 @@ const styles = {
         textAlign: 'center',
         justifyContent: 'center',
         backgroundImage: 'url(' + beach + ')',
+        overflow: 'hidden',
     },
     downloadButton: {
         display: 'flex',
@@ -112,7 +113,7 @@ const styles = {
         width: '50px',
         verticalAlign: 'center',
         marginRight: '10px',
-    }
+    },
 };
 
 class FrontPage extends React.Component {
