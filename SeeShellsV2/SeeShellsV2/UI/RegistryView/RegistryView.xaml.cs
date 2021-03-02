@@ -40,6 +40,7 @@ namespace SeeShellsV2.UI
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.Selected.CurrentEnumerable = (sender as FrameworkElement).Tag as IEnumerable<object>;
+            ViewModel.Selected.Current = (sender as FrameworkElement).DataContext;
         }
     }
 }

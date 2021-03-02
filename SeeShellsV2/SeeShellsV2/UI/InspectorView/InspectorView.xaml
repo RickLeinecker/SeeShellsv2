@@ -8,10 +8,100 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <DataTemplate DataType="{x:Type data:RegistryShellbagRoot}">
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black">
+                        REGISTRY INFORMATION
+                </TextBlock>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Path}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type data:ShellItem}">
-            <StackPanel>
-                <TextBlock Text="{Binding TypeName}"></TextBlock>
-                <TextBlock Text="{Binding CreationDate}"></TextBlock>
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black">
+                        SHELLBAG INFORMATION
+                </TextBlock>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Description" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Description}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Type" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding TypeName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Subtype" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding SubtypeName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Registry Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding RegistryKey.RegistryPath}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Registry Owner" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding RegistryKey.RegistryUser}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Last Registry Write Date" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding RegistryKey.LastRegistryWriteDate}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>

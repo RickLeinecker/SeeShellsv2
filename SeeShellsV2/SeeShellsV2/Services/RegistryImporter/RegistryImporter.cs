@@ -81,8 +81,9 @@ namespace SeeShellsV2.Services
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", string.Empty);
+                RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", "None");
 
+                Selected.Current = root;
                 Selected.CurrentEnumerable = root.Children;
 
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
@@ -181,6 +182,7 @@ namespace SeeShellsV2.Services
 
                 RegistryShellbagRoot root = new RegistryShellbagRoot(Path.GetFileName(registryFilePath), registryFilePath);
 
+                Selected.Current = root;
                 Selected.CurrentEnumerable = root.Children;
 
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();

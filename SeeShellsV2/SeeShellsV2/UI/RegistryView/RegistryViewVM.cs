@@ -18,10 +18,5 @@ namespace SeeShellsV2.UI
 
         [Dependency]
         public ISelected Selected { get; set; }
-
-        public void SetSelectedEnumerable(object o)
-        {
-            Selected.CurrentEnumerable = o as IEnumerable<object>;
-        }
     }
 }

@@ -8,6 +8,9 @@
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Blue.xaml" />
 
+        <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/DarkBrushs.xaml" />
+        <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/Themes/Generic.xaml" />
+
         <!--
             TODO: create custom MahApps theme that matches SeeShells sketches
             https://mahapps.com/docs/themes/thememanager

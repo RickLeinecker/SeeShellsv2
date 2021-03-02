@@ -36,9 +36,6 @@
                            AllowMixedOrientation="True"
                            BorderBrush="Black"
                            BorderThickness="1">
-                <xcad:DockingManager.Theme>
-                    <xcad:Vs2013DarkTheme/>
-                </xcad:DockingManager.Theme>
                 <xcad:DockingManager.DocumentHeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
