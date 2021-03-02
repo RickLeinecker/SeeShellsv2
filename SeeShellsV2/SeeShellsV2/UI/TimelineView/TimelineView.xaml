@@ -5,11 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SeeShellsV2.UI"
              xmlns:data="clr-namespace:SeeShellsV2.Data"
+             xmlns:repo="clr-namespace:SeeShellsV2.Repositories"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             Loaded="GenerateTimeline"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type data:ShellEvent}">
+        <Style x:Key="ShellEventCard" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <DataTemplate  DataType="{x:Type data:ShellEvent}">
             <Border BorderBrush="Gainsboro" BorderThickness="1" CornerRadius="4,4,4,4">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -19,17 +28,16 @@
                     </LinearGradientBrush>
                 </Border.Background>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TypeName}"/>
-                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="3,0,3,0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TimeStamp}"/>
-                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Description}"/>
+                    <TextBlock Style="{StaticResource ShellEventCard}" Margin="0,3,0,3" Text="{Binding TypeName}"/>
+                    <TextBlock Style="{StaticResource ShellEventCard}" Margin="3,0,3,0" Text="{Binding TimeStamp}"/>
+                    <TextBlock Style="{StaticResource ShellEventCard}" Margin="0,3,0,3" Text="{Binding Description}"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
     </UserControl.Resources>
-    <StackPanel>
-        <Button Click="GenerateTimeline">Click</Button>
-        <ScrollViewer>
-            <ListView ItemsSource="{Binding ShellEvents}"/>
-        </ScrollViewer>
+    <ScrollViewer PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+        <StackPanel CanVerticallyScroll="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="Auto" Width="Auto" >
+        <ListView ItemsSource="{Binding ShellEvents}"/>
     </StackPanel>
+    </ScrollViewer>
 </UserControl>
