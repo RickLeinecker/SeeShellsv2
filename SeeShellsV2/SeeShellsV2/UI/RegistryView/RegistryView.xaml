@@ -7,11 +7,31 @@
              xmlns:data="clr-namespace:SeeShellsV2.Data"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <TreeView ItemsSource="{Binding ShellItems}">
+        <TreeView ItemsSource="{Binding ShellItems.RegistryRoots}">
             <TreeView.Resources>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:RegistryShellbagRoot}">
+                    <Button Click="MenuItem_Click" Tag="{Binding Children}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:ShellItem}">
-                    <TextBlock Text="{Binding Description}"></TextBlock>
+                    <Button Click="MenuItem_Click" Tag="{Binding Children}">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <TextBlock Text="{Binding Description}"></TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>

@@ -47,18 +47,22 @@ namespace SeeShellsV2.Services
         private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
+        private ISelected Selected { get; set; }
+
         private CancellationTokenSource tokenSource = new CancellationTokenSource();
         private bool registeredCancellation = false;
 
         public RegistryImporter(
             [Dependency] IConfigParser config,
             [Dependency] IShellItemCollection shellItems,
-            [Dependency] IShellItemFactory shellFactory
+            [Dependency] IShellItemFactory shellFactory,
+            [Dependency] ISelected selected
         )
         {
             Config = config;
             ShellItems = shellItems;
             ShellFactory = shellFactory;
+            Selected = selected;
         }
 
         public Task<(int, int, long)> ImportOnlineRegistry(bool parseAllUsers = false)
@@ -73,10 +77,18 @@ namespace SeeShellsV2.Services
 
             return Task.Run(() =>
             {
+                int parsed = 0, nulled = 0;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                int parsed = 0, nulled = 0;
+                RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", "None");
+
+                if (Selected != null)
+                {
+                    Selected.Current = root;
+                    Selected.CurrentEnumerable = root.Children;
+                }
+
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOnlineRegistryKeyIterator(parseAllUsers))
                 {
@@ -119,13 +131,35 @@ namespace SeeShellsV2.Services
                             if (tokenSource.IsCancellationRequested)
                                 return (parsed, nulled, stopwatch.ElapsedMilliseconds);
 
+                            // add the shell item to the collection in the caller's thread
                             if (syncher != null)
-                                syncher.Post(delegate { ShellItems.Add(shellItem); }, null);
+                            {
+                                syncher.Post(delegate 
+                                {
+                                    ShellItems.Add(shellItem);
+
+                                    // if the shell item has no parent then it belongs to root
+                                    if (shellItem.Parent == null)
+                                        root.Children.Add(shellItem);
+                                }, null);
+                            }
                             else
+                            {
                                 ShellItems.Add(shellItem);
+
+                                // if the shell item has no parent then it belongs to root
+                                if (shellItem.Parent == null)
+                                    root.Children.Add(shellItem);
+                            }
                         }
                     }
                 }
+
+                // add the root item to the collection in the caller's thread
+                if (syncher != null && root.Children.Count > 0)
+                    syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
+                else if (root.Children.Count > 0)
+                    ShellItems.RegistryRoots.Add(root);
 
                 stopwatch.Stop();
 
@@ -145,9 +179,18 @@ namespace SeeShellsV2.Services
 
             return Task.Run(() =>
             {
+                int parsed = 0, nulled = 0;
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                int parsed = 0, nulled = 0;
+
+                RegistryShellbagRoot root = new RegistryShellbagRoot(Path.GetFileName(registryFilePath), registryFilePath);
+
+                if (Selected != null)
+                {
+                    Selected.Current = root;
+                    Selected.CurrentEnumerable = root.Children;
+                }
+
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOfflineRegistryKeyIterator(registryFilePath))
                 {
@@ -192,12 +235,33 @@ namespace SeeShellsV2.Services
 
                             // add the shell item to the collection in the caller's thread
                             if (syncher != null)
-                                syncher.Post(delegate { ShellItems.Add(shellItem); }, null);
+                            {
+                                syncher.Post(delegate
+                                {
+                                    ShellItems.Add(shellItem);
+
+                                    // if the shell item has no parent then it belongs to root
+                                    if (shellItem.Parent == null)
+                                        root.Children.Add(shellItem);
+                                }, null);
+                            }
                             else
+                            {
                                 ShellItems.Add(shellItem);
+
+                                // if the shell item has no parent then it belongs to root
+                                if (shellItem.Parent == null)
+                                    root.Children.Add(shellItem);
+                            }
                         }
                     }
                 }
+
+                // add the root item to the collection in the caller's thread
+                if (syncher != null && root.Children.Count > 0)
+                    syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
+                else if (root.Children.Count > 0)
+                    ShellItems.RegistryRoots.Add(root);
 
                 stopwatch.Stop();
 

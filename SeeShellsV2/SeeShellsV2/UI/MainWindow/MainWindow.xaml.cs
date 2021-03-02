@@ -1,18 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
-using SeeShellsV2.Factories;
-
+using MahApps.Metro.Controls;
 using Unity;
+
+using SeeShellsV2.Factories;
 
 namespace SeeShellsV2.UI
 {
     public interface IMainWindowVM : IViewModel
     {
-        public string Title { get; }
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
         public Task<(int, int, long)> ImportFromOnlineRegistry();
@@ -22,7 +23,7 @@ namespace SeeShellsV2.UI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IWindow
+    public partial class MainWindow : MetroWindow, IWindow
     {
         [Dependency]
         public IMainWindowVM ViewModel

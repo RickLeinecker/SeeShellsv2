@@ -30,9 +30,9 @@ namespace SeeShellsV2.Factories
 
             foreach (var child in (window.Content as Visual).GetChildren())
             {
-                if (child is Xceed.Wpf.AvalonDock.DockingManager)
+                if (child is AvalonDock.DockingManager)
                 {
-                    var dockableEnumerator = (child as Xceed.Wpf.AvalonDock.DockingManager).LogicalChildrenPublic;
+                    var dockableEnumerator = (child as AvalonDock.DockingManager).LogicalChildrenPublic;
                     while (dockableEnumerator.MoveNext())
                     {
                         container.BuildUp(dockableEnumerator.Current.GetType(), dockableEnumerator.Current);

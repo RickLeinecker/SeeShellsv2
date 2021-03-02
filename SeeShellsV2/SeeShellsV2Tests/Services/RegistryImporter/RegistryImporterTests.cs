@@ -22,6 +22,7 @@ namespace SeeShellsV2.Services.Tests
             container.RegisterType<IConfigParser, ConfigParser>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
             container.RegisterType<IShellItemCollection, ShellItemCollection>();
+            container.RegisterInstance<ISelected>(null);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
@@ -34,6 +35,7 @@ namespace SeeShellsV2.Services.Tests
             IUnityContainer container = new UnityContainer();
             container.RegisterType<IConfigParser, ConfigParser>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<ISelected>(null);
 
             ShellItemCollection shellItems = new ShellItemCollection();
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
@@ -51,6 +53,7 @@ namespace SeeShellsV2.Services.Tests
             IUnityContainer container = new UnityContainer();
             container.RegisterType<IConfigParser, ConfigParser>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<ISelected>(null);
 
             ShellItemCollection shellItems = new ShellItemCollection();
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);

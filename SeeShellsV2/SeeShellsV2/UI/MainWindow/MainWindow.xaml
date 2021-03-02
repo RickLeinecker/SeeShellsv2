@@ -1,60 +1,41 @@
-﻿<Window x:Class="SeeShellsV2.UI.MainWindow"
+﻿<mah:MetroWindow x:Class="SeeShellsV2.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeeShellsV2.UI"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:xcad="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="SeeShells" Icon="../Images/SeeShells.png"
+        Height="450" Width="800">
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <Menu Background="Transparent">
+                <MenuItem Header="File" Background="Transparent">
+                    <MenuItem Header="Import">
+                        <MenuItem Header="From CSV" Click="Import_CSV_Click"/>
+                        <MenuItem Header="From Live Registry"  Click="Import_Live_Registry_Click"/>
+                        <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="Export">
+                        <MenuItem Header="To CSV" Click="Export_CSV_Click"/>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <DockPanel>
-              <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Menu Background="DarkGray">
-                    <MenuItem Header="File" Foreground="Black" >
-                        <MenuItem Header="Import" Foreground="Black">
-                            <MenuItem Header="From CSV" Foreground="Black" Click="Import_CSV_Click"/>
-                            <MenuItem Header="From Live Registry" Foreground="Black" Click="Import_Live_Registry_Click"/>
-                            <MenuItem Header="From Offline Registry" Foreground="Black" Click="Import_Offline_Registry_Click"/>
-                        </MenuItem>
-                        <MenuItem Header="Export" Foreground="Black">
-                            <MenuItem Header="To CSV" Foreground="Black" Click="Export_CSV_Click"/>
-                        </MenuItem>
-                    </MenuItem>
-                    <TextBlock Text="Theme:" VerticalAlignment="Center" Foreground="Black"/>
-                <ComboBox x:Name="_themeCombo" SelectedIndex="0" Width="200" Foreground="Black">
-                    <ComboBoxItem Content="Generic" Foreground="Black"/>
-                    <ComboBoxItem Content="Aero" Foreground="Black">
-                        <ComboBoxItem.Tag>
-                            <xcad:AeroTheme />
-                        </ComboBoxItem.Tag>
-                    </ComboBoxItem>
-                    <ComboBoxItem Content="VS2010" Foreground="Black">
-                        <ComboBoxItem.Tag>
-                            <xcad:VS2010Theme />
-                        </ComboBoxItem.Tag>
-                    </ComboBoxItem>
-                    <ComboBoxItem Content="Metro" Foreground="Black">
-                        <ComboBoxItem.Tag>
-                            <xcad:MetroTheme />
-                        </ComboBoxItem.Tag>
-                    </ComboBoxItem>
-                </ComboBox>
-                </Menu>
-              </StackPanel>
-            </DockPanel>
 
-            <xcad:DockingManager Grid.Row="1" Height="Auto"
+            <xcad:DockingManager Grid.Row="1"
                            AllowMixedOrientation="True"
                            BorderBrush="Black"
-                           BorderThickness="1"
-                           Theme="{Binding ElementName=_themeCombo, Path=SelectedItem.Tag}">
+                           BorderThickness="1">
                 <xcad:DockingManager.DocumentHeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -109,4 +90,4 @@
             </xcad:DockingManager>
         </Grid>
     </Grid>
-</Window>
+</mah:MetroWindow>

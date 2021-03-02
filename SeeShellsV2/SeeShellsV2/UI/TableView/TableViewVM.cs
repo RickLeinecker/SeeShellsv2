@@ -15,18 +15,7 @@ namespace SeeShellsV2.UI
 {
     public class TableViewVM : ViewModel, ITableViewVM
     {
-
         [Dependency]
-        public IShellEventCollection ShellEvents { get; set; }
-
-        [Dependency]
-        public TemporaryShellEventGeneratorDontUseMe EventGenerator { get; set; }
-
-        public TableViewVM() { }
-
-        public void GenerateRandomShellEvents()
-        {
-            EventGenerator.Generate();
-        }
+        public ISelected Selected { get; set; }
     }
 }

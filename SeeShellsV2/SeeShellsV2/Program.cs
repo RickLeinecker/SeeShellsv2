@@ -30,6 +30,7 @@ namespace SeeShellsV2
             // Register Repository Types
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
             container.RegisterSingleton<IShellEventCollection, ShellEventCollection>();
+            container.RegisterSingleton<ISelected, Selected>();
 
             // Register Service Types
             container.RegisterType<IConfigParser, ConfigParser>();
@@ -51,10 +52,11 @@ namespace SeeShellsV2
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
 
             // Create and run app with main window
+            App app = container.Resolve<App>();
+
             IWindowFactory windowFactory = container.Resolve<IWindowFactory>();
             Window mainWindow = windowFactory.Create("main") as Window;
 
-            App app = container.Resolve<App>();
             app.Run(mainWindow);
         }
     }
