@@ -91,7 +91,7 @@ class DownloadPage extends React.Component {
                         <Paper className={this.props.classes.contentContainer}>
                             <p className={this.props.classes.title}>Download SeeShells</p>
                             <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                            <Button className={this.props.classes.button}>SEESHELLS.EXE</Button>
+                            <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
                             <div className={this.props.classes.video}>
                                 <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
                             </div>
