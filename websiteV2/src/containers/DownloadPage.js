@@ -1,7 +1,12 @@
 import React from 'react';
+import oldLogo from '../assets/oldLogo.png';
 import beach from '../assets/beach2.png';
+import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import ReactPlayer from "react-player";
 
 const styles = {
     downloadPage: {
@@ -12,20 +17,26 @@ const styles = {
         width: '100%',
     },
     image: {
-        display: 'flex',
+        display: 'grid',
         width: '100%',
         height: '600px',
         textAlign: 'center',
-        justifyContent: 'center',
         alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
+        overflow: 'hidden',
+    },
+    logo: {
+        height: '100px',
+        width: '100px',
+        display: 'flex',
+        float: 'left',
     },
     downloadContainer: {
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
     },
-    login: {
+    contentContainer: {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -37,18 +48,16 @@ const styles = {
         height: '70%',
         position: 'absolute',
         alignSelf: 'center',
+        minWidth: '300px',
+        justifySelf: 'center',
     },
     title: {
         fontSize: '50px',
         fontWeight: 'bold',
-    },
-    field: {
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'white',
-        fontSize: '20px',
-        width: '80%',
-        padding: '3%',
+        textAlign: 'center',
+        padding: '0px',
+        margin: '0px',
+        marginBottom: '5%',
     },
     button: {
         display: 'flex',
@@ -62,34 +71,34 @@ const styles = {
         justifyContent: 'center',
         marginTop: '5%',
     },
-    register: {
-        display: 'flex',
-        backgroundColor: '#EF476F',
-        '&:hover': {
-            backgroundColor: '#33A1FD',
-        },
-        color: 'white',
-        fontSize: '20px',
-        margin: '0px',
-        justifyContent: 'center',
-        marginTop: '5%',
+    video: {
+        paddingTop: '5%',
+        height: '40%',
+        width: '80%',
     },
-    input: {
-        backgroundColor: 'white',
-    }
 }
 
 class DownloadPage extends React.Component {
     render() {
         return(
-            <div className={this.props.classes.downloadPage}>
-                <div className={this.props.classes.downloadContainer}>
-                    <div className={this.props.classes.image}/>
-                    <div className={this.props.classes.login}>
-                        <p className={this.props.classes.title}>Download SeeShells</p>
+            <Paper className={this.props.classes.downloadPage}>
+                <Paper className={this.props.classes.downloadContainer}>
+                    <div className={this.props.classes.image}>
+                        <div id='stars'/>
+                        <div id='stars2'/>
+                        <div id='stars3'/>
+                    
+                        <Paper className={this.props.classes.contentContainer}>
+                            <p className={this.props.classes.title}>Download SeeShells</p>
+                            <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                            <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
+                            <div className={this.props.classes.video}>
+                                <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                            </div>
+                        </Paper>
                     </div>
-                </div>
-            </div>
+                </Paper>
+            </Paper>
         );
     }
 }

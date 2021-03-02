@@ -4,10 +4,10 @@ import AboutPage from './containers/AboutPage.js';
 import DownloadPage from './containers/DownloadPage.js';
 import DocumentationPage from './containers/DocumentationPage.js';
 import DeveloperPage from './containers/DeveloperPage.js';
-import AdminLogin from './containers/admin/AdminLogin.js';
 import Footer from './components/Footer.js';
 import { withStyles } from '@material-ui/core/styles';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 
 const styles = {
   application: {
@@ -34,42 +34,38 @@ const styles = {
     display: 'flex',
     width: '100%',
     height: '100%',
-    overflow: 'scroll',
   },
 };
 
 function App(props) {
   return (
-    <div className={props.classes.application}>
-      <Router basename="/v2">
+    <Paper className={props.classes.application}>
+      <Router basename="/">
         <div className={props.classes.topBar}>
           <MenuBar/>
         </div>
-        <div className={props.classes.content}>
+        <Paper className={props.classes.content}>
           <Route exact path="/">
             <FrontPage/>
           </Route>
-          <Route path="/about">
+          <Route exact path="/about">
             <AboutPage/>
           </Route>
-          <Route path="/download">
+          <Route exact path="/download">
             <DownloadPage/>
           </Route>
-          <Route path="/documentation">
+          <Route exact path="/documentation">
             <DocumentationPage/>
           </Route>
-          <Route path="/developers">
+          <Route exact path="/developers">
             <DeveloperPage/>
           </Route>
-          <Route path="/login">
-            <AdminLogin/>
-          </Route>
-        </div>
+        </Paper>
         <div className={props.classes.bottomBar}>
           <Footer/>
         </div>
       </Router>
-    </div>
+    </Paper>
   );
 }
 

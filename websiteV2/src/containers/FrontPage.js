@@ -1,9 +1,11 @@
 import React from 'react';
 import beach from '../assets/beach2.png';
 import pearl from '../assets/pearl.png';
+import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter, BrowserRouter as Router } from 'react-router-dom';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 const styles = {
     frontPage: {
@@ -14,13 +16,13 @@ const styles = {
         width: '100%',
     },
     image: {
-        display: 'flex',
+        display: 'grid',
         position: 'relative',
         width: '100%',
         height: '350px',
         textAlign: 'center',
-        justifyContent: 'center',
         backgroundImage: 'url(' + beach + ')',
+        overflow: 'hidden',
     },
     downloadButton: {
         display: 'flex',
@@ -33,11 +35,14 @@ const styles = {
         fontSize: '20px',
         margin: '0px',
         bottom: '10px',
+        justifySelf: 'center',
     },
     barContent: {
         display: 'flex',
         flexFlow: 'column wrap',
+        justifySelf: 'center',
         paddingTop: '2%',
+        paddingBottom: '10%',
     },
     intro: {
         display: 'flex',
@@ -110,7 +115,7 @@ const styles = {
         width: '50px',
         verticalAlign: 'center',
         marginRight: '10px',
-    }
+    },
 };
 
 class FrontPage extends React.Component {
@@ -126,9 +131,12 @@ class FrontPage extends React.Component {
 
     render() {
         return(
-            <Router basename="/v2">
-                <div className={this.props.classes.frontPage}>
+            <Router basename="/">
+                <Paper className={this.props.classes.frontPage}>
                     <div className={this.props.classes.image}>
+                        <div id='stars'/>
+                        <div id='stars2'/>
+                        <div id='stars3'/>
                         <div className={this.props.classes.barContent}>
                             <p className={this.props.classes.intro}>SEESHELLS</p>
                             <p className={this.props.classes.description}>
@@ -165,7 +173,7 @@ class FrontPage extends React.Component {
                             <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
                         </div>
                     </div>
-                </div>
+                </Paper>
             </Router>
         );
     }
