@@ -7,7 +7,7 @@ namespace SeeShellsV2.Data
     /// <summary>
     /// The root of a shellbag tree from a registry hive
     /// </summary>
-    public class RegistryShellbagRoot : INotifyPropertyChanged
+    public class RegistryShellbagRoot
     {
         /// <summary>
         /// Name of the source registry hive
@@ -23,8 +23,6 @@ namespace SeeShellsV2.Data
         /// Top level children of the shellbag root
         /// </summary>
         public ObservableCollection<IShellItem> Children { get; init; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public RegistryShellbagRoot(string name, string path)
         {
