@@ -83,8 +83,11 @@ namespace SeeShellsV2.Services
 
                 RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", "None");
 
-                Selected.Current = root;
-                Selected.CurrentEnumerable = root.Children;
+                if (Selected != null)
+                {
+                    Selected.Current = root;
+                    Selected.CurrentEnumerable = root.Children;
+                }
 
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOnlineRegistryKeyIterator(parseAllUsers))
@@ -182,8 +185,11 @@ namespace SeeShellsV2.Services
 
                 RegistryShellbagRoot root = new RegistryShellbagRoot(Path.GetFileName(registryFilePath), registryFilePath);
 
-                Selected.Current = root;
-                Selected.CurrentEnumerable = root.Children;
+                if (Selected != null)
+                {
+                    Selected.Current = root;
+                    Selected.CurrentEnumerable = root.Children;
+                }
 
                 Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
                 foreach (RegistryKeyWrapper keyWrapper in GetOfflineRegistryKeyIterator(registryFilePath))
