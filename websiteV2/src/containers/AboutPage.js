@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -44,23 +44,25 @@ const styles = {
 class AboutPage extends React.Component {
     render() {
         return(
-            <Paper className={this.props.classes.aboutPage}>
-                <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
-                    <Button className={this.props.classes.primaryButtons}>About</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons}>Windows Registry</Button>
-                        <Button className={this.props.classes.buttons}>Shellbags</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons}>SeeShells</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons}>Parsing</Button>
-                        <Button className={this.props.classes.buttons}>Analysis</Button>
-                        <Button className={this.props.classes.buttons}>Timeline</Button>
-                        <Button className={this.props.classes.buttons}>Filtering</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons}>Case Studies</Button>
+            <Router basename="/about">
+                <Paper className={this.props.classes.aboutPage}>
+                    <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
+                        <Button className={this.props.classes.primaryButtons}>About</Button>
+                        <ButtonGroup orientation="vertical">
+                            <Button className={this.props.classes.buttons}>Windows Registry</Button>
+                            <Button className={this.props.classes.buttons}>Shellbags</Button>
+                        </ButtonGroup>
+                        <Button className={this.props.classes.primaryButtons}>SeeShells</Button>
+                        <ButtonGroup orientation="vertical">
+                            <Button className={this.props.classes.buttons}>Parsing</Button>
+                            <Button className={this.props.classes.buttons}>Analysis</Button>
+                            <Button className={this.props.classes.buttons}>Timeline</Button>
+                            <Button className={this.props.classes.buttons}>Filtering</Button>
+                        </ButtonGroup>
+                        <Button className={this.props.classes.primaryButtons}>Case Studies</Button>
+                    </Paper>
                 </Paper>
-            </Paper>
+            </Router>
         );
     }
 }
