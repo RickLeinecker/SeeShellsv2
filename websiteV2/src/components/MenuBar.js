@@ -84,6 +84,7 @@ class MenuBar extends React.Component {
 
     handleClick(event) {
         this.props.history.push("/" + event.currentTarget.id);
+        this.setState({ dropdown: false });
     }
 
     openMenu() {
