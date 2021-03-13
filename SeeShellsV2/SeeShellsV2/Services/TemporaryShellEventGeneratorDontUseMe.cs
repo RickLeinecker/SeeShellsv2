@@ -46,7 +46,7 @@ namespace SeeShellsV2.Services
                             .Select(s => s[rand.Next(s.Length)]).ToArray()),
                         Description = new string(Enumerable.Repeat(chars, rand.Next(1, 10))
                             .Select(s => s[rand.Next(s.Length)]).ToArray()),
-                        TimeStamp = new DateTime(rand.Next(1577854800, 1609477200)),
+                        TimeStamp = new DateTime(rand.Next(637134336, 637450560) * 1000000000L),
                         User = new User()
                         {
                             Name = new string(Enumerable.Repeat(chars, rand.Next(1, 10))
