@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Grow from '@material-ui/core/Grow';
 import ReactPlayer from "react-player";
 
 const styles = {
@@ -50,7 +51,7 @@ const styles = {
         height: '70%',
         position: 'absolute',
         alignSelf: 'center',
-        minWidth: '300px',
+        minWidth: '400px',
         justifySelf: 'center',
     },
     title: {
@@ -81,24 +82,27 @@ const styles = {
 class DownloadPage extends React.Component {
     render() {
         return(
-            <Paper className={this.props.classes.downloadPage}>
-                <Paper className={this.props.classes.downloadContainer}>
-                    <div className={this.props.classes.image}>
-                        <div id='stars'/>
-                        <div id='stars2'/>
-                        <div id='stars3'/>
-                    
-                        <Paper className={this.props.classes.contentContainer}>
-                            <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
-                            <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                            <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
-                            <div className={this.props.classes.video}>
-                                <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                            </div>
-                        </Paper>
-                    </div>
+            
+                <Paper className={this.props.classes.downloadPage}>
+                    <Paper className={this.props.classes.downloadContainer}>
+                        <div className={this.props.classes.image}>
+                            <div id='stars'/>
+                            <div id='stars2'/>
+                            <div id='stars3'/>
+                            <Grow in={true}>
+                                <Paper className={this.props.classes.contentContainer}>
+                                    <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
+                                    <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                                    <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
+                                    <div className={this.props.classes.video}>
+                                        <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    </div>
+                                </Paper>
+                            </Grow>
+
+                        </div>
+                    </Paper>
                 </Paper>
-            </Paper>
         );
     }
 }

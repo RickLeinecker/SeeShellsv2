@@ -5,8 +5,8 @@ import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Collapse from '@material-ui/core/Collapse';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
 const styles = {
@@ -15,6 +15,7 @@ const styles = {
         width: '100%',
         display: 'flex',
         margin: '0px',
+        overflow: 'auto',
     },
     buttonContainer: {
         display: 'flex',
@@ -46,16 +47,26 @@ const styles = {
         display: 'flex',
         float: 'left',
     },
+    dropdownContainer: {
+        backgroundColor: '#212121',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'space-evenly',
+        flexFlow: 'wrap',
+    },
 };
 
 class MenuBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hideNav: false
+            hideNav: false,
+            dropdown: false
         };
 
         this.handleClick = this.handleClick.bind(this);
+        this.openMenu = this.openMenu.bind(this);
     }
 
     componentDidMount() {
@@ -73,6 +84,10 @@ class MenuBar extends React.Component {
 
     handleClick(event) {
         this.props.history.push("/" + event.currentTarget.id);
+    }
+
+    openMenu() {
+        this.setState({ dropdown: !this.state.dropdown });
     }
 
     render() {
@@ -93,15 +108,19 @@ class MenuBar extends React.Component {
                         {this.state.hideNav &&
                             <div className={this.props.classes.buttonContainer}> 
                                 <Button className={this.props.classes.buttons} onClick={this.openMenu}><DehazeIcon/></Button>
-                                <Menu>
-                                    <MenuItem onClick={this.handleClick} id="about">About</MenuItem>
-                                    <MenuItem onClick={this.handleClick} id="download">Download</MenuItem>
-                                    <MenuItem onClick={this.handleClick} id="documentation">Documentation</MenuItem>
-                                    <MenuItem onClick={this.handleClick} id="developers">Developers</MenuItem>
-                                </Menu>
                             </div>
                         }
                     </Toolbar>
+                    {this.state.hideNav &&
+                        <Collapse in={this.state.dropdown}>
+                            <Paper className={this.props.classes.dropdownContainer}>
+                                <Button className={this.props.classes.buttons} onClick={this.handleClick} id="about">About</Button>
+                                <Button className={this.props.classes.buttons} onClick={this.handleClick} id="download">Download</Button>
+                                <Button className={this.props.classes.buttons} onClick={this.handleClick} id="documentation">Documentation</Button>
+                                <Button className={this.props.classes.buttons} onClick={this.handleClick} id="developers">Developers</Button>
+                            </Paper>
+                        </Collapse>
+                    }
                 </AppBar>
             </Router>
         );

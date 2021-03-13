@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Grow from '@material-ui/core/Grow';
 
 const styles = {
     devContainer: {
@@ -64,32 +65,34 @@ const styles = {
 class DeveloperProfile extends React.Component {
     render() {
         return(
-            <Card className={this.props.classes.devContainer}>
-                {this.props.version === 1 &&
-                    <div className={this.props.classes.backgroundV1}>
-                        <CardContent>
-                            <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
-                        </CardContent>
-                    </div>
-                }
-                {this.props.version === 2 &&
-                    <div className={this.props.classes.backgroundV2}>
-                        <CardContent>
-                            <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
-                        </CardContent>
-                    </div>
-                }
-                {this.props.version === 3 &&
-                    <div className={this.props.classes.backgroundSponsor}>
-                        <CardContent>
-                            <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
-                        </CardContent>
-                    </div>
-                }
-            </Card>
+            <Grow in={true}>
+                <Card className={this.props.classes.devContainer}>
+                    {this.props.version === 1 &&
+                        <div className={this.props.classes.backgroundV1}>
+                            <CardContent>
+                                <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
+                                <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
+                            </CardContent>
+                        </div>
+                    }
+                    {this.props.version === 2 &&
+                        <div className={this.props.classes.backgroundV2}>
+                            <CardContent>
+                                <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
+                                <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
+                            </CardContent>
+                        </div>
+                    }
+                    {this.props.version === 3 &&
+                        <div className={this.props.classes.backgroundSponsor}>
+                            <CardContent>
+                                <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>
+                                <Typography variant="subtitle1" className={this.props.classes.devDescription}>{this.props.role}</Typography>
+                            </CardContent>
+                        </div>
+                    }
+                </Card>
+            </Grow>
         );
     }
 }

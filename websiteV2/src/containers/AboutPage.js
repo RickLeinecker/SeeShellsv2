@@ -4,6 +4,10 @@ import { withRouter, HashRouter as Router, Route } from 'react-router-dom';
 import AboutBar from '../components/AboutBar.js';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Slide from '@material-ui/core/Slide';
+import Collapse from '@material-ui/core/Collapse';
+import Button from '@material-ui/core/Button';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ReactPlayer from "react-player";
 
 const styles = {
@@ -15,6 +19,7 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         overflow: 'auto',
+        borderRadius: '0',
     },
     title: {
         fontSize: '50px',
@@ -54,18 +59,80 @@ const styles = {
         fontWeight: 'bold',
         color: 'white',
     },
+    sidebarContainer: {
+        height: '100%',
+        display: 'flex',
+        alignContent: 'center',
+        flexDirection: 'column',
+        borderRadius: '0',
+    },
+    toggle: {
+        backgroundColor: '#424242',
+        borderRadius: '0',
+    },
+    topBar: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#424242',
+        alignContent: 'center',
+        flexDirection: 'column',
+        borderRadius: '0',
+    },
+    buttons: {
+        color: 'white',
+    }
 };
 
 class AboutPage extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showBar: true,
+        };
+
+        this.toggleDropdown = this.toggleDropdown.bind(this);
+    }
+
+    toggleDropdown() {
+        this.setState({ dropdown: !this.state.dropdown });
+    }
+    
+    componentDidMount() {
+        window.addEventListener("resize", this.resize.bind(this));
+        this.resize();
+    }
+    
+    resize() {
+        this.setState({hideNav: window.innerWidth <= 760});
+    }
+    
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.resize.bind(this));
     }
 
     render() {
         return(
             <Router basename="/about">
-                <AboutBar/>
-                <Paper className={this.props.classes.content}>
+                {!this.state.hideNav &&
+                    <Slide in={this.state.showBar} direction="right" mountOnEnter unmountOnExit>
+                        <Paper className={this.props.classes.sidebarContainer}>
+                            <AboutBar/>
+                        </Paper>
+                    </Slide>
+                }
+                <Paper elevation={0} className={this.props.classes.content}>
+                    {this.state.hideNav &&
+                        <Paper className={this.props.classes.topBar}>
+                            <Button className={this.props.classes.buttons} onClick={this.toggleDropdown}><ArrowDropDownIcon/></Button>
+                            <Collapse in={this.state.dropdown}>
+                                <Paper>
+                                    <AboutBar/>
+                                </Paper>
+                            </Collapse>
+                        </Paper>
+                    }
                     {this.props.subpage === "about" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>About</Typography>
