@@ -6,11 +6,6 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const styles = {
-    aboutPage: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-    },
     sidebarContainer: {
         width: '20%',
         height: '100%',
@@ -58,22 +53,20 @@ class AboutBar extends React.Component {
 
     render() {
         return(
-            <Paper className={this.props.classes.aboutPage}>
-                <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="about">About</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="registry">Windows Registry</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="shellbags">Shellbags</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="seeshells">SeeShells</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="parser">Parsing</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="analysis">Analysis</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">Timeline</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filtering</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="case-studies">Case Studies</Button>
-                </Paper>
+            <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="about">About</Button>
+                <ButtonGroup orientation="vertical">
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="registry">Windows Registry</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="shellbags">Shellbags</Button>
+                </ButtonGroup>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="seeshells">SeeShells</Button>
+                <ButtonGroup orientation="vertical">
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="parser">Parsing</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="analysis">Analysis</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">Timeline</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filtering</Button>
+                </ButtonGroup>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="case-studies">Case Studies</Button>
             </Paper>
         );
     }

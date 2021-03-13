@@ -6,11 +6,6 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const styles = {
-    documentationPage: {
-        display: 'flex',
-        height: '100%',
-        width: '100%',
-    },
     sidebarContainer: {
         width: '20%',
         height: '100%',
@@ -58,25 +53,23 @@ class DocumentationBar extends React.Component {
 
     render() {
         return(
-            <Paper className={this.props.classes.documentationPage}>
-                <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="documentation">How to Use</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="online">Online Parsing</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="offline">Offline Parsing</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="advanced">Advanced Configuration</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="toolbar">Toolbar</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="data">Viewing the Data</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">The Timeline</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="events">Events</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filters</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="export">Exporting</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="import">Importing</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="licensing">Licensing</Button>
-                </Paper>
+            <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="documentation">How to Use</Button>
+                <ButtonGroup orientation="vertical">
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="online">Online Parsing</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="offline">Offline Parsing</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="advanced">Advanced Configuration</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="toolbar">Toolbar</Button>
+                </ButtonGroup>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="data">Viewing the Data</Button>
+                <ButtonGroup orientation="vertical">
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">The Timeline</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="events">Events</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filters</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="export">Exporting</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="import">Importing</Button>
+                </ButtonGroup>
+                <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="licensing">Licensing</Button>
             </Paper>
         );
     }

@@ -22,6 +22,7 @@ class AboutPage extends React.Component {
                 <Paper>
                     {this.props.subpage === "about" &&
                         <Paper>
+                            hi
                         </Paper>
                     }
                     {this.props.subpage === "registry" &&
