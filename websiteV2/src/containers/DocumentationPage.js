@@ -38,7 +38,7 @@ class DocumentationPage extends React.Component {
                     {this.props.subpage === "documentation" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>How To Use</Typography>
-                            <Typography variant="subtitle" className={this.props.classes.text}>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
                                 SeeShells collects ShellBags specific Windows Registry keys and parses through them, 
                                 and organizes the data found in them to display them on a graphical timeline. The 
                                 graphical timeline is the unique feature that SeeShells offers over other existing parsers: 

@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
     frontPage: {
@@ -51,6 +52,7 @@ const styles = {
         fontSize: '100px',
         margin: '0px',
         left: '10px',
+        paddingLeft: '10px',
     },
     description: {
         display: 'flex',
@@ -85,9 +87,10 @@ const styles = {
     info: {
         display: 'flex',
         alignItems: 'center',
-        fontSize: '30px',
         margin: '30px',
-        color: '#3E3E3E',
+    },
+    text: {
+        fontSize: '20px',
     },
     column: {
         display: 'flex',
@@ -134,46 +137,46 @@ class FrontPage extends React.Component {
         return(
             <Router basename="/">
                 <Paper className={this.props.classes.frontPage}>
-                    <div className={this.props.classes.image}>
+                    <Paper elevation={0} className={this.props.classes.image}>
                         <div id='stars'/>
                         <div id='stars2'/>
                         <div id='stars3'/>
                         <div className={this.props.classes.barContent}>
-                            <p className={this.props.classes.intro}>SEESHELLS</p>
-                            <p className={this.props.classes.description}>
+                            <Typography className={this.props.classes.intro}>SEESHELLS</Typography>
+                            <Typography className={this.props.classes.description}>
                                 A <span className={this.props.classes.descriptionAlt}>digital forensics tool</span> for analyzing Windows Registry Artifacts.
-                            </p>
+                            </Typography>
                         </div>
                         <Button className={this.props.classes.downloadButton} onClick={this.handleClick} id="download">GET THE TOOL</Button>
-                    </div>
-                    <div className={this.props.classes.featuresContainer}>
-                        <p className={this.props.classes.title}>Why SeeShells?</p>
-                        <div className={this.props.classes.infoContainer}>
-                            <div className={this.props.classes.column}>
-                                <div className={this.props.classes.info}>
+                    </Paper>
+                    <Paper elevation={0} className={this.props.classes.featuresContainer}>
+                        <Typography className={this.props.classes.title}>Why SeeShells?</Typography>
+                        <Paper elevation={0} className={this.props.classes.infoContainer}>
+                            <Paper elevation={0} className={this.props.classes.column}>
+                                <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <span className={this.props.classes.descriptionAlt}>Quick parsing</span> of Windows Registry artifacts
-                                </div>
-                                <div className={this.props.classes.info}>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Quick parsing</span> of Windows Registry artifacts</Typography>
+                                </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging
-                                </div>
-                            </div>
-                            <div className={this.props.classes.column}>
-                                <div className={this.props.classes.info}>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging</Typography>
+                                </Paper>
+                            </Paper>
+                            <Paper elevation={0} className={this.props.classes.column}>
+                                <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <span className={this.props.classes.descriptionAlt}>Timeline View</span> for a holistic view of computer activity
-                                </div>
-                                <div className={this.props.classes.info}>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Timeline View</span> for a holistic view of computer activity</Typography>
+                                </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends
-                                </div>
-                            </div>
-                        </div>
-                        <div>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends</Typography>
+                                </Paper>
+                            </Paper>
+                        </Paper>
+                        <Paper elevation={0}>
                             <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
-                        </div>
-                    </div>
+                        </Paper>
+                    </Paper>
                 </Paper>
             </Router>
         );
