@@ -32,6 +32,11 @@ const styles = {
         fontWeight: 'bold',
         marginTop: '1%',
         alignSelf: 'center',
+        textAlign: 'center',
+        color: '#33A1FD',
+    },
+    text: {
+        textAlign: 'center',
     },
     video: {
         maxHeight: '360px',
@@ -53,7 +58,7 @@ class DeveloperPage extends React.Component {
             <Paper className={this.props.classes.devContainer}>
                 <Paper className={this.props.classes.devIntro}>
                     <Typography variant="title" className={this.props.classes.title}>SeeShells Development Teams</Typography>
-                    <Typography variant="subtitle1">
+                    <Typography variant="subtitle1" className={this.props.classes.text}>
                         The SeeShells application is a Senior Design project built by two teams of five Computer Science students at UCF.
                         The V1 team designed the original application, while the V2 team enhanced the project.
                     </Typography>
@@ -69,6 +74,7 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile version={2} name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
                     <DeveloperProfile version={2} name="Spencer Ross" role="V2 Team: Team Manager, Application Testing and Backend Configuration"/>
                     <DeveloperProfile version={2} name="Joshua Rueda" role="V2 Team: Video Producer"/>
+                    <DeveloperProfile version={3} name="Rick Leinecker" role="Project Sponsor"/>
                 </Paper>
             </Paper>
         );
