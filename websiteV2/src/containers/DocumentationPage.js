@@ -1,9 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import DocumentationBar from '../components/DocumentationBar.js';
 
 const styles = {
     documentationPage: {
@@ -44,26 +43,59 @@ const styles = {
 class DocumentationPage extends React.Component {
     render() {
         return(
-            <Paper className={this.props.classes.documentationPage}>
-                <Paper elevation={2} square={true} className={this.props.classes.sidebarContainer}>
-                    <Button className={this.props.classes.primaryButtons}>How to Use</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons}>Online Parsing</Button>
-                        <Button className={this.props.classes.buttons}>Offline Parsing</Button>
-                        <Button className={this.props.classes.buttons}>Advanced Configuration</Button>
-                        <Button className={this.props.classes.buttons}>Toolbar</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons}>Viewing the Data</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons}>The Timeline</Button>
-                        <Button className={this.props.classes.buttons}>Events</Button>
-                        <Button className={this.props.classes.buttons}>Filters</Button>
-                        <Button className={this.props.classes.buttons}>Exporting</Button>
-                        <Button className={this.props.classes.buttons}>Importing</Button>
-                    </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons}>Licensing</Button>
+            <Router basename="/documentation">
+                <DocumentationBar/>
+                <Paper>
+                    {this.props.subpage === "documentation" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "online" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "offline" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "advanced" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "toolbar" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "data" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "timeline" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "events" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "filters" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "export" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "import" &&
+                        <Paper>
+                        </Paper>
+                    }
+                    {this.props.subpage === "licensing" &&
+                        <Paper>
+                        </Paper>
+                    }
                 </Paper>
-            </Paper>
+            </Router>
         );
     }
 }
