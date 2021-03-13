@@ -12,12 +12,14 @@ const styles = {
         justifyContent: 'center',
         alignContent: 'center',
         width: '100%',
+        overflow: 'auto',
     },
     devs: {
         display: 'flex',
         height: '90%',
         justifyContent: 'space-evenly',
         flexWrap: 'wrap',
+        overflow: 'auto',
     },
     devIntro: {
         display: 'flex',

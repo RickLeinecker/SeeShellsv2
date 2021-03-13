@@ -13,6 +13,7 @@ const styles = {
         margin: '0px',
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     primaryButtons: {
         display: 'flex',

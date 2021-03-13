@@ -14,15 +14,18 @@ const styles = {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'auto',
     },
     title: {
         fontSize: '50px',
         fontWeight: 'bold',
         marginTop: '1%',
         alignSelf: 'center',
+        color: '#33A1FD',
     },
     text: {
         textAlign: 'center',
+        padding: '1%',
     },
     video: {
         maxHeight: '360px',
@@ -42,6 +45,7 @@ const styles = {
         flexWrap: 'wrap',
         height: '100%',
         width: '100%',
+        overflow: 'auto',
     },
     caseStudy: {
         textAlign: 'center',
@@ -147,22 +151,33 @@ class AboutPage extends React.Component {
                         </Paper>
                     }
                     {this.props.subpage === "case-studies" &&
-                        <Paper className={this.props.classes.caseStudies}>
-                            <Paper className={this.props.classes.video}>
-                                <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                            </Paper>
-                            <Paper className={this.props.classes.video}>
-                                <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                            </Paper>
-                            <Paper className={this.props.classes.video}>
-                                <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                            </Paper>
-                            <Paper className={this.props.classes.video}>
-                                <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Case Studies</Typography>
+                            <Paper className={this.props.classes.caseStudies}>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
+                                <Paper className={this.props.classes.video}>
+                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                                </Paper>
                             </Paper>
                         </Paper>
                     }

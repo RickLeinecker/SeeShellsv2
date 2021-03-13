@@ -14,15 +14,18 @@ const styles = {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'auto',
     },
     title: {
         fontSize: '50px',
         fontWeight: 'bold',
         marginTop: '1%',
         alignSelf: 'center',
+        color: '#33A1FD',
     },
     text: {
         textAlign: 'center',
+        padding: '1%',
     },
 };
 
