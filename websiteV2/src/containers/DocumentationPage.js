@@ -3,40 +3,26 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import DocumentationBar from '../components/DocumentationBar.js';
+import Typography from '@material-ui/core/Typography';
+import ReactPlayer from "react-player";
 
 const styles = {
-    documentationPage: {
-        display: 'flex',
+    content: {
         height: '100%',
         width: '100%',
-    },
-    sidebarContainer: {
-        width: '20%',
-        height: '100%',
-        backgroundColor: '#424242',
-        margin: '0px',
         display: 'flex',
+        justifyContent: 'flex-start',
         flexDirection: 'column',
+        alignItems: 'center',
     },
-    primaryButtons: {
-        display: 'flex',
-        justifyContent: 'left',
-        color: '#F2F2F2',
-        '&:hover': {
-            color: '#33A1FD',
-        },
-        fontSize: '30px',
-        fontFamily: 'Georgia',
+    title: {
+        fontSize: '50px',
+        fontWeight: 'bold',
+        marginTop: '1%',
+        alignSelf: 'center',
     },
-    buttons: {
-        display: 'flex',
-        justifyContent: 'center',
-        color: '#F2F2F2',
-        '&:hover': {
-            color: '#33A1FD',
-        },
-        fontSize: '20px',
-        fontFamily: 'Georgia',
+    text: {
+        textAlign: 'center',
     },
 };
 
@@ -45,53 +31,72 @@ class DocumentationPage extends React.Component {
         return(
             <Router basename="/documentation">
                 <DocumentationBar/>
-                <Paper>
+                <Paper className={this.props.classes.content}>
                     {this.props.subpage === "documentation" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>How To Use</Typography>
+                            <Typography variant="subtitle" className={this.props.classes.text}>
+                                SeeShells collects ShellBags specific Windows Registry keys and parses through them, 
+                                and organizes the data found in them to display them on a graphical timeline. The 
+                                graphical timeline is the unique feature that SeeShells offers over other existing parsers: 
+                                this timeline makes ShellBag data easier to understand and facilitates the process of
+                                finding a significant pattern or piece of evidence.
+                            </Typography>
                         </Paper>
                     }
                     {this.props.subpage === "online" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Online Parsing</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "offline" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Offline Parsing</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "advanced" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Advanced Configuration</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "toolbar" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Toolbar</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "data" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Viewing The Data</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "timeline" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Timeline View</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "events" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Shellbag Events</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "filters" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Shellbag Filtering</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "export" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Exporting</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "import" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Importing</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "licensing" &&
-                        <Paper>
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Licensing</Typography>
                         </Paper>
                     }
                 </Paper>

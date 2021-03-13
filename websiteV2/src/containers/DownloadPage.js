@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import ReactPlayer from "react-player";
 
 const styles = {
@@ -55,8 +56,6 @@ const styles = {
         fontSize: '50px',
         fontWeight: 'bold',
         textAlign: 'center',
-        padding: '0px',
-        margin: '0px',
         marginBottom: '5%',
     },
     button: {
@@ -89,7 +88,7 @@ class DownloadPage extends React.Component {
                         <div id='stars3'/>
                     
                         <Paper className={this.props.classes.contentContainer}>
-                            <p className={this.props.classes.title}>Download SeeShells</p>
+                            <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
                             <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
                             <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
                             <div className={this.props.classes.video}>

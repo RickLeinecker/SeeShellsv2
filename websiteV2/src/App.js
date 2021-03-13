@@ -82,7 +82,7 @@ function App(props) {
           </Route>
 
           <Route exact path="/documentation">
-            <DocumentationPage/>
+            <DocumentationPage subpage="documentation"/>
           </Route>
           <Route exact path="/documentation/online">
             <DocumentationPage subpage="online"/>

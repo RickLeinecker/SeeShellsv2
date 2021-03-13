@@ -31,6 +31,18 @@ const styles = {
         marginTop: '1%',
         alignSelf: 'center',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '150px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
 };
 
 class DeveloperPage extends React.Component {
