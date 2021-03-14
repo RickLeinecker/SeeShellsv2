@@ -51,7 +51,7 @@ const styles = {
         height: '70%',
         position: 'absolute',
         alignSelf: 'center',
-        minWidth: '400px',
+        minWidth: '360px',
         justifySelf: 'center',
     },
     title: {

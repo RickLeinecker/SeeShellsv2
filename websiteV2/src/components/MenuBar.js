@@ -35,7 +35,7 @@ const styles = {
     },
     title: {
         fontFamily: 'Georgia',
-        fontSize: '50px',
+        fontSize: 'calc(20px + 2vw)',
         margin: '10px',
         display: 'flex',
         paddingLeft: '10px',
@@ -107,7 +107,7 @@ class MenuBar extends React.Component {
                             </div>
                         }
                         {this.state.hideNav &&
-                            <div className={this.props.classes.buttonContainer}> 
+                            <div> 
                                 <Button className={this.props.classes.buttons} onClick={this.openMenu}><DehazeIcon/></Button>
                             </div>
                         }

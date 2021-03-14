@@ -16,16 +16,10 @@ const styles = {
     },
     devs: {
         display: 'flex',
-        height: '90%',
+        height: '100%',
         justifyContent: 'space-evenly',
         flexWrap: 'wrap',
         overflow: 'auto',
-    },
-    devIntro: {
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'center',
     },
     title: {
         fontSize: '50px',
@@ -56,14 +50,12 @@ class DeveloperPage extends React.Component {
     render() {
         return(
             <Paper className={this.props.classes.devContainer}>
-                <Paper className={this.props.classes.devIntro}>
+                <Paper className={this.props.classes.devs}>
                     <Typography variant="title" className={this.props.classes.title}>SeeShells Development Teams</Typography>
                     <Typography variant="subtitle1" className={this.props.classes.text}>
                         The SeeShells application is a Senior Design project built by two teams of five Computer Science students at UCF.
                         The V1 team designed the original application, while the V2 team enhanced the project.
                     </Typography>
-                </Paper>
-                <Paper className={this.props.classes.devs}>
                     <DeveloperProfile version={1} name="Sara Frackiewicz" role="V1 Team: API, Scripting, and Administrative Website"/>
                     <DeveloperProfile version={1} name="Klayton Killough" role="V1 Team: WPF Shellbag Parser and IO"/>
                     <DeveloperProfile version={1} name="Aleksandar Stoyanov" role="V1 Team: WPF Shellbag Parser and Timeline"/>
