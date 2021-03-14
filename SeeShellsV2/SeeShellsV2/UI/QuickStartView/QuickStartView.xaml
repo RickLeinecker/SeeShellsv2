@@ -18,7 +18,7 @@
         <Border Name="OutsideBorder" 
                 Background="#80000000" 
                 MouseLeftButtonDown="Border_MouseLeftButtonDown">
-            <Border Background="{StaticResource MahApps.Brushes.ThemeBackground}"
+            <Border Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     CornerRadius="5">

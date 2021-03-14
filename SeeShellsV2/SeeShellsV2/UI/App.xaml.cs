@@ -27,7 +27,17 @@ namespace SeeShellsV2.UI
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
             WindowFactory.Create("main").Show();
+        }
+
+        public void ChangeTheme(Uri uri)
+        {
+            ResourceDictionary resourceDict = LoadComponent(uri) as ResourceDictionary;
+            Resources.MergedDictionaries.Clear();
+
+            foreach (var dict in resourceDict.MergedDictionaries)
+                Resources.MergedDictionaries.Add(dict);
         }
     }
 }

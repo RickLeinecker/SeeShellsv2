@@ -11,17 +11,17 @@
     <UserControl.Resources>
         <Style TargetType="{x:Type hex:HexEditor}">
             <Setter Property="BytePerLine" Value="8" />
-            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.ThemeBackground}" />
-            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.ThemeForeground}" />
-            <Setter Property="ForegroundSecondColor" Value="{StaticResource MahApps.Brushes.AccentBase}" />
-            <Setter Property="HighLightColor" Value="{StaticResource MahApps.Brushes.Highlight}" />
-            <Setter Property="MouseOverColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background.MouseOver}" />
-            <Setter Property="SelectionFirstColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background}" />
-            <Setter Property="SelectionSecondColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background}" />
-            <Setter Property="ForegroundHighLightOffSetHeaderColor" Value="{StaticResource MahApps.Brushes.Gray.MouseOver}" />
-            <Setter Property="ForegroundOffSetHeaderColor" Value="{StaticResource MahApps.Brushes.Gray}" />
-            <Setter Property="ForegroundContrast" Value="{StaticResource MahApps.Brushes.IdealForeground}" />
-            <Setter Property="AutoHighLiteSelectionByteBrush" Value="{StaticResource MahApps.Brushes.Accent4}" />
+            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+            <Setter Property="ForegroundSecondColor" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
+            <Setter Property="HighLightColor" Value="{DynamicResource MahApps.Brushes.Highlight}" />
+            <Setter Property="MouseOverColor" Value="{DynamicResource MahApps.Brushes.DataGrid.Selection.Background.MouseOver}" />
+            <Setter Property="SelectionFirstColor" Value="{DynamicResource MahApps.Brushes.DataGrid.Selection.Background}" />
+            <Setter Property="SelectionSecondColor" Value="{DynamicResource MahApps.Brushes.DataGrid.Selection.Background}" />
+            <Setter Property="ForegroundHighLightOffSetHeaderColor" Value="{DynamicResource MahApps.Brushes.Gray.MouseOver}" />
+            <Setter Property="ForegroundOffSetHeaderColor" Value="{DynamicResource MahApps.Brushes.Gray}" />
+            <Setter Property="ForegroundContrast" Value="{DynamicResource MahApps.Brushes.IdealForeground}" />
+            <Setter Property="AutoHighLiteSelectionByteBrush" Value="{DynamicResource MahApps.Brushes.Accent4}" />
             <Setter Property="StatusBarVisibility" Value="Hidden" />
         </Style>
         <local:StreamConverter x:Key="StreamConverter"/>

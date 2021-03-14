@@ -75,5 +75,13 @@ namespace SeeShellsV2.UI
             if (openFileDialog.ShowDialog() == true)
                 ViewModel.ImportFromRegistry(openFileDialog.FileName);
         }
+
+        private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleSwitch s && s.IsOn)
+                (Application.Current as App).ChangeTheme(new Uri(@"UI/Themes/DarkTheme.xaml", UriKind.Relative));
+            else
+                (Application.Current as App).ChangeTheme(new Uri(@"UI/Themes/LightTheme.xaml", UriKind.Relative));
+        }
     }
 }

@@ -25,6 +25,24 @@
             </Menu>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <mah:WindowCommands.Resources>
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOn" Color="White" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOn" Color="White" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOn" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOnPointerOver" Color="{DynamicResource MahApps.Colors.Gray7}" />
+            </mah:WindowCommands.Resources>
+            <mah:ToggleSwitch OffContent="Light"
+                              OnContent="Dark"
+                              Toggled="ToggleSwitch_Toggled"
+                              IsOn="True"
+                              HorizontalAlignment="Right"
+                              HorizontalContentAlignment="Right"
+                              ContentDirection="LeftToRight"
+                              Margin="5 0"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid>
             <xcad:DockingManager AllowMixedOrientation="True"
