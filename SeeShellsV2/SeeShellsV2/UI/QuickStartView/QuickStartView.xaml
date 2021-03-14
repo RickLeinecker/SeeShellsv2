@@ -8,10 +8,15 @@
              xmlns:local="clr-namespace:SeeShellsV2.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="MenuItem" BasedOn="{StaticResource MahApps.Styles.MenuItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Border Name="OutsideBorder" 
                 Background="#80000000" 
-                Visibility="{Binding Visibility}"
                 MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border Background="{StaticResource MahApps.Brushes.ThemeBackground}"
                     VerticalAlignment="Center"
