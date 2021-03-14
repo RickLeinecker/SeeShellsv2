@@ -14,7 +14,7 @@ namespace SeeShellsV2.UI
     {
         [Dependency] public ICsvImporter CsvImporter { get; set; }
         [Dependency] public IRegistryImporter RegImporter { get; set; }
-        //[Dependency] public IShellEventManager ShellEventManager { get; set; }
+        [Dependency] public IShellEventManager ShellEventManager { get; set; }
         [Dependency] public ISelected Selected { get; set; }
 
         public string WebsiteUrl => @"https://shellbags.github.io/v2";
@@ -39,7 +39,7 @@ namespace SeeShellsV2.UI
             Selected.Current = root;
             Selected.CurrentEnumerable = root.Children;
 
-            // await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));
+            await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));
         }
     }
 }

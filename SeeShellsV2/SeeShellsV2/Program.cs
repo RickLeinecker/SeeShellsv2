@@ -35,7 +35,7 @@ namespace SeeShellsV2
             // Register Factory Types
             container.RegisterType<IWindowFactory, WindowFactory>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            // container.RegisterType<IShellEventFactory, ShellEventFactory>();
+            container.RegisterType<IShellEventFactory, ShellEventFactory>();
 
             // Register Repository Types
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
@@ -45,7 +45,7 @@ namespace SeeShellsV2
             // Register Service Types
             container.RegisterType<ICsvImporter, CsvImporter>();
             container.RegisterType<IRegistryImporter, RegistryImporter>();
-            // container.RegisterType<IShellEventManager, ShellEventManager>();
+            container.RegisterType<IShellEventManager, ShellEventManager>();
 
             // Register Window Types
             container.RegisterType<IWindow, MainWindow>("main");
