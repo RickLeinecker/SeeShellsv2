@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../assets/seeshellsLogo-100.png';
+import logoClicked from '../assets/seeshellsLogo-100-click.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
@@ -46,6 +47,11 @@ const styles = {
         width: '70px',
         display: 'flex',
         float: 'left',
+        backgroundImage: 'url(' + logo + ')',
+        backgroundSize: 'cover',
+        '&:hover': {
+            backgroundImage: 'url(' + logoClicked + ')',
+        },
     },
     dropdownContainer: {
         backgroundColor: '#212121',
@@ -116,7 +122,7 @@ class MenuBar extends React.Component {
             <Router basename="/">
                 <AppBar position="static" className={this.props.classes.menuBar}>
                     <Toolbar>
-                        <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
+                        <div alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
                         <p className={this.props.classes.title}>SEESHELLS</p>
                         {!this.state.hideNav && 
                             <div className={this.props.classes.buttonContainer}> 
