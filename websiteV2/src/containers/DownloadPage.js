@@ -1,5 +1,5 @@
 import React from 'react';
-import oldLogo from '../assets/oldLogo.png';
+import logo from '../assets/seeshellsLogo-small.png';
 import beach from '../assets/beach2.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
@@ -29,8 +29,8 @@ const styles = {
         overflow: 'hidden',
     },
     logo: {
-        height: '100px',
-        width: '100px',
+        height: '150px',
+        width: '150px',
         display: 'flex',
         float: 'left',
     },
@@ -95,7 +95,7 @@ class DownloadPage extends React.Component {
                         <Grow in={true}>
                             <Paper className={this.props.classes.contentContainer}>
                                 <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
-                                <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                                <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
                                 <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
                                 <div className={this.props.classes.video}>
                                     <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
