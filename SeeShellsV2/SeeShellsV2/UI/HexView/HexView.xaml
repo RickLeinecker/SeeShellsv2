@@ -25,20 +25,7 @@
             <Setter Property="StatusBarVisibility" Value="Hidden" />
         </Style>
         <local:StreamConverter x:Key="StreamConverter"/>
-
-        <DataTemplate DataType="{x:Type data:ShellItem}">
-            <hex:HexEditor
-                Stream="{Binding Value, Converter={StaticResource StreamConverter}}"
-                ReadOnlyMode="True"/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type data:ShellEvent}">
-            <hex:HexEditor
-                Stream="{Binding Evidence[0].Value, Converter={StaticResource StreamConverter}}"
-                ReadOnlyMode="True"/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type data:RegistryHive}">
-            
-        </DataTemplate>
     </UserControl.Resources>
-    <ContentControl Content="{Binding Selected.Current}"/>
+    <hex:HexEditor Stream="{Binding Selected.Current, Converter={StaticResource StreamConverter}}"
+                   ReadOnlyMode="True" BorderThickness="0" Focusable="False"/>
 </UserControl>
