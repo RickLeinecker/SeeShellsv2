@@ -14,47 +14,53 @@
 		<local:TimelineSlicer x:Key="TimelineSlicer"/>
 	</UserControl.Resources>
 	<ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
-		PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown" 
-		PreviewMouseMove="ScrollViewer_PreviewMouseMove"
-		PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp">
+			PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown"
+			PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp"
+			MouseMove="ScrollViewer_MouseMove"
+			PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
 		<!-- ItemsControl displays a collection of items -->
-		<ItemsControl HorizontalContentAlignment="Stretch">
+	<ItemsControl x:Name="Timeline" HorizontalContentAlignment="Stretch">
 
-			<!-- Set the source of the ItemsControl to the IShellEventCollection repo -->
-			<ItemsControl.ItemsSource>
+		<!-- Set the source of the ItemsControl to the IShellEventCollection repo -->
+		<ItemsControl.ItemsSource>
 
-				<!--Use Converter to split the event collection into discrete stacks by timestamp.
+			<!--Use Converter to split the event collection into discrete stacks by timestamp.
 				TimelineSlicer(IShellEventCollection) => IEnumerable<IEnumerable<IShellEvent>>-->
-				<MultiBinding Converter="{StaticResource TimelineSlicer}">
-					<!-- Bind ShellEvents from TimelineVM to the itemscontrol -->
-					<Binding Path="ShellEvents"/>
-					<!-- Also Bind Count so the view will redraw when Count is changed -->
-					<Binding Path="ShellEvents.Count"/>
-				</MultiBinding>
-			</ItemsControl.ItemsSource>
+			<MultiBinding Converter="{StaticResource TimelineSlicer}">
+				<!-- Bind ShellEvents from TimelineVM to the itemscontrol -->
+				<Binding Path="ShellEvents"/>
+				<!-- Also Bind Count so the view will redraw when Count is changed -->
+				<Binding Path="ShellEvents.Count"/>
+			</MultiBinding>
+		</ItemsControl.ItemsSource>
 
-			<!--Use a horizontal stack panel to wrap list of collections.
+			<ItemsControl.LayoutTransform>
+				<ScaleTransform x:Name="scaleTransform" />
+			</ItemsControl.LayoutTransform>
+
+		<!--Use a horizontal stack panel to wrap list of collections.
 			We can replace this with a custom panel for stack positioning
 			and user interactions.-->
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<local:TimelinePanel />
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
+		<ItemsControl.ItemsPanel>
+			<ItemsPanelTemplate>
+				<local:TimelinePanel x:Name="timelinePanel" ColumnWidth="170"/>
+			</ItemsPanelTemplate>
+		</ItemsControl.ItemsPanel>
 
-			
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<StackPanel VerticalAlignment="Bottom">
 
-						<ItemsControl ItemsSource="{Binding}">
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+					<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+						<!--<Separator Width="3" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="0,0,0,0"/>-->
+						<!--<StackPanel VerticalAlignment="Bottom">-->
+						<ItemsControl ItemsSource="{Binding}" Margin="3,0,3,0">
 
 							<ItemsControl.ItemsPanel>
 								<ItemsPanelTemplate>
-										<StackPanel/>
+									<StackPanel/>
 								</ItemsPanelTemplate>
 							</ItemsControl.ItemsPanel>
-							
+
 
 							<ItemsControl.ItemTemplate>
 								<DataTemplate>
@@ -78,10 +84,11 @@
 
 						</ItemsControl>
 
+						<!--</StackPanel>-->
 					</StackPanel>
 				</DataTemplate>
-			</ItemsControl.ItemTemplate>
+		</ItemsControl.ItemTemplate>
 
-		</ItemsControl>
+	</ItemsControl>
 	</ScrollViewer>
 </UserControl>
