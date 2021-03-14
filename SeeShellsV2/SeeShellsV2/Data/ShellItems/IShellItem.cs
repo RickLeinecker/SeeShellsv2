@@ -27,21 +27,31 @@ namespace SeeShellsV2.Data
         /// Description can be used to refer to:
         /// <list type="bullet">
         /// <item>filename (e.g. foo.zip)</item>
-        /// <item>directory name</item> (e.g. "C:\" for the C drive directory)
-        /// <item>GUID (or the known correspondence of a GUID (see <see cref="KnownGuids"/>)</item>
+        /// <item>directory name (e.g. "C:\" for the C drive directory)</item>
+        /// <item>GUID (or the known correspondence of a GUID)</item>
         /// </list> 
         /// </summary>
         string Description { init; get; }
 
         /// <summary>
-        /// Registry Key from which the shell item was parsed
+        /// Place refered to by the shell item.
         /// </summary>
-        RegistryKeyWrapper RegistryKey { get; set; }
+        Place Place { init; get; }
+
+        RegistryHive RegistryHive { init; get; }
+
+        byte[] Value { init; get; }
+
+        int? NodeSlot { init; get; }
+
+        DateTime? SlotModifiedDate { init; get; }
+
+        DateTime LastRegistryWriteDate { init; get; }
 
         /// <summary>
         /// Parent of this shell item
         /// </summary>
-        IShellItem Parent { get; set; }
+        IShellItem Parent { init; get; }
 
         /// <summary>
         /// Children of this shell item
@@ -86,7 +96,7 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// List of <see cref="IExtensionBlock"/> instances associated with the shell item
         /// </summary>
-        IReadOnlyList<IExtensionBlock> ExtensionBlocks { get; }
+        IReadOnlyCollection<IExtensionBlock> ExtensionBlocks { init; get; }
 
         /// <summary>
         /// Set of tags associated with the shell item

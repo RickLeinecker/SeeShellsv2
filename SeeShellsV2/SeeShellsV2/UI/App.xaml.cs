@@ -17,9 +17,17 @@ namespace SeeShellsV2.UI
     /// </summary>
     public partial class App : Application
     {
+        [Dependency]
+        public IWindowFactory WindowFactory { get; set; }
+
         public App()
         {
             InitializeComponent();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            WindowFactory.Create("main").Show();
         }
     }
 }

@@ -46,6 +46,7 @@ namespace SeeShellsV2.Services
 
                 while (csv.Read())
                 {
+                    /*
                     var typeId = csv.GetField<string>("Type");
                     Type type = shellFactory.GetShellType(byte.Parse(typeId, NumberStyles.HexNumber));
 
@@ -56,6 +57,7 @@ namespace SeeShellsV2.Services
                     }
 
                     shellItems.Add((IShellItem)csv.GetRecord(type));
+                    */
                 }
             }
         }

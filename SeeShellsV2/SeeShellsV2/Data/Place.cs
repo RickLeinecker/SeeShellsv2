@@ -11,6 +11,8 @@ namespace SeeShellsV2.Data
     /// </summary>
     public class Place
     {
+        public string PathName { get; init; }
+
         public string Name { get; init; }
     }
 }

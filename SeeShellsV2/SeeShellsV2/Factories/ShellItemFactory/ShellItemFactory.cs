@@ -5,21 +5,44 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
+using Unity;
+
 using SeeShellsV2.Data;
+using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Factories
 {
     public class ShellItemFactory : IShellItemFactory
     {
+        private readonly IList<IShellItemParser> parsers;
 
-        public Type GetShellType(byte type, IShellItem parent = null)
+        public ShellItemFactory([Dependency] IUnityContainer container)
         {
-            return ShellItem.GetShellType(type, parent);
+            parsers = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(IShellItemParser).IsAssignableFrom(p))
+                .Where(q => q.IsClass)
+                .Select(r => (IShellItemParser)container.Resolve(r))
+                .OrderByDescending(s => s.Priority)
+                .ToList();
         }
 
-        public IShellItem Create(byte[] buf, IShellItem parent = null)
+        public Type GetShellType(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null)
         {
-            return ShellItem.FromByteArray(buf, parent);
+            foreach (var parser in parsers)
+                if (parser.CanParse(hive, keyWrapper, value, parent))
+                    return parser.ShellItemType;
+
+            return null;
+        }
+
+        public IShellItem Create(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null)
+        {
+            foreach (var parser in parsers)
+                if (parser.CanParse(hive, keyWrapper, value, parent))
+                    return parser.Parse(hive, keyWrapper, value, parent);
+
+            return null;
         }
     }
 }

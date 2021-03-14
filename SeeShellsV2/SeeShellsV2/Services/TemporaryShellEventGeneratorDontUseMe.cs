@@ -57,7 +57,7 @@ namespace SeeShellsV2.Services
                             Name = new string(Enumerable.Repeat(chars, rand.Next(1, 10))
                             .Select(s => s[rand.Next(s.Length)]).ToArray())
                         },
-                        Evidence = new List<ShellItem>() { new ShellItem() { Description = "Fake Shell Item" } }
+                        Evidence = new List<ShellItem>() { new UnknownShellItem() { Description = "Fake Shell Item" } }
                     };
 
                     syncher.Post(delegate { collection.Add(e); }, null);

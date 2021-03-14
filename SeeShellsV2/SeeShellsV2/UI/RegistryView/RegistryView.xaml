@@ -15,7 +15,7 @@
     <Grid>
         <TreeView ItemsSource="{Binding ShellItems.RegistryRoots}">
             <TreeView.Resources>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:RegistryShellbagRoot}">
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:RegistryHive}">
                     <Button Click="MenuItem_Click" Tag="{Binding Children}">
                         <Button.Template>
                             <ControlTemplate>

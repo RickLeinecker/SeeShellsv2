@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading;
 
 namespace SeeShellsV2.Utilities
 {
@@ -35,8 +36,8 @@ namespace SeeShellsV2.Utilities
                 comparer = value;
                 data = data.OrderBy(t => t, comparer).ToList();
 
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Comparer"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                OnPropertyChanged(new PropertyChangedEventArgs("Comparer"));
             }
         }
 
@@ -51,8 +52,8 @@ namespace SeeShellsV2.Utilities
 
             data.Insert(idx, item);
 
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, idx));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, idx));
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
         }
 
         public void AddRange(IEnumerable<T> collection)
@@ -66,16 +67,16 @@ namespace SeeShellsV2.Utilities
                 data.Insert(idx, item);
             }
 
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
         }
 
         public void Clear()
         {
             data.Clear();
 
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
         }
 
         public bool Contains(T item)
@@ -97,8 +98,8 @@ namespace SeeShellsV2.Utilities
             {
                 data.RemoveAt(idx);
 
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, idx));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Count"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, idx));
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             }
 
             return idx >= 0;
@@ -111,7 +112,47 @@ namespace SeeShellsV2.Utilities
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
+        }
+
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
+
+        protected void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (SynchronizationContext.Current == _synchronizationContext)
+            {
+                // Execute the CollectionChanged event on the current thread
+                RaiseCollectionChanged(e);
+            }
+            else
+            {
+                // Raises the CollectionChanged event on the creator thread
+                _synchronizationContext.Send(RaiseCollectionChanged, e);
+            }
+        }
+
+        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (SynchronizationContext.Current == _synchronizationContext)
+            {
+                // Execute the PropertyChanged event on the current thread
+                RaisePropertyChanged(e);
+            }
+            else
+            {
+                // Raises the PropertyChanged event on the creator thread
+                _synchronizationContext.Send(RaisePropertyChanged, e);
+            }
+        }
+
+        private void RaiseCollectionChanged(object param)
+        {
+            CollectionChanged?.Invoke(this, (NotifyCollectionChangedEventArgs)param);
+        }
+
+        private void RaisePropertyChanged(object param)
+        {
+            PropertyChanged?.Invoke(this, (PropertyChangedEventArgs)param);
         }
     }
 }

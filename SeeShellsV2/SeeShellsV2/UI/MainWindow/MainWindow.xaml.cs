@@ -16,8 +16,9 @@ namespace SeeShellsV2.UI
     {
         public void ImportFromCSV(string path);
         public void ExportToCSV(string path);
-        public Task<(int, int, long)> ImportFromOnlineRegistry();
-        public Task<(int, int, long)> ImportFromOfflineRegistry(string hiveLocation);
+        public void ImportFromRegistry(string hiveLocation = null);
+        string WebsiteUrl { get; }
+        string GithubUrl { get; }
     }
 
     /// <summary>
@@ -63,23 +64,16 @@ namespace SeeShellsV2.UI
                 ViewModel.ExportToCSV(openFileDialog.FileName);
         }
 
-        private async void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
+        private void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
         {
-            (int parsed, int failed, long elapsedMillis) = await ViewModel.ImportFromOnlineRegistry();
-
-            MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", parsed, failed, elapsedMillis));
+            ViewModel.ImportFromRegistry();
         }
 
-        private async void Import_Offline_Registry_Click(object sender, RoutedEventArgs e)
+        private void Import_Offline_Registry_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.ValidateNames = false;
-            openFileDialog.ReadOnlyChecked = true;
+            OpenFileDialog openFileDialog = new OpenFileDialog { ValidateNames = false, ReadOnlyChecked = true };
             if (openFileDialog.ShowDialog() == true)
-            {
-                (int parsed, int failed, long elapsedMillis) = await ViewModel.ImportFromOfflineRegistry(openFileDialog.FileName);
-                MessageBox.Show(string.Format("{0} shell items parsed, {1} shell items failed, {2} milliseconds.", parsed, failed, elapsedMillis));
-            }
+                ViewModel.ImportFromRegistry(openFileDialog.FileName);
         }
     }
 }

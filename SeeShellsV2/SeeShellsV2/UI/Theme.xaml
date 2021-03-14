@@ -1,8 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:MWindow="clr-namespace:MWindowLib;assembly=MWindowLib"
-                    xmlns:xcad="https://github.com/Dirkster99/AvalonDock"
-                    xmlns:local="clr-namespace:SeeShellsV2.UI">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -15,6 +12,7 @@
             TODO: create custom MahApps theme that matches SeeShells sketches
             https://mahapps.com/docs/themes/thememanager
         -->
+            
         <!--
             TODO: create custom Avalon Dock theme that matches SeeShells sketches
             https://stackoverflow.com/questions/10017949/restyling-avalondock-for-high-contrast-themes

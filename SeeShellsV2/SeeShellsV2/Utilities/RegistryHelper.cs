@@ -25,7 +25,6 @@ namespace SeeShellsV2.Utilities
 {
     public static class RegistryHelper
     {
-        // private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         public static DateTime? GetDateModified(RegistryHive registryHive, string path)
         {
             var lastModified = new FILETIME();
@@ -78,9 +77,8 @@ namespace SeeShellsV2.Utilities
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // logger.Warn(ex, $"Couldn't retrieve registry modified date for {path}");
                 return null;
             }
         }

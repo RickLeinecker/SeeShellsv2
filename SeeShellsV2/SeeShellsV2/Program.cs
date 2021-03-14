@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Media;
 
 using Unity;
+using Newtonsoft.Json;
 
 using SeeShellsV2.Data;
 using SeeShellsV2.Factories;
@@ -23,9 +27,15 @@ namespace SeeShellsV2
         {
             IUnityContainer container = new UnityContainer();
 
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string internalResourcePath = assembly.GetManifestResourceNames().Single(str => str.EndsWith("Config.json"));
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(internalResourcePath)))
+                container.RegisterInstance<IConfig>(JsonConvert.DeserializeObject<Config>(reader.ReadToEnd()));
+
             // Register Factory Types
             container.RegisterType<IWindowFactory, WindowFactory>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            // container.RegisterType<IShellEventFactory, ShellEventFactory>();
 
             // Register Repository Types
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
@@ -33,9 +43,9 @@ namespace SeeShellsV2
             container.RegisterSingleton<ISelected, Selected>();
 
             // Register Service Types
-            container.RegisterType<IConfigParser, ConfigParser>();
             container.RegisterType<ICsvImporter, CsvImporter>();
             container.RegisterType<IRegistryImporter, RegistryImporter>();
+            // container.RegisterType<IShellEventManager, ShellEventManager>();
 
             // Register Window Types
             container.RegisterType<IWindow, MainWindow>("main");
@@ -50,14 +60,11 @@ namespace SeeShellsV2
             container.RegisterType<IRegistryViewVM, RegistryViewVM>();
             container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
+            // container.RegisterType<IHexViewVM, HexViewVM>();
 
             // Create and run app with main window
             App app = container.Resolve<App>();
-
-            IWindowFactory windowFactory = container.Resolve<IWindowFactory>();
-            Window mainWindow = windowFactory.Create("main") as Window;
-
-            app.Run(mainWindow);
+            app.Run();
         }
     }
 }

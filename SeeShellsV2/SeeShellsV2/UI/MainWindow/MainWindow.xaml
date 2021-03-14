@@ -8,7 +8,7 @@
         xmlns:xcad="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
         Title="SeeShells" Icon="../Images/SeeShells.png"
-        Height="450" Width="800">
+        Height="800" Width="1400">
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <Menu Background="Transparent">
@@ -27,15 +27,9 @@
     </mah:MetroWindow.LeftWindowCommands>
     <Grid>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <xcad:DockingManager Grid.Row="1"
-                           AllowMixedOrientation="True"
-                           BorderBrush="Black"
-                           BorderThickness="1">
+            <xcad:DockingManager AllowMixedOrientation="True"
+                                 BorderBrush="Black"
+                                 BorderThickness="1">
                 <xcad:DockingManager.DocumentHeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -44,34 +38,44 @@
                         </StackPanel>
                     </DataTemplate>
                 </xcad:DockingManager.DocumentHeaderTemplate>
-                
+
                 <xcad:LayoutRoot x:Name="_layoutRoot">
                     <xcad:LayoutPanel Orientation="Horizontal">
-                        
-                        <xcad:LayoutAnchorablePane DockWidth="200">
-                            <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                <local:InspectorView />
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                        
+
+                        <xcad:LayoutPanel Orientation="Vertical" DockWidth="320">
+                            <xcad:LayoutAnchorablePane DockMinWidth="200">
+                                <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                    <local:InspectorView />
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+
+                            <!--
+                            <xcad:LayoutAnchorablePane DockMinWidth="200">
+                                <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                    <local:HexView />
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                            -->
+                        </xcad:LayoutPanel>
+
                         <xcad:LayoutDocumentPaneGroup >
                             <xcad:LayoutDocumentPane>
-                                <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" IconSource="../Images/SeeShells.png">
+                                <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" >
                                     <local:TimelineView />
                                 </xcad:LayoutDocument>
-                                <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" IconSource="../Images/SeeShells.png">
+                                <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" >
                                     <local:TableView />
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
                         </xcad:LayoutDocumentPaneGroup >
 
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="125">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <local:FileSystemView />
-                                </xcad:LayoutAnchorable>
-                                <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                        <xcad:LayoutAnchorablePaneGroup DockWidth="320">
+                            <xcad:LayoutAnchorablePane DockMinWidth="200">
+                                <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:RegistryView />
+                                </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                    <local:FileSystemView />
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
@@ -80,7 +84,7 @@
                     <xcad:LayoutRoot.LeftSide>
                         <xcad:LayoutAnchorSide>
                             <xcad:LayoutAnchorGroup>
-                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:FilterControlView />
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorGroup>

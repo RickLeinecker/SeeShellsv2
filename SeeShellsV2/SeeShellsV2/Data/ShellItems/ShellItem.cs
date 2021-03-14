@@ -15,12 +15,13 @@
 // if not, see <https://www.gnu.org/licenses>
 #endregion
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace SeeShellsV2.Data
 {
-    public class ShellItem : IShellItem
+    public abstract class ShellItem : IShellItem
     {
         public string Description
         {
@@ -28,16 +29,45 @@ namespace SeeShellsV2.Data
             get => fields.GetClassOrDefault("Description", "??");
         }
 
-        public RegistryKeyWrapper RegistryKey
+        public Place Place
         {
-            set => fields["RegistryKey"] = value;
-            get => fields.GetClassOrDefault<RegistryKeyWrapper>("RegistryKey", null);
+            init => fields["Place"] = value;
+            get => fields.GetClassOrDefault<Place>("Place", null);
+        }
+
+        public RegistryHive RegistryHive
+        {
+            init => fields["RegistryHive"] = value;
+            get => fields.GetClassOrDefault<RegistryHive>("RegistryHive", null);
+        }
+
+        public byte[] Value
+        {
+            init => fields["Value"] = value;
+            get => fields.GetClassOrDefault<byte[]>("Value", null);
+        }
+
+        public int? NodeSlot
+        {
+            init => fields["NodeSlot"] = value;
+            get => fields.GetClassOrDefault<object>("NodeSlot", null) as int?;
+        }
+
+        public DateTime? SlotModifiedDate
+        {
+            init => fields["SlotModifiedDate"] = value;
+            get => fields.GetClassOrDefault<object>("SlotModifiedDate", null) as DateTime?;
+        }
+
+        public DateTime LastRegistryWriteDate
+        {
+            init => fields["LastRegistryWriteDate"] = value;
+            get => fields.GetStructOrDefault("LastRegistryWriteDate", DateTime.MinValue);
         }
 
         public IShellItem Parent
         {
-            set => parent = value;
-            get => parent;
+            init; get;
         }
 
         public IList<IShellItem> Children
@@ -80,8 +110,9 @@ namespace SeeShellsV2.Data
             get => fields;
         }
 
-        public IReadOnlyList<IExtensionBlock> ExtensionBlocks
+        public IReadOnlyCollection<IExtensionBlock> ExtensionBlocks
         {
+            init => extensionBlocks = value;
             get => extensionBlocks;
         }
 
@@ -90,126 +121,9 @@ namespace SeeShellsV2.Data
             get => tags;
         }
 
-        /// <summary>
-        /// Create a new shell item from a byte array
-        /// </summary>
-        /// <param name="buf">the byte array containing shell item data</param>
-        /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        public static IShellItem FromByteArray(byte[] buf, IShellItem parent = null)
-        {
-            // attempt to deduce type by parent type
-            try
-            {
-                FileEntryShellItem fileEntryParent = parent as FileEntryShellItem;
-                FileEntryShellItem.FileAttributeFlags compressed = FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_COMPRESSED | FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_ARCHIVE;
-
-                if (parent is CompressedFolderShellItem || (fileEntryParent != null && (fileEntryParent.FileAttributes & compressed) != 0))
-                {
-                    return new CompressedFolderShellItem(buf);
-                }
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
-            { }
-
-            // attempt to deduce type by shell signature (uint located at offset 0x06)
-            try
-            {
-                uint signature = Block.UnpackDWord(buf, 0x06);
-
-                if (MtpDeviceShellItem.KnownSignatures.Contains(signature))
-                {
-                    return new MtpDeviceShellItem(buf);
-                }
-                else if (MtpVolumeShellItem.KnownSignatures.Contains(signature))
-                {
-                    return new MtpVolumeShellItem(buf);
-                }
-                else if (MtpFileEntryShellItem.KnownSignatures.Contains(signature))
-                {
-                    return new MtpFileEntryShellItem(buf);
-                }
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
-            { }
-
-            // Attempt to deduce type by type field (byte located at offset 0x02)
-            try
-            {
-                byte type = Block.UnpackByte(buf, 0x02);
-
-                switch (type & 0x70) // 0x70 is the assumed mask for the shell class type
-                {
-                    case 0x10 when type == 0x1F:
-                        return new RootFolderShellItem(buf);
-                    case 0x20 when VolumeShellItem.KnownTypes.Contains(type):
-                        return new VolumeShellItem(buf);
-                    case 0x30 when FileEntryShellItem.KnownTypes.Contains(type):
-                        return new FileEntryShellItem(buf);
-                    case 0x40 when NetworkShellItem.KnownTypes.Contains(type):
-                        return new NetworkShellItem(buf);
-                    case 0x60 when type == 0x61:
-                        return new UriShellItem(buf);
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is ShellParserException)
-            { }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Create a new shell item from a byte array
-        /// </summary>
-        /// <param name="buf">the byte array containing shell item data</param>
-        /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        public static Type GetShellType(byte type, IShellItem parent = null)
-        {
-            switch (type & 0x70) // 0x70 is the assumed mask for the shell class type
-            {
-                case 0x10 when type == 0x1F:
-                    return typeof(RootFolderShellItem);
-                case 0x20 when VolumeShellItem.KnownTypes.Contains(type):
-                    return typeof(VolumeShellItem);
-                case 0x30 when FileEntryShellItem.KnownTypes.Contains(type):
-                    return typeof(FileEntryShellItem);
-                case 0x40 when NetworkShellItem.KnownTypes.Contains(type):
-                    return typeof(NetworkShellItem);
-                case 0x60 when type == 0x61:
-                    return typeof(UriShellItem);
-                default:
-                    break;
-            }
-
-            FileEntryShellItem fileEntryParent = parent as FileEntryShellItem;
-            FileEntryShellItem.FileAttributeFlags compressed = FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_COMPRESSED | FileEntryShellItem.FileAttributeFlags.FILE_ATTRIBUTE_ARCHIVE;
-
-            if (fileEntryParent != null && (fileEntryParent.FileAttributes & compressed) != 0)
-            {
-                return typeof(CompressedFolderShellItem);
-            }
-
-            return null;
-        }
-
-        protected IShellItem parent = null;
-        protected List<IShellItem> children = new List<IShellItem>();
+        protected IList<IShellItem> children = new List<IShellItem>();
         protected Dictionary<string, object> fields = new Dictionary<string, object>();
-        protected List<IExtensionBlock> extensionBlocks = new List<IExtensionBlock>();
+        protected IReadOnlyCollection<IExtensionBlock> extensionBlocks = new List<IExtensionBlock>();
         protected SortedSet<IShellTag> tags = new SortedSet<IShellTag>();
-    }
-
-    internal static class Utilities
-    {
-        public static T GetClassOrDefault<T>(this IDictionary<string, object> dict, string key, T defaultValue) where T : class
-        {
-            return dict.ContainsKey(key) ? dict[key] as T ?? defaultValue : defaultValue;
-        }
-
-        public static T GetStructOrDefault<T>(this IDictionary<string, object> dict, string key, T defaultValue) where T : struct
-        {
-            return dict.ContainsKey(key) ? dict[key] as T? ?? defaultValue : defaultValue;
-        }
     }
 }

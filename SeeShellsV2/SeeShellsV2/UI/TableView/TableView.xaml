@@ -10,11 +10,12 @@
     <Grid>
         <DataGrid ItemsSource="{Binding Selected.CurrentEnumerable}" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Type" Binding="{Binding TypeName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Subtype" Binding="{Binding SubtypeName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="User" Binding="{Binding RegistryKey.RegistryUser}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Last Registry Write" Binding="{Binding RegistryKey.LastRegistryWriteDate}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding TypeName}"/>
+                <DataGridTextColumn Header="Subtype" Binding="{Binding SubtypeName}"/>
+                <DataGridTextColumn Header="Registry" Binding="{Binding RegistryHive.Name}"/>
+                <DataGridTextColumn Header="User" Binding="{Binding RegistryHive.User.Name}"/>
+                <DataGridTextColumn Header="Last Registry Write" Binding="{Binding LastRegistryWriteDate}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
