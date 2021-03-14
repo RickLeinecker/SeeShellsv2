@@ -36,10 +36,6 @@ namespace SeeShellsV2.UI
 		[Dependency]
 		public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
 
-		private Point scrollMousePoint;
-		private double voff = 1;
-		private double hoff = 1;
-
 		public TimelineView()
 		{
 			InitializeComponent();
@@ -50,28 +46,65 @@ namespace SeeShellsV2.UI
 			ViewModel.GenerateRandomShellEvents();
 		}
 
+		Point? lastDragPoint;
 		private void ScrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			(sender as ScrollViewer).CaptureMouse();
-			scrollMousePoint= e.GetPosition(sender as ScrollViewer);
-			voff = (sender as ScrollViewer).VerticalOffset;
-			hoff = (sender as ScrollViewer).HorizontalOffset;
-		}
-
-		private void ScrollViewer_PreviewMouseMove(object sender, MouseEventArgs e)
-		{
-			if ((sender as ScrollViewer).IsMouseCaptured)
+			var mousePos = e.GetPosition(sender as ScrollViewer);
+			if (mousePos.X <= (sender as ScrollViewer).ViewportWidth 
+					&& mousePos.Y < (sender as ScrollViewer).ViewportHeight)
 			{
-				var newHoff = hoff + (scrollMousePoint.X - e.GetPosition(sender as ScrollViewer).X);
-				var newVoff = voff + (scrollMousePoint.Y - e.GetPosition(sender as ScrollViewer).Y);
-				(sender as ScrollViewer).ScrollToVerticalOffset(newVoff);
-				(sender as ScrollViewer).ScrollToHorizontalOffset(newHoff);
+				(sender as ScrollViewer).Cursor = Cursors.SizeAll;
+				lastDragPoint = mousePos;
+				Mouse.Capture(sender as ScrollViewer);
 			}
 		}
 
 		private void ScrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
 		{
+			(sender as ScrollViewer).Cursor = Cursors.Arrow;
 			(sender as ScrollViewer).ReleaseMouseCapture();
+			lastDragPoint = null;
+		}
+
+		private void ScrollViewer_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (lastDragPoint.HasValue)
+			{
+				Point posNow = e.GetPosition(sender as ScrollViewer);
+
+				double dX = posNow.X - lastDragPoint.Value.X;
+				double dY = posNow.Y - lastDragPoint.Value.Y;
+
+				lastDragPoint = posNow;
+
+				(sender as ScrollViewer).ScrollToHorizontalOffset((sender as ScrollViewer).HorizontalOffset - dX);
+				(sender as ScrollViewer).ScrollToVerticalOffset((sender as ScrollViewer).VerticalOffset - dY);
+			}
+		}
+
+		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+		{
+
+			if (e.Delta > 0)
+			{
+				scaleTransform.ScaleX += 0.1;
+				scaleTransform.ScaleY += 0.1;
+				if (scaleTransform.ScaleX > 1)
+				{
+					scaleTransform.ScaleX -= 0.1;
+					scaleTransform.ScaleY -= 0.1;
+				}
+			}
+			if (e.Delta < 0)
+			{
+				scaleTransform.ScaleX -= 0.1;
+				scaleTransform.ScaleY -= 0.1;
+				if (scaleTransform.ScaleX < 0.3)
+				{
+					scaleTransform.ScaleX += 0.1;
+					scaleTransform.ScaleY += 0.1;
+				}
+			}
 		}
 	}
 
