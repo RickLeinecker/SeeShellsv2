@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="SeeShellsV2.UI.HexView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hex="clr-namespace:WpfHexaEditor;assembly=WPFHexaEditor"
+             xmlns:local="clr-namespace:SeeShellsV2.UI"
+             xmlns:data="clr-namespace:SeeShellsV2.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type hex:HexEditor}">
+            <Setter Property="BytePerLine" Value="8" />
+            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.ThemeBackground}" />
+            <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.ThemeForeground}" />
+            <Setter Property="ForegroundSecondColor" Value="{StaticResource MahApps.Brushes.AccentBase}" />
+            <Setter Property="HighLightColor" Value="{StaticResource MahApps.Brushes.Highlight}" />
+            <Setter Property="MouseOverColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background.MouseOver}" />
+            <Setter Property="SelectionFirstColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background}" />
+            <Setter Property="SelectionSecondColor" Value="{StaticResource MahApps.Brushes.DataGrid.Selection.Background}" />
+            <Setter Property="ForegroundHighLightOffSetHeaderColor" Value="{StaticResource MahApps.Brushes.Gray.MouseOver}" />
+            <Setter Property="ForegroundOffSetHeaderColor" Value="{StaticResource MahApps.Brushes.Gray}" />
+            <Setter Property="ForegroundContrast" Value="{StaticResource MahApps.Brushes.IdealForeground}" />
+            <Setter Property="AutoHighLiteSelectionByteBrush" Value="{StaticResource MahApps.Brushes.Accent4}" />
+            <Setter Property="StatusBarVisibility" Value="Hidden" />
+        </Style>
+        <local:StreamConverter x:Key="StreamConverter"/>
+
+        <DataTemplate DataType="{x:Type data:ShellItem}">
+            <hex:HexEditor
+                Stream="{Binding Value, Converter={StaticResource StreamConverter}}"
+                ReadOnlyMode="True"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type data:ShellEvent}">
+            <hex:HexEditor
+                Stream="{Binding Evidence[0].Value, Converter={StaticResource StreamConverter}}"
+                ReadOnlyMode="True"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type data:RegistryHive}">
+            
+        </DataTemplate>
+    </UserControl.Resources>
+    <ContentControl Content="{Binding Selected.Current}"/>
+</UserControl>

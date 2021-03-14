@@ -49,13 +49,11 @@
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
 
-                            <!--
                             <xcad:LayoutAnchorablePane DockMinWidth="200">
                                 <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:HexView />
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
-                            -->
                         </xcad:LayoutPanel>
 
                         <xcad:LayoutDocumentPaneGroup >
