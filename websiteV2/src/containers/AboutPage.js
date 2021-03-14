@@ -27,6 +27,7 @@ const styles = {
         marginTop: '1%',
         alignSelf: 'center',
         color: '#33A1FD',
+        textAlign: 'center',
     },
     text: {
         textAlign: 'center',
@@ -116,11 +117,9 @@ class AboutPage extends React.Component {
         return(
             <Router basename="/about">
                 {!this.state.hideNav &&
-                    <Slide in={this.state.showBar} direction="right" mountOnEnter unmountOnExit>
-                        <Paper className={this.props.classes.sidebarContainer}>
-                            <AboutBar/>
-                        </Paper>
-                    </Slide>
+                    <Paper className={this.props.classes.sidebarContainer}>
+                        <AboutBar/>
+                    </Paper>
                 }
                 <Paper elevation={0} className={this.props.classes.content}>
                     {this.state.hideNav &&
