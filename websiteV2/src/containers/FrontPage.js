@@ -109,6 +109,10 @@ const styles = {
     },
 };
 
+/*
+*   FrontPage.js
+*   - the front page of the website
+*/
 class FrontPage extends React.Component {
     constructor(props) {
         super(props);
@@ -116,6 +120,11 @@ class FrontPage extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    /*
+    *   handleClick(event)
+    *   - takes in a react event object on every button click
+    *   - redirects the user to the page associated with the button's id
+    */
     handleClick(event) {
         this.props.history.push("/" + event.currentTarget.id);
     }

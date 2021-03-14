@@ -58,6 +58,10 @@ const styles = {
     }
 };
 
+/*
+*   DocumentationPage.js
+*   - handles all /documentation pages and renders content depending on what version of the documentation page is open
+*/
 class DocumentationPage extends React.Component {
     constructor(props) {
         super(props);
@@ -70,6 +74,13 @@ class DocumentationPage extends React.Component {
         this.toggleDropdown = this.toggleDropdown.bind(this);
     }
 
+    
+    /*
+    *   toggleDropdown()
+    *   - opens or closes the mobile view menu
+    *   - this.state.dropdown === true: mobile view menu is open
+    *   - this.state.dropdown === false: mobile view menu is closed
+    */
     toggleDropdown() {
         this.setState({ dropdown: !this.state.dropdown });
     }
@@ -79,6 +90,10 @@ class DocumentationPage extends React.Component {
         this.resize();
     }
     
+    /*
+    *   resize()
+    *   - along with componentDidMount() and componentWillUnmount(), this function determines whether or not the user is in mobile view
+    */
     resize() {
         this.setState({hideNav: window.innerWidth <= 760});
     }

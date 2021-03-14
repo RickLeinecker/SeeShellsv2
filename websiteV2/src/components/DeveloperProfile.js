@@ -62,6 +62,13 @@ const styles = {
     },
 };
 
+/*
+*   DeveloperProfile.js
+*   - component that displays the name and role for each person involved in SeeShells' development
+*   - this.props.version === 1: V1 team members, renders a card with the V1 logo
+*   - this.props.version === 2: V2 team members, renders a card with the V2 logo
+*   - this.props.version === 0: SeeShells sponsor, renders a card with the UCF pegasus logo
+*/
 class DeveloperProfile extends React.Component {
     render() {
         return(
@@ -83,7 +90,7 @@ class DeveloperProfile extends React.Component {
                             </CardContent>
                         </div>
                     }
-                    {this.props.version === 3 &&
+                    {this.props.version === 0 &&
                         <div className={this.props.classes.backgroundSponsor}>
                             <CardContent>
                                 <Typography variant="h5" className={this.props.classes.devTitle}>{this.props.name}</Typography>

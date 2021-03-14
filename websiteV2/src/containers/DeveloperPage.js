@@ -46,6 +46,15 @@ const styles = {
     },
 };
 
+/*
+*   DeveloperPage.js
+*   - renders all of the developer profiles and handles what content is passed into them
+*   - version={1}: V1 team members, renders a card with the V1 logo
+*   - version={2}: V2 team members, renders a card with the V2 logo
+*   - version={0}: SeeShells sponsor, renders a card with the UCF pegasus logo
+*   - name={}: the name to be rendered on the card
+*   - role={}: the role to be rendered on the card
+*/
 class DeveloperPage extends React.Component {
     render() {
         return(
@@ -66,7 +75,7 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile version={2} name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
                     <DeveloperProfile version={2} name="Spencer Ross" role="V2 Team: Team Manager, Application Testing and Backend Configuration"/>
                     <DeveloperProfile version={2} name="Joshua Rueda" role="V2 Team: Video Producer"/>
-                    <DeveloperProfile version={3} name="Rick Leinecker" role="Project Sponsor"/>
+                    <DeveloperProfile version={0} name="Rick Leinecker" role="Project Sponsor"/>
                 </Paper>
             </Paper>
         );

@@ -43,6 +43,11 @@ const styles = {
     },
 };
 
+/*
+*   AboutBar.js
+*   - component that controls the navigation on all /about pages
+*   - new pages can be added by creating a new button, replacing the id and text fields, and adding the id to the App.js routes
+*/
 class AboutBar extends React.Component {
     constructor(props) {
         super(props);
@@ -50,6 +55,11 @@ class AboutBar extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    /*
+    *   handleClick(event)
+    *   - takes in a react event object on every button click
+    *   - redirects the user to the page associated with the button's id
+    */
     handleClick(event) {
         if (event.currentTarget.id === "about") {
             this.props.history.push("/");

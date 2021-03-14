@@ -79,30 +79,32 @@ const styles = {
     },
 }
 
+/*
+*   DownloadPage.js
+*   - serves the link to the SeeShells executable, pulled directly from github releases to the SeeShells repository
+*/
 class DownloadPage extends React.Component {
     render() {
         return(
-            
-                <Paper className={this.props.classes.downloadPage}>
-                    <Paper className={this.props.classes.downloadContainer}>
-                        <div className={this.props.classes.image}>
-                            <div id='stars'/>
-                            <div id='stars2'/>
-                            <div id='stars3'/>
-                            <Grow in={true}>
-                                <Paper className={this.props.classes.contentContainer}>
-                                    <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
-                                    <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                                    <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
-                                    <div className={this.props.classes.video}>
-                                        <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    </div>
-                                </Paper>
-                            </Grow>
-
-                        </div>
-                    </Paper>
+            <Paper className={this.props.classes.downloadPage}>
+                <Paper className={this.props.classes.downloadContainer}>
+                    <div className={this.props.classes.image}>
+                        <div id='stars'/>
+                        <div id='stars2'/>
+                        <div id='stars3'/>
+                        <Grow in={true}>
+                            <Paper className={this.props.classes.contentContainer}>
+                                <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
+                                <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                                <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
+                                <div className={this.props.classes.video}>
+                                    <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                </div>
+                            </Paper>
+                        </Grow>
+                    </div>
                 </Paper>
+            </Paper>
         );
     }
 }

@@ -57,6 +57,10 @@ const styles = {
     },
 };
 
+/*
+*   MenuBar.js
+*   - handles all top bar sitewide navigation
+*/
 class MenuBar extends React.Component {
     constructor(props) {
         super(props);
@@ -66,7 +70,7 @@ class MenuBar extends React.Component {
         };
 
         this.handleClick = this.handleClick.bind(this);
-        this.openMenu = this.openMenu.bind(this);
+        this.toggleMenu = this.toggleMenu.bind(this);
     }
 
     componentDidMount() {
@@ -74,6 +78,10 @@ class MenuBar extends React.Component {
         this.resize();
     }
     
+    /*
+    *   resize()
+    *   - along with componentDidMount() and componentWillUnmount(), this function determines whether or not the user is in mobile view
+    */
     resize() {
         this.setState({hideNav: window.innerWidth <= 760});
     }
@@ -82,12 +90,24 @@ class MenuBar extends React.Component {
         window.removeEventListener("resize", this.resize.bind(this));
     }
 
+    /*
+    *   handleClick(event)
+    *   - takes in a react event object on every button click
+    *   - redirects the user to the page associated with the button's id
+    *   - closes the dropdown menu after a new page is selected
+    */
     handleClick(event) {
         this.props.history.push("/" + event.currentTarget.id);
         this.setState({ dropdown: false });
     }
 
-    openMenu() {
+    /*
+    *   toggleMenu()
+    *   - opens or closes the mobile view menu
+    *   - this.state.dropdown === true: mobile view menu is open
+    *   - this.state.dropdown === false: mobile view menu is closed
+    */
+    toggleMenu() {
         this.setState({ dropdown: !this.state.dropdown });
     }
 
@@ -108,7 +128,7 @@ class MenuBar extends React.Component {
                         }
                         {this.state.hideNav &&
                             <div> 
-                                <Button className={this.props.classes.buttons} onClick={this.openMenu}><DehazeIcon/></Button>
+                                <Button className={this.props.classes.buttons} onClick={this.toggleMenu}><DehazeIcon/></Button>
                             </div>
                         }
                     </Toolbar>

@@ -39,6 +39,15 @@ const styles = {
   },
 };
 
+/*
+*   App.js
+*   - the outermost portion of the website
+*   - handles all routes and renders the MenuBar, page content associated with the current route, and the Footer
+*   - new pages need to be declared here as follows:
+*       - <Route exact path="/pathname">
+*       -    <PathPage/> (optional: add a subpage field to be handled in PathPage.js)
+*       - </Route>
+*/
 function App(props) {
   return (
     <Paper className={props.classes.application}>
