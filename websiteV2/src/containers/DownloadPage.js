@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/seeshellsLogo-small.png';
+import logo from '../assets/seeshellsLogo-650.png';
 import beach from '../assets/beach2.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
