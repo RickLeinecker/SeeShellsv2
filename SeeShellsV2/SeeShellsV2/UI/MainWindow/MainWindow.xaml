@@ -92,6 +92,8 @@
                     </xcad:LayoutRoot.LeftSide>
                 </xcad:LayoutRoot>
             </xcad:DockingManager>
+
+            <local:QuickStartView />
         </Grid>
     </Grid>
 </mah:MetroWindow>
