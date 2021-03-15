@@ -16,10 +16,10 @@ namespace SeeShellsV2.UI
 
 		}
 
-		public int VisibleElementCount
+		public bool IsHistogram
 		{
-			get => (int) GetValue(VisibleElementCountProp);
-			private set => SetValue(VisibleElementCountProp, value);
+			get => (bool) GetValue(IsHistogramProp);
+			private set => SetValue(IsHistogramProp, value);
 		}
 
 		public TimeSpan Scale
@@ -40,12 +40,12 @@ namespace SeeShellsV2.UI
 			set { SetValue(EndDateProp, value); }
 		}
 
-		public static readonly DependencyProperty VisibleElementCountProp =
+		public static readonly DependencyProperty IsHistogramProp =
 			DependencyProperty.Register(
-				nameof(VisibleElementCount),
-				typeof(int),
+				nameof(IsHistogram),
+				typeof(bool),
 				typeof(TimelinePanel),
-				new PropertyMetadata(0)
+				new PropertyMetadata(false)
 			);
 
 		public static readonly DependencyProperty StartDateProp =
