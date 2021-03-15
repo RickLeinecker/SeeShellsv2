@@ -41,9 +41,14 @@ namespace SeeShellsV2.UI
 			InitializeComponent();
 		}
 
+		bool initialized = false;
 		private void GenerateTimeline(object sender, RoutedEventArgs e)
 		{
-			ViewModel.GenerateRandomShellEvents();
+			if (!initialized)
+			{
+				initialized = true;
+				ViewModel.GenerateRandomShellEvents();
+			}
 		}
 
 		Point? lastDragPoint;
@@ -129,5 +134,5 @@ namespace SeeShellsV2.UI
 				}
 			}
 		}
-	}
+    }
 }

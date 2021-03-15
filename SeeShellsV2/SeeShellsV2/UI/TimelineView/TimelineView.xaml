@@ -44,7 +44,7 @@
 				</DataTemplate>
 			</mah:RangeSlider.AutoToolTipRangeValuesTemplate>
 		</mah:RangeSlider>
-		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden"
+		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
 		PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown"
 		PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp"
 		MouseMove="ScrollViewer_MouseMove"
