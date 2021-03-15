@@ -78,20 +78,20 @@ namespace SeeShellsV2.UI
 				lastDragPoint = posNow;
 				if (Dates.LowerValue != Dates.Minimum && Dates.UpperValue != Dates.Maximum)
 				{ 
- 					Dates.UpperValue += dX;
-					Dates.LowerValue += dX;
+ 					Dates.UpperValue -= dX;
+					Dates.LowerValue -= dX;
 				}
 				else
 				{
-					if (Dates.UpperValue == Dates.Maximum && Dates.LowerValue != Dates.Minimum  && dX < 0)
+					if (Dates.UpperValue == Dates.Maximum && Dates.LowerValue != Dates.Minimum  && dX > 0)
 					{
-						Dates.UpperValue += dX;
-						Dates.LowerValue += dX;
+						Dates.UpperValue -= dX;
+						Dates.LowerValue -= dX;
 					}
-					else if (Dates.LowerValue == Dates.Minimum && Dates.UpperValue != Dates.Maximum && dX > 0)
+					else if (Dates.LowerValue == Dates.Minimum && Dates.UpperValue != Dates.Maximum && dX < 0)
 					{
-						Dates.UpperValue += dX;
-						Dates.LowerValue += dX;
+						Dates.UpperValue -= dX;
+						Dates.LowerValue -= dX;
 					}
 				}
 

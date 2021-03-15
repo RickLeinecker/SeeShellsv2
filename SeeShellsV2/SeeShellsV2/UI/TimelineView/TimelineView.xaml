@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:SeeShellsV2.UI"
+             xmlns:converters="clr-namespace:SeeShellsV2.UI.Converters"
 			 xmlns:data="clr-namespace:SeeShellsV2.Data"
 			 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -11,11 +12,9 @@
 			 mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800">
 	<UserControl.Resources>
-		<local:DateSliderConverter x:Key="DateSlider"/>
-		<local:TextSizeConverter x:Key="TextSize"/>
-		<local:CardHeightConverter x:Key="CardHeight"/>
-		<local:TimelinePanel x:Key="TimelinePanel"/>
-	</UserControl.Resources>
+        <converters:DateSliderConverter x:Key="DateSlider"/>
+        <converters:ShellEventCollectionSorter x:Key="ShellEventCollectionSorter"/>
+    </UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -28,7 +27,7 @@
                  AutoToolTipPlacement="TopLeft"
                  LargeChange="10"
                  LowerValue="0"
-                 Maximum="365"
+                 Maximum="8760"
                  Minimum="0"
                  Orientation="Horizontal"
                  SmallChange="1"
@@ -51,7 +50,7 @@
 		MouseMove="ScrollViewer_MouseMove"
 		PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
 			<!-- ItemsControl displays a collection of items -->
-			<ItemsControl x:Name="Timeline" ItemsSource="{Binding ShellEvents}">
+            <ItemsControl x:Name="Timeline" ItemsSource="{Binding ShellEvents, Converter={StaticResource ShellEventCollectionSorter}}">
 
 				<ItemsControl.LayoutTransform>
 					<ScaleTransform x:Name="scaleTransform" />
@@ -70,17 +69,24 @@
 
 				<ItemsControl.ItemContainerStyle>
 					<Style>
-						<Setter Property="local:TimelinePanel.Date" Value="{Binding TimeStamp}" />
-					</Style>
+                        <Setter Property="local:TimelinePanel.Date" Value="{Binding TimeStamp}" />
+                    </Style>
 				</ItemsControl.ItemContainerStyle>
 
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<StackPanel x:Name="Card" VerticalAlignment="Center" Width="Auto">
+						<StackPanel x:Name="Card" VerticalAlignment="Center">
 							<Border BorderBrush="Gainsboro"
                                 BorderThickness="1"
                                 CornerRadius="4,4,4,4"
-                                Padding="0 10">
+                                Margin="5"
+                                Padding="5 10"
+                                MaxWidth="250">
+                                <Border.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextWrapping" Value="Wrap" />
+                                    </Style>
+                                </Border.Resources>
 								<Border.Background>
 									<LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
 										<GradientStop Color="#0F830C" Offset="0.0" />

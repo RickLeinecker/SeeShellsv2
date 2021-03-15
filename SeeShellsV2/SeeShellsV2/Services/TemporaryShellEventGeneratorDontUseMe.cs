@@ -38,7 +38,7 @@ namespace SeeShellsV2.Services
                 const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                 Random rand = new Random(seed);
 
-                for (int i = 0; i < rand.Next(200, 2001); i++)
+                for (int i = 0; i < rand.Next(1000, 2001); i++)
                 {
                     IShellEvent e = new ShellEvent()
                     {

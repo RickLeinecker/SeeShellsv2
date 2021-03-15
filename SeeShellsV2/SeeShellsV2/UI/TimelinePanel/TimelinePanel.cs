@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Globalization;
 
@@ -15,25 +16,17 @@ namespace SeeShellsV2.UI
 
 		}
 
-		public static readonly DependencyProperty ColWidthProp =
-			DependencyProperty.Register(
-				nameof(ColumnWidth),
-				typeof(double),
-				typeof(TimelinePanel),
-				new PropertyMetadata(170.00, (o, args) => (o as TimelinePanel).InvalidateArrange()));
-
-		public double ColumnWidth
+		public int VisibleElementCount
 		{
-			get { return (double)GetValue(ColWidthProp); }
-			set { SetValue(ColWidthProp,value ); }
+			get => (int) GetValue(VisibleElementCountProp);
+			private set => SetValue(VisibleElementCountProp, value);
 		}
 
-		public static readonly DependencyProperty StartDateProp =
-			DependencyProperty.Register(
-				nameof(StartDate),
-				typeof(DateTime),
-				typeof(TimelinePanel),
-				new PropertyMetadata(new DateTime(2020,1,1), (o, args) => (o as TimelinePanel).InvalidateArrange()));
+		public TimeSpan Scale
+		{
+			get { return (TimeSpan)GetValue(ScaleProp); }
+			set { SetValue(ScaleProp, value); }
+		}
 
 		public DateTime StartDate
 		{
@@ -41,24 +34,47 @@ namespace SeeShellsV2.UI
 			set { SetValue(StartDateProp, value); }
 		}
 
-		public static readonly DependencyProperty EndDateProp =
-			DependencyProperty.Register(
-				nameof(EndDate),
-				typeof(DateTime),
-				typeof(TimelinePanel),
-				new PropertyMetadata(new DateTime(2021, 1, 1), (o, args) => (o as TimelinePanel).InvalidateArrange()));
-
 		public DateTime EndDate
 		{
 			get { return (DateTime)GetValue(EndDateProp); }
 			set { SetValue(EndDateProp, value); }
 		}
 
+		public static readonly DependencyProperty VisibleElementCountProp =
+			DependencyProperty.Register(
+				nameof(VisibleElementCount),
+				typeof(int),
+				typeof(TimelinePanel),
+				new PropertyMetadata(0)
+			);
 
-		public DateTime Begin => new DateTime(2020, 1, 1);
-		public DateTime End => new DateTime(2020, 2, 1);
+		public static readonly DependencyProperty StartDateProp =
+			DependencyProperty.Register(
+				nameof(StartDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new DateTime(2020,1,1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
-		public static readonly DependencyProperty DateProperty = DependencyProperty.RegisterAttached("Date", typeof(DateTime), typeof(TimelinePanel), new FrameworkPropertyMetadata(DateTime.MinValue, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
+		public static readonly DependencyProperty EndDateProp =
+			DependencyProperty.Register(
+				nameof(EndDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new DateTime(2021, 1, 1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+
+		public static readonly DependencyProperty ScaleProp =
+			DependencyProperty.Register(
+				nameof(ScaleProp),
+				typeof(TimeSpan),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new TimeSpan(1, 0, 0), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+
+		public static readonly DependencyProperty DateProperty =
+			DependencyProperty.RegisterAttached(
+				"Date",
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(DateTime.MinValue, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
 		public static DateTime GetDate(DependencyObject obj)
 		{
@@ -70,37 +86,64 @@ namespace SeeShellsV2.UI
 			obj.SetValue(DateProperty, value);
 		}
 
-		//protected override Size MeasureOverride(Size availableSize)
-		//{
-		//	Size panelDesiredSize = new Size();
-		//	foreach (UIElement child in InternalChildren)
-		//	{
-		//		child.Measure(new Size(ColumnWidth, availableSize.Height));
-		//		panelDesiredSize.Width += child.DesiredSize.Width;
-		//		panelDesiredSize.Height = (panelDesiredSize.Height > child.DesiredSize.Height ? 
-		//									panelDesiredSize.Height : child.DesiredSize.Height + 10);
-		//	}
+		/*
+		private void CleanUp()
+		{
+			IItemContainerGenerator generator = ItemContainerGenerator;
 
-		//	return panelDesiredSize;
-		//}
+			for (int i = 0; i < InternalChildren.Count; i++)
+			{
+				UIElement child = InternalChildren[i];
+				int index = ((ItemContainerGenerator)generator).IndexFromContainer(child);
+				DateTime date = GetDate(child);
+
+				if (date < StartDate || date >= EndDate)
+				{
+					RemoveInternalChildRange(i, 1);
+					generator.Remove(generator.GeneratorPositionFromIndex(index), 1);
+					i--;
+				}
+			}
+		}
+
+		protected override Size MeasureOverride(Size availableSize)
+		{
+			UIElementCollection children = InternalChildren;
+			IItemContainerGenerator generator = ItemContainerGenerator;
+
+			CleanUp();
+
+			return base.MeasureOverride(availableSize);
+		}
+		*/
 
 		protected override Size ArrangeOverride(Size finalSize)
 		{
+			if (!InternalChildren.OfType<UIElement>().Any())
+				return finalSize;
+
 			DateTime begin = StartDate;
 			DateTime end = EndDate;
 			TimeSpan resolution = end - begin;
 			int columns = 1;
-			var columnWidth = finalSize.Width;
+			double columnWidth = finalSize.Width;
+			double minColWidth = InternalChildren
+				.OfType<UIElement>()
+				.Select(c =>
+				{
+					c.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
+					return c.DesiredSize.Width;
+				})
+				.Max();
 
-
-			while (columnWidth / 2 > ColumnWidth)
+			while (columnWidth / 2 > minColWidth)
 			{
 				columnWidth /= 2;
 				columns *= 2;
 				resolution = new TimeSpan(resolution.Ticks / 2);
 			}
 
-			Debug.WriteLine("CW " + ColumnWidth);
+			Debug.WriteLine("CW " + minColWidth);
 			Debug.WriteLine("cW " + columnWidth);
 			Debug.WriteLine("col "+ columns);
 
@@ -118,43 +161,18 @@ namespace SeeShellsV2.UI
 
 					double x = columnWidth * bucket;
 					double y = finalSize.Height - bucketHeights[bucket];
-					double width = columnWidth;
+					double width = minColWidth;
 					double height = Math.Ceiling(child.DesiredSize.Height);
 					var bounds = new Rect(x, y, width, height);
 					child.Arrange(bounds);
 				}
+				else
+				{
+					child.Arrange(new Rect(0, 0, 0, 0));
+				}
 
 			}
 			return finalSize;
-		}
-	}
-
-	public class DateSliderConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			DateTime result = new DateTime();
-			if (parameter.ToString().Equals("StartDate"))
-			{
-				result = new DateTime(2020, 1, 1).AddDays(double.Parse(value.ToString()));
-
-				Debug.WriteLine("Startdateslider "  + result);
-
-			}
-			if (parameter.ToString().Equals("EndDate"))
-			{
-				result = new DateTime(2020, 1, 2).AddDays(double.Parse(value.ToString()));
-
-				Debug.WriteLine("Enddateslider "  + result);
-
-			}			
-			
-			return result;
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return value;
 		}
 	}
 }
