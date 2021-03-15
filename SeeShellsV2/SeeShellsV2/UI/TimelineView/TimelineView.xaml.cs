@@ -50,7 +50,7 @@ namespace SeeShellsV2.UI
 		private void ScrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			var mousePos = e.GetPosition(sender as ScrollViewer);
-			if (mousePos.X <= (sender as ScrollViewer).ViewportWidth 
+			if (mousePos.X <= (sender as ScrollViewer).ViewportWidth
 					&& mousePos.Y < (sender as ScrollViewer).ViewportHeight)
 			{
 				(sender as ScrollViewer).Cursor = Cursors.SizeAll;
@@ -76,17 +76,37 @@ namespace SeeShellsV2.UI
 				double dY = posNow.Y - lastDragPoint.Value.Y;
 
 				lastDragPoint = posNow;
+				if (Dates.LowerValue != Dates.Minimum && Dates.UpperValue != Dates.Maximum)
+				{ 
+ 					Dates.UpperValue += dX;
+					Dates.LowerValue += dX;
+				}
+				else
+				{
+					if (Dates.UpperValue == Dates.Maximum && Dates.LowerValue != Dates.Minimum  && dX < 0)
+					{
+						Dates.UpperValue += dX;
+						Dates.LowerValue += dX;
+					}
+					else if (Dates.LowerValue == Dates.Minimum && Dates.UpperValue != Dates.Maximum && dX > 0)
+					{
+						Dates.UpperValue += dX;
+						Dates.LowerValue += dX;
+					}
+				}
 
-				(sender as ScrollViewer).ScrollToHorizontalOffset((sender as ScrollViewer).HorizontalOffset - dX);
-				(sender as ScrollViewer).ScrollToVerticalOffset((sender as ScrollViewer).VerticalOffset - dY);
+				//(sender as ScrollViewer).ScrollToHorizontalOffset((sender as ScrollViewer).HorizontalOffset - dX);
+				//(sender as ScrollViewer).ScrollToVerticalOffset((sender as ScrollViewer).VerticalOffset - dY);
 			}
 		}
 
 		private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
 		{
-
 			if (e.Delta > 0)
 			{
+				//Dates.LowerValue += 10;
+				//Dates.UpperValue -= 10;
+
 				scaleTransform.ScaleX += 0.1;
 				scaleTransform.ScaleY += 0.1;
 				if (scaleTransform.ScaleX > 1)
@@ -97,6 +117,9 @@ namespace SeeShellsV2.UI
 			}
 			if (e.Delta < 0)
 			{
+				//Dates.LowerValue -= 10;
+				//Dates.UpperValue += 10;
+
 				scaleTransform.ScaleX -= 0.1;
 				scaleTransform.ScaleY -= 0.1;
 				if (scaleTransform.ScaleX < 0.3)
@@ -105,22 +128,6 @@ namespace SeeShellsV2.UI
 					scaleTransform.ScaleY += 0.1;
 				}
 			}
-		}
-	}
-
-	public class TimelineSlicer : IMultiValueConverter
-	{
-		public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
-		{
-			if (value[0] is IShellEventCollection shellEvents)
-				return shellEvents.GroupBy(e => e.TimeStamp.Month);
-
-			return false;
-		}
-
-		public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
