@@ -109,29 +109,13 @@ namespace SeeShellsV2.UI
 		{
 			if (e.Delta > 0)
 			{
-				//Dates.LowerValue += 10;
-				//Dates.UpperValue -= 10;
-
-				scaleTransform.ScaleX += 0.1;
-				scaleTransform.ScaleY += 0.1;
-				if (scaleTransform.ScaleX > 1)
-				{
-					scaleTransform.ScaleX -= 0.1;
-					scaleTransform.ScaleY -= 0.1;
-				}
+				Dates.LowerValue += 10;
+				Dates.UpperValue -= 10;
 			}
 			if (e.Delta < 0)
 			{
-				//Dates.LowerValue -= 10;
-				//Dates.UpperValue += 10;
-
-				scaleTransform.ScaleX -= 0.1;
-				scaleTransform.ScaleY -= 0.1;
-				if (scaleTransform.ScaleX < 0.3)
-				{
-					scaleTransform.ScaleX += 0.1;
-					scaleTransform.ScaleY += 0.1;
-				}
+				Dates.LowerValue -= 10;
+				Dates.UpperValue += 10;
 			}
 		}
     }

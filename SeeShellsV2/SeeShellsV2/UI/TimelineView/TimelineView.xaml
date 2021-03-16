@@ -27,7 +27,7 @@
                  AutoToolTipPlacement="TopLeft"
                  LargeChange="10"
                  LowerValue="0"
-                 Maximum="8760"
+                 Maximum="525600"
                  Minimum="0"
                  Orientation="Horizontal"
                  SmallChange="1"
@@ -61,7 +61,7 @@
 			and user interactions.-->
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
-						<local:TimelinePanel x:Name="timelinePanel"
+						<local:TimelinePanel
 						StartDate="{Binding ElementName=Dates, Path=LowerValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" 
 						EndDate="{Binding ElementName=Dates, Path=UpperValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}" />
 					</ItemsPanelTemplate>

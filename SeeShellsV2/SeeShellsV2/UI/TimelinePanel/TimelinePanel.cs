@@ -22,12 +22,6 @@ namespace SeeShellsV2.UI
 
 		}
 
-		public TimeSpan Scale
-		{
-			get { return (TimeSpan)GetValue(ScaleProp); }
-			set { SetValue(ScaleProp, value); }
-		}
-
 		public DateTime StartDate
 		{
 			get { return (DateTime)GetValue(StartDateProp); }
@@ -58,13 +52,6 @@ namespace SeeShellsV2.UI
 			set => SetValue(MaxVisibleElementsProp, value);
 		}
 
-		public static readonly DependencyProperty ScaleProp =
-			DependencyProperty.Register(
-				nameof(ScaleProp),
-				typeof(TimeSpan),
-				typeof(TimelinePanel),
-				new PropertyMetadata(new TimeSpan(1, 0, 0), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
-
 
 		public static readonly DependencyProperty StartDateProp =
 			DependencyProperty.Register(
@@ -85,7 +72,7 @@ namespace SeeShellsV2.UI
 				nameof(MinColumnWidth),
 				typeof(double),
 				typeof(TimelinePanel),
-				new PropertyMetadata(100.0, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+				new PropertyMetadata(0.0, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
 		public static readonly DependencyProperty MaxColumnWidthProp =
 			DependencyProperty.Register(
@@ -115,14 +102,20 @@ namespace SeeShellsV2.UI
 
 		public static DateTime GetDate(IItemContainerGenerator generator, int index)
 		{
+			index = Math.Clamp(index, 0, (generator as ItemContainerGenerator).Items.Count-1);
+
 			DateTime date;
+			if (generator.GeneratorPositionFromIndex(index).Offset == 0)
+				generator.Remove(generator.GeneratorPositionFromIndex(index), 1);
+
 			using (generator.StartAt(generator.GeneratorPositionFromIndex(index), GeneratorDirection.Forward))
 			{
 				var element = generator.GenerateNext();
 				generator.PrepareItemContainer(element);
 				date = (DateTime) element.GetValue(DateProperty);
-				generator.Remove(generator.GeneratorPositionFromIndex(index), 1);
 			}
+
+			generator.Remove(generator.GeneratorPositionFromIndex(index), 1);
 
 			return date;
 		}
@@ -132,12 +125,9 @@ namespace SeeShellsV2.UI
 			obj.SetValue(DateProperty, value);
 		}
 
+		private TimeSpan Scale { get; set; }
 		private DateTime CalculatedAbsoluteStartDate { get; set; }
 		private DateTime CalculatedAbsoluteEndDate { get; set; }
-		private TimeSpan CalculatedPixelScale { get; set; }
-		private double CalculatedAbsoluteWidth { get; set; }
-		private double CalculatedBinWidth { get; set; }
-		private int CalculatedBinCount { get; set; }
 
 		protected override Size MeasureOverride(Size availableSize)
 		{
@@ -145,7 +135,7 @@ namespace SeeShellsV2.UI
 			ItemContainerGenerator generator = ItemContainerGenerator as ItemContainerGenerator;
 
 			if (generator == null || !generator.Items.Any())
-				return base.MeasureOverride(availableSize);
+				return new Size { Width = 0, Height = 0 };
 
 			CleanUp();
 
@@ -153,20 +143,15 @@ namespace SeeShellsV2.UI
 			CalculatedAbsoluteStartDate = GetDate(generator, 0);
 			CalculatedAbsoluteEndDate = GetDate(generator, generator.Items.Count - 1);
 
-			TimeSpan absoluteScale = CalculatedAbsoluteEndDate.Subtract(CalculatedAbsoluteStartDate);
-			CalculatedBinCount = (int)Math.Ceiling(absoluteScale.Ticks / (double)Scale.Ticks);
-			CalculatedBinWidth = MaxColumnWidth - (Math.Exp(Scale.Ticks / (double)absoluteScale.Ticks) % (MaxColumnWidth - MinColumnWidth));
-			CalculatedAbsoluteWidth = CalculatedBinWidth * CalculatedBinCount;
-			CalculatedPixelScale = Scale.Divide(CalculatedBinWidth);
+			Scale = (EndDate.Subtract(StartDate)).Divide(6.0);
 
-			// compute start and end index for generator (assuming elements are sorted)
-			int startIndex = SearchGeneratorItems(StartDate.Subtract(Scale));
-			int endIndex = SearchGeneratorItems(EndDate.Add(Scale));
+			if (Scale.Ticks <= 0)
+				return new Size { Width = 0, Height = 0 };
+
+			int startIndex = SearchGeneratorItems(StartDate.Subtract(Scale.Multiply(2.0)));
+			int endIndex = SearchGeneratorItems(EndDate.Add(Scale.Multiply(2.0)));
 			int itemsCount = endIndex - startIndex;
 
-			GenerateChildren(startIndex, endIndex);
-
-			/*
 			if (itemsCount <= MaxVisibleElements)
 			{
 				GenerateChildren(startIndex, endIndex);
@@ -179,38 +164,59 @@ namespace SeeShellsV2.UI
 					int e = SearchGeneratorItems(c.Add(Scale));
 
 					Rectangle rect = new Rectangle();
-					rect.Width = CalculatedBinWidth;
+					rect.HorizontalAlignment = HorizontalAlignment.Stretch;
 					rect.Height = 50 * (e - b);
 					rect.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x0F, 0x83, 0x0C)); // #0F830C
 					SetDate(rect, c);
 					AddInternalChild(rect);
 				}
 			}
-			*/
 
-			return new Size { Width = CalculatedAbsoluteWidth, Height = 0.0 };
+			return new Size { Width = 0.0, Height = 0.0 };
 		}
 
 		protected override Size ArrangeOverride(Size finalSize)
 		{
-			if (CalculatedBinCount <= 0.0)
-				return base.ArrangeOverride(finalSize);
+			if (!InternalChildren.OfType<UIElement>().Any())
+				return finalSize;
 
-			double[] binsHeights = new double[CalculatedBinCount];
+			if (MinColumnWidth == 0.0)
+				SetValue(MinColumnWidthProp, InternalChildren
+					.OfType<UIElement>()
+					.Select(c =>
+					{
+						c.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
+						return c.DesiredSize.Width;
+					})
+					.Max());
+
+			TimeSpan absoluteSpan = CalculatedAbsoluteEndDate.Subtract(CalculatedAbsoluteStartDate);
+
+			if (absoluteSpan.Ticks <= 0)
+				return finalSize;
+
+			int calculatedBinCount = (int)Math.Ceiling(absoluteSpan.Divide(Scale));
+			double calculatedBinWidth = Math.Clamp(finalSize.Width / EndDate.Subtract(StartDate).Divide(Scale), MinColumnWidth, MaxColumnWidth);
+			TimeSpan calculatedPixelScale = Scale.Divide(calculatedBinWidth);
+
+			if (calculatedBinCount <= 0.0)
+				return finalSize;
+
+			double[] binsHeights = new double[calculatedBinCount];
 
 			foreach (UIElement child in InternalChildren)
 			{
 				DateTime date = GetDate(child);
 				int bucket = (int)((date.Subtract(CalculatedAbsoluteStartDate)).Divide(Scale));
 
-				if (bucket >= 0 && bucket < CalculatedBinCount)
+				if (bucket >= 0 && bucket < calculatedBinCount)
 				{
 					child.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
 					binsHeights[bucket] += Math.Ceiling(child.DesiredSize.Height);
 
-					double x = CalculatedBinWidth * bucket + ((CalculatedAbsoluteStartDate.Subtract(StartDate)).Divide(CalculatedPixelScale));
+					double x = calculatedBinWidth * bucket + ((CalculatedAbsoluteStartDate.Subtract(StartDate)).Divide(calculatedPixelScale));
 					double y = finalSize.Height - binsHeights[bucket];
-					double width = CalculatedBinWidth;
+					double width = calculatedBinWidth;
 					double height = Math.Ceiling(child.DesiredSize.Height);
 					var bounds = new Rect(x, y, width, height);
 					child.Arrange(bounds);

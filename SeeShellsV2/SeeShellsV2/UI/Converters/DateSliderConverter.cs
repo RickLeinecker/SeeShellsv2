@@ -16,14 +16,14 @@ namespace SeeShellsV2.UI.Converters
 			DateTime result = new DateTime();
 			if (parameter.ToString().Equals("StartDate"))
 			{
-				result = new DateTime(2020, 1, 1, 0, 0, 0).AddHours(double.Parse(value.ToString()));
+				result = new DateTime(2020, 1, 1, 0, 0, 0).AddMinutes(double.Parse(value.ToString()));
 
 				Debug.WriteLine("Startdateslider " + result);
 
 			}
 			if (parameter.ToString().Equals("EndDate"))
 			{
-				result = new DateTime(2020, 1, 1, 1, 0, 0).AddHours(double.Parse(value.ToString()));
+				result = new DateTime(2020, 1, 1, 1, 0, 0).AddMinutes(double.Parse(value.ToString()));
 
 				Debug.WriteLine("Enddateslider " + result);
 
