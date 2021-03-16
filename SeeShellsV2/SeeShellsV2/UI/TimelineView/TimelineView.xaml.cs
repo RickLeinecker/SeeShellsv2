@@ -77,18 +77,18 @@ namespace SeeShellsV2.UI
 			{
 				Point posNow = e.GetPosition(sender as ScrollViewer);
 
-				double dX = posNow.X - lastDragPoint.Value.X;
+				double dX = (posNow.X - lastDragPoint.Value.X) * (Dates.UpperValue - Dates.LowerValue + 0.01) / (sender as ScrollViewer).ActualWidth;
 				double dY = posNow.Y - lastDragPoint.Value.Y;
 
 				lastDragPoint = posNow;
 				if (Dates.LowerValue != Dates.Minimum && Dates.UpperValue != Dates.Maximum)
-				{ 
- 					Dates.UpperValue -= dX;
+				{
+					Dates.UpperValue -= dX;
 					Dates.LowerValue -= dX;
 				}
 				else
 				{
-					if (Dates.UpperValue == Dates.Maximum && Dates.LowerValue != Dates.Minimum  && dX > 0)
+					if (Dates.UpperValue == Dates.Maximum && Dates.LowerValue != Dates.Minimum && dX > 0)
 					{
 						Dates.UpperValue -= dX;
 						Dates.LowerValue -= dX;
@@ -109,14 +109,30 @@ namespace SeeShellsV2.UI
 		{
 			if (e.Delta > 0)
 			{
-				Dates.LowerValue += 10;
-				Dates.UpperValue -= 10;
+				//Dates.LowerValue += 10;
+				//Dates.UpperValue -= 10;
+
+				scaleTransform.ScaleX += 0.1;
+				scaleTransform.ScaleY += 0.1;
+				if (scaleTransform.ScaleX > 1)
+				{
+					scaleTransform.ScaleX -= 0.1;
+					scaleTransform.ScaleY -= 0.1;
+				}
 			}
 			if (e.Delta < 0)
 			{
-				Dates.LowerValue -= 10;
-				Dates.UpperValue += 10;
+				//Dates.LowerValue -= 10;
+				//Dates.UpperValue += 10;
+
+				scaleTransform.ScaleX -= 0.1;
+				scaleTransform.ScaleY -= 0.1;
+				if (scaleTransform.ScaleX < 0.1)
+				{
+					scaleTransform.ScaleX += 0.1;
+					scaleTransform.ScaleY += 0.1;
+				}
 			}
 		}
-    }
+	}
 }

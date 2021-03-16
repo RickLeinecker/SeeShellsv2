@@ -8,75 +8,72 @@
 			 xmlns:data="clr-namespace:SeeShellsV2.Data"
 			 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-			 Loaded="GenerateTimeline"
-			 mc:Ignorable="d" 
+             Loaded="GenerateTimeline"
+             mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800">
-	<UserControl.Resources>
+    <UserControl.Resources>
         <converters:DateSliderConverter x:Key="DateSlider"/>
         <converters:ShellEventCollectionSorter x:Key="ShellEventCollectionSorter"/>
     </UserControl.Resources>
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<mah:RangeSlider x:Name="Dates" Width="Auto" Grid.Row="0"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <mah:RangeSlider x:Name="Dates" Width="Auto" Grid.Row="0"
                  Margin="4"
                  mah:SliderHelper.ChangeValueBy="LargeChange"
                  mah:SliderHelper.EnableMouseWheel="MouseHover"
                  AutoToolTipPlacement="TopLeft"
                  LargeChange="10"
                  LowerValue="0"
-                 Maximum="525600"
+                 Maximum="1051200"
                  Minimum="0"
                  Orientation="Horizontal"
                  SmallChange="1"
                  Style="{DynamicResource MahApps.Styles.RangeSlider.Win10}"
-                 UpperValue="365">
-			<mah:RangeSlider.AutoToolTipRangeValuesTemplate>
-				<DataTemplate DataType="mah:RangeSliderAutoTooltipValues">
-					<UniformGrid Columns="2" Rows="2">
-						<TextBlock HorizontalAlignment="Right" Text="From: " />
-						<TextBlock HorizontalAlignment="Right" Text="{Binding LowerValue, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" />
-						<TextBlock HorizontalAlignment="Right" Text="To: " />
-						<TextBlock HorizontalAlignment="Right" Text="{Binding UpperValue, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}" />
-					</UniformGrid>
-				</DataTemplate>
-			</mah:RangeSlider.AutoToolTipRangeValuesTemplate>
-		</mah:RangeSlider>
-		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
-		PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown"
-		PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp"
-		MouseMove="ScrollViewer_MouseMove"
-		PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
-			<!-- ItemsControl displays a collection of items -->
+                 UpperValue="1051200">
+            <mah:RangeSlider.AutoToolTipRangeValuesTemplate>
+                <DataTemplate DataType="mah:RangeSliderAutoTooltipValues">
+                    <UniformGrid Columns="2" Rows="2">
+                        <TextBlock HorizontalAlignment="Right" Text="From: " />
+                        <TextBlock HorizontalAlignment="Right" Text="{Binding LowerValue, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" />
+                        <TextBlock HorizontalAlignment="Right" Text="To: " />
+                        <TextBlock HorizontalAlignment="Right" Text="{Binding UpperValue, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}" />
+                    </UniformGrid>
+                </DataTemplate>
+            </mah:RangeSlider.AutoToolTipRangeValuesTemplate>
+        </mah:RangeSlider>
+        <ScrollViewer Name="ScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+            <!-- ItemsControl displays a collection of items -->
             <ItemsControl x:Name="Timeline" ItemsSource="{Binding ShellEvents, Converter={StaticResource ShellEventCollectionSorter}}">
 
-				<ItemsControl.LayoutTransform>
-					<ScaleTransform x:Name="scaleTransform" />
-				</ItemsControl.LayoutTransform>
+                <ItemsControl.LayoutTransform>
+                    <ScaleTransform x:Name="scaleTransform" />
+                </ItemsControl.LayoutTransform>
 
-				<!--Use a horizontal stack panel to wrap list of collections.
+                <!--Use a horizontal stack panel to wrap list of collections.
 			We can replace this with a custom panel for stack positioning
 			and user interactions.-->
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<local:TimelinePanel
-						StartDate="{Binding ElementName=Dates, Path=LowerValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" 
-						EndDate="{Binding ElementName=Dates, Path=UpperValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <local:TimelinePanel
+							StartDate="{Binding ElementName=Dates, Path=LowerValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" 
+							EndDate="{Binding ElementName=Dates, Path=UpperValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}"
+							/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-				<ItemsControl.ItemContainerStyle>
-					<Style>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
                         <Setter Property="local:TimelinePanel.Date" Value="{Binding TimeStamp}" />
                     </Style>
-				</ItemsControl.ItemContainerStyle>
+                </ItemsControl.ItemContainerStyle>
 
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<StackPanel x:Name="Card" VerticalAlignment="Center">
-							<Border BorderBrush="Gainsboro"
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel x:Name="Card" VerticalAlignment="Center">
+                            <Border BorderBrush="Gainsboro"
                                 BorderThickness="1"
                                 CornerRadius="4,4,4,4"
                                 Margin="5"
@@ -87,23 +84,39 @@
                                         <Setter Property="TextWrapping" Value="Wrap" />
                                     </Style>
                                 </Border.Resources>
-								<Border.Background>
-									<LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-										<GradientStop Color="#0F830C" Offset="0.0" />
-										<GradientStop Color="#0F730C" Offset="0.5" />
-										<GradientStop Color="#0F830C" Offset="1.0" />
-									</LinearGradientBrush>
-								</Border.Background>
-								<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-									<TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TypeName}"/>
-									<TextBlock FontSize="12" FontFamily="Verdana" Margin="3,0,3,0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TimeStamp}"/>
-									<TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Description}"/>
-								</StackPanel>
-							</Border>
-						</StackPanel>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-	</ScrollViewer>
-	</Grid>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                        <GradientStop Color="#0F830C" Offset="0.0" />
+                                        <GradientStop Color="#0F730C" Offset="0.5" />
+                                        <GradientStop Color="#0F830C" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TypeName}"/>
+                                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="3,0,3,0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding TimeStamp}"/>
+                                    <TextBlock FontSize="12" FontFamily="Verdana" Margin="0,3,0,3" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Description}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Background="{TemplateBinding Background}">
+                            <ScrollViewer CanContentScroll="True" 
+                                          Padding="{TemplateBinding Padding}"
+                                          Focusable="False"
+                                          HorizontalScrollBarVisibility="Visible"
+                                          VerticalScrollBarVisibility="Hidden">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

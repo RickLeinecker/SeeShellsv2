@@ -15,11 +15,11 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.UI
 {
-    public class TimelinePanel : VirtualizingPanel
-	{ 
+	public class TimelinePanel : VirtualizingPanel, IScrollInfo
+	{
 		public TimelinePanel() : base()
 		{
-
+			LayoutTransform = new ScaleTransform(0.1, 0.1);
 		}
 
 		public DateTime StartDate
@@ -52,20 +52,37 @@ namespace SeeShellsV2.UI
 			set => SetValue(MaxVisibleElementsProp, value);
 		}
 
+		public TimeSpan Scale
+		{
+			get => (TimeSpan)GetValue(ScaleProp);
+			private set => SetValue(ScaleProp, value);
+		}
+
+		public DateTime CalculatedAbsoluteStartDate
+		{
+			get => (DateTime)GetValue(CalculatedAbsoluteStartDateProp);
+			private set => SetValue(CalculatedAbsoluteStartDateProp, value);
+		}
+
+		public DateTime CalculatedAbsoluteEndDate
+		{
+			get => (DateTime)GetValue(CalculatedAbsoluteEndDateProp);
+			private set => SetValue(CalculatedAbsoluteEndDateProp, value);
+		}
 
 		public static readonly DependencyProperty StartDateProp =
 			DependencyProperty.Register(
 				nameof(StartDate),
 				typeof(DateTime),
 				typeof(TimelinePanel),
-				new PropertyMetadata(new DateTime(2020,1,1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+				new PropertyMetadata(new DateTime(2010, 1, 1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
 		public static readonly DependencyProperty EndDateProp =
 			DependencyProperty.Register(
 				nameof(EndDate),
 				typeof(DateTime),
 				typeof(TimelinePanel),
-				new PropertyMetadata(new DateTime(2021, 1, 1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+				new PropertyMetadata(new DateTime(2022, 1, 1), (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
 		public static readonly DependencyProperty MinColumnWidthProp =
 			DependencyProperty.Register(
@@ -79,14 +96,14 @@ namespace SeeShellsV2.UI
 				nameof(MaxColumnWidth),
 				typeof(double),
 				typeof(TimelinePanel),
-				new PropertyMetadata(250.0, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+				new PropertyMetadata(500.0, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
 		public static readonly DependencyProperty MaxVisibleElementsProp =
 			DependencyProperty.Register(
 				nameof(MaxVisibleElements),
 				typeof(int),
 				typeof(TimelinePanel),
-				new PropertyMetadata(25, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+				new PropertyMetadata(50, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
 
 		public static readonly DependencyProperty DateProperty =
 			DependencyProperty.RegisterAttached(
@@ -95,6 +112,27 @@ namespace SeeShellsV2.UI
 				typeof(TimelinePanel),
 				new FrameworkPropertyMetadata(DateTime.MinValue, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
+		public static readonly DependencyProperty ScaleProp =
+			DependencyProperty.RegisterAttached(
+				nameof(Scale),
+				typeof(TimeSpan),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(TimeSpan.Zero));
+
+		public static readonly DependencyProperty CalculatedAbsoluteStartDateProp =
+			DependencyProperty.Register(
+				nameof(CalculatedAbsoluteStartDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new DateTime(2021, 1, 1)));
+
+		public static readonly DependencyProperty CalculatedAbsoluteEndDateProp =
+			DependencyProperty.Register(
+				nameof(CalculatedAbsoluteEndDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new DateTime(2021, 1, 1)));
+
 		public static DateTime GetDate(DependencyObject obj)
 		{
 			return (DateTime)obj.GetValue(DateProperty);
@@ -102,7 +140,7 @@ namespace SeeShellsV2.UI
 
 		public static DateTime GetDate(IItemContainerGenerator generator, int index)
 		{
-			index = Math.Clamp(index, 0, (generator as ItemContainerGenerator).Items.Count-1);
+			index = Math.Clamp(index, 0, (generator as ItemContainerGenerator).Items.Count - 1);
 
 			DateTime date;
 			if (generator.GeneratorPositionFromIndex(index).Offset == 0)
@@ -112,7 +150,7 @@ namespace SeeShellsV2.UI
 			{
 				var element = generator.GenerateNext();
 				generator.PrepareItemContainer(element);
-				date = (DateTime) element.GetValue(DateProperty);
+				date = (DateTime)element.GetValue(DateProperty);
 			}
 
 			generator.Remove(generator.GeneratorPositionFromIndex(index), 1);
@@ -125,9 +163,12 @@ namespace SeeShellsV2.UI
 			obj.SetValue(DateProperty, value);
 		}
 
-		private TimeSpan Scale { get; set; }
-		private DateTime CalculatedAbsoluteStartDate { get; set; }
-		private DateTime CalculatedAbsoluteEndDate { get; set; }
+		// TODO: make scale = 1 / Zoom
+		private double Zoom
+		{
+			get => (LayoutTransform as ScaleTransform).ScaleX;
+			set => (LayoutTransform as ScaleTransform).ScaleX = (LayoutTransform as ScaleTransform).ScaleY = value;
+		}
 
 		protected override Size MeasureOverride(Size availableSize)
 		{
@@ -143,7 +184,7 @@ namespace SeeShellsV2.UI
 			CalculatedAbsoluteStartDate = GetDate(generator, 0);
 			CalculatedAbsoluteEndDate = GetDate(generator, generator.Items.Count - 1);
 
-			Scale = (EndDate.Subtract(StartDate)).Divide(6.0);
+			Scale = (EndDate.Subtract(StartDate)).Divide(6.0 / Zoom);
 
 			if (Scale.Ticks <= 0)
 				return new Size { Width = 0, Height = 0 };
@@ -152,7 +193,8 @@ namespace SeeShellsV2.UI
 			int endIndex = SearchGeneratorItems(EndDate.Add(Scale.Multiply(2.0)));
 			int itemsCount = endIndex - startIndex;
 
-			if (itemsCount <= MaxVisibleElements)
+
+			if (Zoom >= 0.8)
 			{
 				GenerateChildren(startIndex, endIndex);
 			}
@@ -171,6 +213,9 @@ namespace SeeShellsV2.UI
 					AddInternalChild(rect);
 				}
 			}
+
+			if (ScrollOwner != null)
+				ScrollOwner.InvalidateScrollInfo();
 
 			return new Size { Width = 0.0, Height = 0.0 };
 		}
@@ -311,9 +356,9 @@ namespace SeeShellsV2.UI
 				if (test == date)
 					return m;
 				else if (test > date)
-					r = m-1;
+					r = m - 1;
 				else
-					l = m+1;
+					l = m + 1;
 			}
 
 			return m;
@@ -338,6 +383,124 @@ namespace SeeShellsV2.UI
 					}
 				}
 			}
+		}
+
+		public ScrollViewer ScrollOwner { get; set; }
+
+		public bool CanHorizontallyScroll
+		{
+			get => (bool)GetValue(CanHorizontallyScrollProp);
+			set => SetValue(CanHorizontallyScrollProp, value);
+		}
+
+		public bool CanVerticallyScroll
+		{
+			get => (bool)GetValue(CanVerticallyScrollProp);
+			set => SetValue(CanVerticallyScrollProp, value);
+		}
+
+		public double ExtentHeight => 0;
+
+		public double ExtentWidth => (CalculatedAbsoluteEndDate - CalculatedAbsoluteStartDate) / (Scale);
+
+		public double HorizontalOffset => (StartDate - CalculatedAbsoluteStartDate) / (Scale);
+
+		public double VerticalOffset => 0;
+
+		public double ViewportHeight => 0;
+
+		public double ViewportWidth => 6.0 / Zoom;
+
+		public static readonly DependencyProperty CanHorizontallyScrollProp =
+			DependencyProperty.Register(
+				nameof(CanHorizontallyScroll),
+				typeof(bool),
+				typeof(TimelinePanel),
+				new PropertyMetadata(false, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+
+		public static readonly DependencyProperty CanVerticallyScrollProp =
+			DependencyProperty.Register(
+				nameof(CanVerticallyScroll),
+				typeof(bool),
+				typeof(TimelinePanel),
+				new PropertyMetadata(false, (o, args) => (o as TimelinePanel).InvalidateMeasure()));
+
+		public void LineDown()
+		{
+			
+		}
+
+		public void LineLeft()
+		{
+
+		}
+
+		public void LineRight()
+		{
+
+		}
+
+		public void LineUp()
+		{
+
+		}
+
+		public Rect MakeVisible(Visual visual, Rect rectangle)
+		{
+			return rectangle;
+		}
+
+		public void MouseWheelDown()
+		{
+			Zoom = Math.Max(0.1, Zoom - 0.1);
+		}
+
+		public void MouseWheelUp()
+		{
+			Zoom = Math.Min(1.0, Zoom + 0.1);
+		}
+
+		public void MouseWheelLeft()
+		{
+
+		}
+
+		public void MouseWheelRight()
+		{
+
+		}
+
+		public void PageDown()
+		{
+
+		}
+
+		public void PageLeft()
+		{
+
+		}
+
+		public void PageRight()
+		{
+
+		}
+
+		public void PageUp()
+		{
+
+		}
+
+		public void SetHorizontalOffset(double offset)
+		{
+			TimeSpan range = EndDate - StartDate;
+			TimeSpan dT = offset / ExtentWidth * (CalculatedAbsoluteEndDate - CalculatedAbsoluteStartDate);
+			StartDate = CalculatedAbsoluteStartDate + dT;
+			EndDate = StartDate + range;
+		}
+
+		public void SetVerticalOffset(double offset)
+		{
+
 		}
 	}
 }
