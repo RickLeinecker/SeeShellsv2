@@ -21,7 +21,7 @@ using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
-    public interface ITableViewVM : IViewModel
+    public interface IShellItemTableViewVM : IViewModel
     {
         ISelected Selected { get; }
     }
@@ -29,16 +29,16 @@ namespace SeeShellsV2.UI
     /// <summary>
     /// Interaction logic for TableView.xaml
     /// </summary>
-    public partial class TableView : UserControl
+    public partial class ShellItemTableView : UserControl
     {
         [Dependency]
-        public ITableViewVM ViewModel
+        public IShellItemTableViewVM ViewModel
         {
-            get => DataContext as ITableViewVM;
+            get => DataContext as IShellItemTableViewVM;
             set => DataContext = value;
         }
 
-        public TableView()
+        public ShellItemTableView()
         {
             InitializeComponent();
         }

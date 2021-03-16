@@ -36,8 +36,7 @@ namespace SeeShellsV2.Data
         {
             return sequence
                 .OfType<ItemCreateEvent>()
-                .Where(e => (e.Evidence.First() as FileEntryShellItem)?.SubtypeName == "File" || false)
-                .Where(e => Path.GetDirectoryName(e.Place.Name) == "My Computer\\Downloads");
+                .Where(e => e.Place.PathName != null && e.Place.PathName.Contains("Downloads"));
         }
     }
 }

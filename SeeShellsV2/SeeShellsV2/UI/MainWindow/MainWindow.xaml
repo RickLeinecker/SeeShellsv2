@@ -79,8 +79,11 @@
                                 <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" >
                                     <local:TimelineView />
                                 </xcad:LayoutDocument>
-                                <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" >
-                                    <local:TableView />
+                                <xcad:LayoutDocument ContentId="tableview" Title="Shellbags" CanClose="False" >
+                                    <local:ShellItemTableView />
+                                </xcad:LayoutDocument>
+                                <xcad:LayoutDocument ContentId="eventview" Title="Events" CanClose="False" >
+                                    <local:ShellEventTableView />
                                 </xcad:LayoutDocument>
                             </xcad:LayoutDocumentPane>
                         </xcad:LayoutDocumentPaneGroup >

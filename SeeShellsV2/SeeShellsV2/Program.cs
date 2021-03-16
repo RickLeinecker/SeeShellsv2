@@ -54,7 +54,8 @@ namespace SeeShellsV2
             // Register ViewModel Types
             container.RegisterType<IMainWindowVM, MainWindowVM>();
             container.RegisterType<IExportWindowVM, ExportWindowVM>();
-            container.RegisterType<ITableViewVM, TableViewVM>();
+            container.RegisterType<IShellItemTableViewVM, ShellItemTableViewVM>();
+            container.RegisterType<IShellEventTableViewVM, ShellEventTableViewVM>();
             container.RegisterType<IInspectorViewVM, InspectorViewVM>();
             container.RegisterType<ITimelineViewVM, TimelineViewVM>();
             container.RegisterType<IRegistryViewVM, RegistryViewVM>();

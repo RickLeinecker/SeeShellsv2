@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SeeShellsV2.UI.TableView"
+﻿<UserControl x:Class="SeeShellsV2.UI.ShellItemTableView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
