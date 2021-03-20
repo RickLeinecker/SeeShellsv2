@@ -45,6 +45,10 @@ namespace SeeShellsV2.UI
 		public double Scale { get => (double)GetValue(ScaleProp); }
 		public double Resolution { get => (double)GetValue(ResolutionProp); }
 
+		protected double ZoomInternal { get => (double)GetValue(ZoomProp); set => SetCurrentValue(ZoomProp, value); }
+		protected DateTime BeginDateInternal { get => (DateTime)GetValue(BeginDateProp); set => SetCurrentValue(BeginDateProp, value); }
+		protected DateTime EndDateInternal { get => (DateTime)GetValue(EndDateProp); set => SetCurrentValue(EndDateProp, value); }
+
 		protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args) { }
 		protected override Size MeasureOverride(Size availableSize) { return new Size { Width = 0, Height = 0 }; }
 		protected override Size ArrangeOverride(Size finalSize) { return finalSize; }
