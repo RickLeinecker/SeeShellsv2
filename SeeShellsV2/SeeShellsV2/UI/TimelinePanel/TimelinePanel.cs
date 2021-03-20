@@ -15,6 +15,311 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.UI
 {
+	public class TimelinePanelItem
+	{
+		public object Item { get; init; }
+		public DateTime TimeStamp { get; init; }
+		public Color Color { get; init; }
+	}
+
+	public class TimelinePanel : VirtualizingPanel, IScrollInfo
+	{
+		public TimelinePanel() : base()
+		{
+			LayoutTransform = new ScaleTransform(0.1, 0.1);
+			AbsoluteBeginDate = new DateTime(2020, 1, 1);
+			AbsoluteEndDate = new DateTime(2021, 1, 1);
+		}
+
+		public double Zoom { get => (double)GetValue(ZoomProp); set => SetValue(ZoomProp, value); }
+		public DateTime BeginDate { get => (DateTime)GetValue(BeginDateProp); set => SetValue(BeginDateProp, value); }
+		public DateTime EndDate { get => (DateTime)GetValue(EndDateProp); set => SetValue(EndDateProp, value); }
+
+		public DateTime AbsoluteBeginDate { get => (DateTime)GetValue(AbsoluteBeginDateProp); private set => SetValue(AbsoluteBeginDatePropKey, value); }
+		public DateTime AbsoluteEndDate { get => (DateTime)GetValue(AbsoluteEndDateProp); private set => SetValue(AbsoluteEndDatePropKey, value); }
+
+		public TimeSpan VisibleSpan { get => (TimeSpan)GetValue(VisibleSpanProp); private set => SetValue(VisibleSpanPropKey, value); }
+		public TimeSpan AbsoluteSpan { get => (TimeSpan)GetValue(AbsoluteSpanProp); private set => SetValue(AbsoluteSpanPropKey, value); }
+
+		public TimeSpan ColumnSpan { get => (TimeSpan)GetValue(ColumnSpanProp); }
+		public double Scale { get => (double)GetValue(ScaleProp); }
+		public double Resolution { get => (double)GetValue(ResolutionProp); }
+
+		protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args) { }
+		protected override Size MeasureOverride(Size availableSize) { return new Size { Width = 0, Height = 0 }; }
+		protected override Size ArrangeOverride(Size finalSize) { return finalSize; }
+
+		public ScrollViewer ScrollOwner { get; set; }
+		public bool CanHorizontallyScroll { get; set; }
+		public bool CanVerticallyScroll { get; set; }
+		public double ExtentHeight => throw new NotImplementedException();
+		public double ExtentWidth => throw new NotImplementedException();
+		public double ViewportHeight => throw new NotImplementedException();
+		public double ViewportWidth => throw new NotImplementedException();
+		public double HorizontalOffset => throw new NotImplementedException();
+		public double VerticalOffset => throw new NotImplementedException();
+
+		public void LineDown() { throw new NotImplementedException(); }
+		public void LineLeft() { throw new NotImplementedException(); }
+		public void LineRight() { throw new NotImplementedException(); }
+		public void LineUp() { throw new NotImplementedException(); }
+		public Rect MakeVisible(Visual visual, Rect rectangle) { throw new NotImplementedException(); }
+		public void MouseWheelDown() { throw new NotImplementedException(); }
+		public void MouseWheelLeft() { throw new NotImplementedException(); }
+		public void MouseWheelRight() { throw new NotImplementedException(); }
+		public void MouseWheelUp() { throw new NotImplementedException(); }
+		public void PageDown() { throw new NotImplementedException(); }
+		public void PageLeft() { throw new NotImplementedException(); }
+		public void PageRight() { throw new NotImplementedException(); }
+		public void PageUp() { throw new NotImplementedException(); }
+		public void SetHorizontalOffset(double offset) { throw new NotImplementedException(); }
+		public void SetVerticalOffset(double offset) { throw new NotImplementedException(); }
+
+		public static readonly DependencyProperty ZoomProp =
+			DependencyProperty.Register(
+				nameof(Zoom),
+				typeof(double),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(
+					1.0,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					(o, args) => // callback
+					{
+						TimelinePanel t = o as TimelinePanel;
+						t.SetValue(VisibleSpanPropKey, t.AbsoluteSpan / t.Zoom);
+						t.SetValue(ScalePropKey, 1.05 - 1 / t.Zoom);
+						t.SetValue(ResolutionPropKey, (double)(1 << (7 + 3 / (int)t.Zoom)));
+						t.SetValue(ColumnSpanPropKey, t.AbsoluteSpan / t.Resolution);
+					},
+					(o, v) => Math.Max((double)v, 1.0) // validation
+				)
+			);
+
+		public static readonly DependencyProperty BeginDateProp =
+			DependencyProperty.Register(
+				nameof(BeginDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(
+					DateTime.MinValue,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					(o, args) => // callback
+					{
+						TimelinePanel t = o as TimelinePanel;
+						t.SetValue(VisibleSpanPropKey, t.EndDate - t.BeginDate);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = o as TimelinePanel;
+						DateTime b = (DateTime)v;
+
+						if (b >= t.EndDate)
+							return t.EndDate - new TimeSpan(0, 1, 0);
+
+						if (b >= t.AbsoluteEndDate)
+							return t.AbsoluteEndDate - new TimeSpan(0, 1, 0);
+
+						if (b < t.AbsoluteBeginDate)
+							return t.AbsoluteBeginDate;
+
+						return b;
+					}
+				)
+			);
+
+		public static readonly DependencyProperty EndDateProp =
+			DependencyProperty.Register(
+				nameof(EndDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(
+					DateTime.MaxValue,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					(o, args) => // callback
+					{
+						TimelinePanel t = o as TimelinePanel;
+						t.SetValue(VisibleSpanPropKey, t.EndDate - t.BeginDate);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = o as TimelinePanel;
+						DateTime e = (DateTime)v;
+
+						if (e <= t.BeginDate)
+							return t.BeginDate + new TimeSpan(0, 1, 0);
+
+						if (e > t.AbsoluteEndDate)
+							return t.AbsoluteEndDate;
+
+						if (e <= t.AbsoluteBeginDate)
+							return t.AbsoluteBeginDate + new TimeSpan(0, 1, 0);
+
+						return e;
+					}
+				)
+			);
+
+		private static readonly DependencyPropertyKey AbsoluteBeginDatePropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(AbsoluteBeginDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(
+					DateTime.MinValue,
+					(o, args) => // callback
+					{
+						TimelinePanel t = (o as TimelinePanel);
+
+						if (t.EndDate < t.AbsoluteBeginDate)
+							t.SetCurrentValue(EndDateProp, t.AbsoluteBeginDate);
+
+						if (t.BeginDate < t.AbsoluteBeginDate)
+							t.SetCurrentValue(BeginDateProp, t.AbsoluteBeginDate);
+
+						t.SetValue(AbsoluteSpanPropKey, t.AbsoluteEndDate - t.AbsoluteBeginDate);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = o as TimelinePanel;
+						DateTime b = (DateTime)v;
+
+						if (b >= t.AbsoluteEndDate)
+							return t.AbsoluteEndDate - new TimeSpan(0, 1, 0);
+
+						return b;
+					}
+				)
+			);
+
+		public static readonly DependencyProperty AbsoluteBeginDateProp = AbsoluteBeginDatePropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey AbsoluteEndDatePropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(AbsoluteEndDate),
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new PropertyMetadata(
+					DateTime.MaxValue,
+					(o, args) => // callback
+					{
+						TimelinePanel t = (o as TimelinePanel);
+
+						if (t.BeginDate > t.AbsoluteEndDate)
+							t.SetCurrentValue(BeginDateProp, t.AbsoluteEndDate);
+
+						if (t.EndDate > t.AbsoluteEndDate)
+							t.SetCurrentValue(EndDateProp, t.AbsoluteEndDate);
+
+						t.SetValue(AbsoluteSpanPropKey, t.AbsoluteEndDate - t.AbsoluteBeginDate);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = o as TimelinePanel;
+						DateTime e = (DateTime)v;
+
+						if (e <= t.AbsoluteBeginDate)
+							return t.AbsoluteBeginDate + new TimeSpan(0, 1, 0);
+
+						return e;
+					}
+				)
+			);
+
+		public static readonly DependencyProperty AbsoluteEndDateProp = AbsoluteEndDatePropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey VisibleSpanPropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(VisibleSpan),
+				typeof(TimeSpan),
+				typeof(TimelinePanel),
+				new PropertyMetadata(
+					new TimeSpan(0, 0, 1),
+					(o, args) => // callback
+					{
+						TimelinePanel t = (o as TimelinePanel);
+						t.SetCurrentValue(ZoomProp, t.AbsoluteSpan / t.VisibleSpan);
+						t.SetCurrentValue(EndDateProp, t.BeginDate + t.VisibleSpan);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = (o as TimelinePanel);
+						TimeSpan value = (TimeSpan)v;
+						if (value <= TimeSpan.Zero)
+							return new TimeSpan(0, 0, 1);
+
+						if (value > t.AbsoluteSpan)
+							return t.AbsoluteSpan;
+
+						return v;
+					}
+				)
+			);
+
+		public static readonly DependencyProperty VisibleSpanProp = VisibleSpanPropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey AbsoluteSpanPropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(AbsoluteSpan),
+				typeof(TimeSpan),
+				typeof(TimelinePanel),
+				new PropertyMetadata(
+					new TimeSpan(0, 0, 1),
+					(o, args) => // callback
+					{
+						TimelinePanel t = (o as TimelinePanel);
+						t.SetCurrentValue(ZoomProp, t.AbsoluteSpan / t.VisibleSpan);
+						t.SetValue(AbsoluteEndDatePropKey, t.AbsoluteBeginDate + t.AbsoluteSpan);
+					},
+					(o, v) => // validation
+					{
+						TimelinePanel t = (o as TimelinePanel);
+						TimeSpan value = (TimeSpan)v;
+						if (value <= TimeSpan.Zero)
+							return new TimeSpan(0, 0, 1);
+
+						return v;
+					}
+				)
+			);
+
+		public static readonly DependencyProperty AbsoluteSpanProp = AbsoluteSpanPropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey ColumnSpanPropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(ColumnSpan),
+				typeof(TimeSpan),
+				typeof(TimelinePanel),
+				new PropertyMetadata(new TimeSpan(0, 1, 0))
+			);
+
+		public static readonly DependencyProperty ColumnSpanProp = ColumnSpanPropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey ScalePropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(Scale),
+				typeof(double),
+				typeof(TimelinePanel),
+				new PropertyMetadata(
+					0.05,
+					(_, _) => { }, // callback
+					(o, v) => Math.Clamp((double)v, 0.05, 1.0) // validation
+				)
+			);
+
+		public static readonly DependencyProperty ScaleProp = ScalePropKey.DependencyProperty;
+
+		private static readonly DependencyPropertyKey ResolutionPropKey =
+			DependencyProperty.RegisterReadOnly(
+				nameof(Resolution),
+				typeof(double),
+				typeof(TimelinePanel),
+				new PropertyMetadata(1024.0)
+			);
+
+		public static readonly DependencyProperty ResolutionProp = ResolutionPropKey.DependencyProperty;
+	}
+
+	/*
 	public class TimelinePanel : VirtualizingPanel, IScrollInfo
 	{
 		public TimelinePanel() : base()
@@ -275,7 +580,7 @@ namespace SeeShellsV2.UI
 
 			return finalSize;
 
-			/*
+			/#*
 			if (!InternalChildren.OfType<UIElement>().Any())
 				return finalSize;
 
@@ -331,7 +636,7 @@ namespace SeeShellsV2.UI
 			}
 
 			return finalSize;
-			*/
+			*#/
 		}
 
 		private void CleanUp()
@@ -503,4 +808,5 @@ namespace SeeShellsV2.UI
 
 		}
 	}
+	*/
 }
