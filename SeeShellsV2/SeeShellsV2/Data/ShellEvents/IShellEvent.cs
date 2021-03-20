@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SeeShellsV2.UI;
+
 namespace SeeShellsV2.Data
 {
     /// <summary>
     /// Represents a suspected action performed by a user
     /// </summary>
-    public interface IShellEvent
+    public interface IShellEvent : ITimelineEvent
     {
         /// <summary>
         /// The type of event that occured (File Create, File Download, etc.)

@@ -15,11 +15,9 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.UI
 {
-	public class TimelinePanelItem
+	public interface ITimelineEvent
 	{
-		public object Item { get; init; }
 		public DateTime TimeStamp { get; init; }
-		public Color Color { get; init; }
 	}
 
 	public class TimelinePanel : VirtualizingPanel, IScrollInfo
@@ -50,18 +48,86 @@ namespace SeeShellsV2.UI
 		protected DateTime EndDateInternal { get => (DateTime)GetValue(EndDateProp); set => SetCurrentValue(EndDateProp, value); }
 
 		protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args) { }
-		protected override Size MeasureOverride(Size availableSize) { return new Size { Width = 0, Height = 0 }; }
-		protected override Size ArrangeOverride(Size finalSize) { return finalSize; }
+
+		protected override Size MeasureOverride(Size availableSize) 
+		{
+			var necessaryChidrenTouchOrGeneratorWillBeNull = Children;
+			ItemContainerGenerator generator = ItemContainerGenerator as ItemContainerGenerator;
+
+			if (generator == null || !generator.Items.OfType<ITimelineEvent>().Any())
+				return new Size { Width = 0, Height = 0 };
+
+			AbsoluteBeginDate = generator.Items.OfType<ITimelineEvent>().First().TimeStamp;
+			AbsoluteEndDate = generator.Items.OfType<ITimelineEvent>().Last().TimeStamp;
+
+			CleanUp();
+
+			GenerateChildren();
+
+			if (ScrollOwner != null)
+				ScrollOwner.InvalidateScrollInfo();
+
+			return new Size { Width = 0.0, Height = 0.0 };
+		}
+
+		protected override Size ArrangeOverride(Size finalSize)
+		{
+			if (!InternalChildren.OfType<UIElement>().Any())
+				return finalSize;
+
+			double minColumnWidth = InternalChildren
+				.OfType<UIElement>()
+				.Select(c =>
+				{
+					c.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
+					return c.DesiredSize.Width;
+				})
+				.Max();
+
+			double calculatedBinWidth = Math.Max(finalSize.Width / (VisibleSpan / ColumnSpan), minColumnWidth);
+			TimeSpan calculatedPixelSpan = ColumnSpan / calculatedBinWidth;
+
+			int first = (int)((BeginDate - AbsoluteBeginDate) / ColumnSpan);
+			int last = (int)((EndDate - AbsoluteBeginDate) / ColumnSpan);
+
+			double[] binsHeights = new double[(int) Resolution];
+
+			foreach (UIElement child in InternalChildren)
+			{
+				DateTime date = GetDate(child);
+				int bucket = (int)((date - AbsoluteBeginDate) / ColumnSpan);
+
+				if (bucket >= first && bucket <= last)
+				{
+					child.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
+					binsHeights[bucket] += Math.Ceiling(child.DesiredSize.Height);
+
+					double x = calculatedBinWidth * bucket + ((AbsoluteBeginDate - BeginDate) / calculatedPixelSpan);
+					double y = finalSize.Height - binsHeights[bucket];
+					double width = calculatedBinWidth;
+					double height = Math.Ceiling(child.DesiredSize.Height);
+					var bounds = new Rect(x, y, width, height);
+					child.Arrange(bounds);
+				}
+				else
+				{
+					child.Arrange(new Rect(0, 0, 0, 0));
+				}
+
+			}
+
+			return finalSize;
+		}
 
 		public ScrollViewer ScrollOwner { get; set; }
 		public bool CanHorizontallyScroll { get; set; }
 		public bool CanVerticallyScroll { get; set; }
-		public double ExtentHeight => throw new NotImplementedException();
-		public double ExtentWidth => throw new NotImplementedException();
-		public double ViewportHeight => throw new NotImplementedException();
-		public double ViewportWidth => throw new NotImplementedException();
-		public double HorizontalOffset => throw new NotImplementedException();
-		public double VerticalOffset => throw new NotImplementedException();
+		public double ExtentWidth => Resolution;
+		public double ViewportWidth => VisibleSpan / ColumnSpan;
+		public double HorizontalOffset => (BeginDate - AbsoluteBeginDate) / ColumnSpan;
+		public double ExtentHeight => 0;
+		public double ViewportHeight => 0;
+		public double VerticalOffset => 0;
 
 		public void LineDown() { throw new NotImplementedException(); }
 		public void LineLeft() { throw new NotImplementedException(); }
@@ -86,13 +152,14 @@ namespace SeeShellsV2.UI
 				typeof(TimelinePanel),
 				new FrameworkPropertyMetadata(
 					1.0,
-					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
+					FrameworkPropertyMetadataOptions.AffectsMeasure,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
 						t.SetValue(VisibleSpanPropKey, t.AbsoluteSpan / t.Zoom);
 						t.SetValue(ScalePropKey, 1.05 - 1 / t.Zoom);
-						t.SetValue(ResolutionPropKey, (double)(1 << (7 + 3 / (int)t.Zoom)));
+						// t.SetValue(ResolutionPropKey, (double)(1 << (7 + 2 / (int)t.Zoom)));
 						t.SetValue(ColumnSpanPropKey, t.AbsoluteSpan / t.Resolution);
 					},
 					(o, v) => Math.Max((double)v, 1.0) // validation
@@ -106,7 +173,8 @@ namespace SeeShellsV2.UI
 				typeof(TimelinePanel),
 				new FrameworkPropertyMetadata(
 					DateTime.MinValue,
-					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
+					FrameworkPropertyMetadataOptions.AffectsMeasure,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
@@ -118,10 +186,10 @@ namespace SeeShellsV2.UI
 						DateTime b = (DateTime)v;
 
 						if (b >= t.EndDate)
-							return t.EndDate - new TimeSpan(0, 1, 0);
+							return t.EndDate - new TimeSpan(0, 0, 1);
 
 						if (b >= t.AbsoluteEndDate)
-							return t.AbsoluteEndDate - new TimeSpan(0, 1, 0);
+							return t.AbsoluteEndDate - new TimeSpan(0, 0, 1);
 
 						if (b < t.AbsoluteBeginDate)
 							return t.AbsoluteBeginDate;
@@ -138,7 +206,8 @@ namespace SeeShellsV2.UI
 				typeof(TimelinePanel),
 				new FrameworkPropertyMetadata(
 					DateTime.MaxValue,
-					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
+					FrameworkPropertyMetadataOptions.AffectsMeasure,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
@@ -150,13 +219,13 @@ namespace SeeShellsV2.UI
 						DateTime e = (DateTime)v;
 
 						if (e <= t.BeginDate)
-							return t.BeginDate + new TimeSpan(0, 1, 0);
+							return t.BeginDate + new TimeSpan(0, 0, 1);
 
 						if (e > t.AbsoluteEndDate)
 							return t.AbsoluteEndDate;
 
 						if (e <= t.AbsoluteBeginDate)
-							return t.AbsoluteBeginDate + new TimeSpan(0, 1, 0);
+							return t.AbsoluteBeginDate + new TimeSpan(0, 0, 1);
 
 						return e;
 					}
@@ -293,7 +362,19 @@ namespace SeeShellsV2.UI
 				nameof(ColumnSpan),
 				typeof(TimeSpan),
 				typeof(TimelinePanel),
-				new PropertyMetadata(new TimeSpan(0, 1, 0))
+				new PropertyMetadata(
+					new TimeSpan(0, 0, 1),
+					(_, _) => { }, // callback
+					(o, v) => // validation
+					{
+						TimelinePanel t = (o as TimelinePanel);
+						TimeSpan value = (TimeSpan)v;
+						if (value <= TimeSpan.Zero)
+							return new TimeSpan(0, 0, 1);
+
+						return v;
+					}
+				)
 			);
 
 		public static readonly DependencyProperty ColumnSpanProp = ColumnSpanPropKey.DependencyProperty;
@@ -305,7 +386,12 @@ namespace SeeShellsV2.UI
 				typeof(TimelinePanel),
 				new PropertyMetadata(
 					0.05,
-					(_, _) => { }, // callback
+					(o, args) => // callback
+					{
+						TimelinePanel t = o as TimelinePanel;
+						ScaleTransform s = t.LayoutTransform as ScaleTransform;
+						s.ScaleX = s.ScaleY = t.Scale;
+					},
 					(o, v) => Math.Clamp((double)v, 0.05, 1.0) // validation
 				)
 			);
@@ -317,10 +403,128 @@ namespace SeeShellsV2.UI
 				nameof(Resolution),
 				typeof(double),
 				typeof(TimelinePanel),
-				new PropertyMetadata(1024.0)
+				new PropertyMetadata(512.0)
 			);
 
 		public static readonly DependencyProperty ResolutionProp = ResolutionPropKey.DependencyProperty;
+
+		private int SearchGeneratorItems(DateTime date)
+		{
+			ItemContainerGenerator generator = ItemContainerGenerator as ItemContainerGenerator;
+
+			int m = 0;
+			int l = 0;
+			int r = generator.Items.Count;
+
+			while (r >= l)
+			{
+				m = l + (r - l) / 2;
+
+				if (m >= generator.Items.Count)
+					return generator.Items.Count;
+
+				DateTime test = (generator.Items[m] as ITimelineEvent).TimeStamp;
+
+				if (test == date)
+					return m;
+				else if (test > date)
+					r = m - 1;
+				else
+					l = m + 1;
+			}
+
+			return m;
+		}
+
+		private void CleanUp()
+		{
+			ItemContainerGenerator generator = ItemContainerGenerator as ItemContainerGenerator;
+
+			for (int i = 0; i < InternalChildren.Count; i++)
+			{
+				UIElement element = InternalChildren[i];
+				int index = generator.IndexFromContainer(element);
+				DateTime date = GetDate(element);
+
+				if (date < BeginDate || date > EndDate)
+				{
+					RemoveInternalChildRange(i, 1);
+
+					if (index != -1)
+						ItemContainerGenerator.Remove(ItemContainerGenerator.GeneratorPositionFromIndex(index), 1);
+
+					i--;
+				}
+				else if (element is Rectangle)
+				{
+					RemoveInternalChildRange(i, 1);
+					i--;
+				}
+			}
+		}
+
+		private void GenerateChildren()
+		{
+			if (ItemContainerGenerator == null)
+				return;
+
+			int start = SearchGeneratorItems(BeginDate);
+			int end = SearchGeneratorItems(EndDate);
+
+			if (Zoom >= 20.0)
+			{
+				using (ItemContainerGenerator.StartAt(ItemContainerGenerator.GeneratorPositionFromIndex(start), GeneratorDirection.Forward))
+				{
+					UIElement child;
+					for (int i = start; i < end; i++)
+					{
+						if (ItemContainerGenerator.GeneratorPositionFromIndex(i).Offset == 0)
+							continue;
+
+						child = ItemContainerGenerator.GenerateNext() as UIElement;
+
+						if (child == null)
+							continue;
+
+						AddInternalChild(child);
+						ItemContainerGenerator.PrepareItemContainer(child);
+						SetDate(child, ((ItemContainerGenerator as ItemContainerGenerator).Items[i] as ITimelineEvent).TimeStamp);
+					}
+				}
+			}
+			else
+			{
+				for (var c = BeginDate; c <= EndDate - ColumnSpan; c = c + ColumnSpan)
+				{
+					int b = SearchGeneratorItems(c);
+					int e = SearchGeneratorItems(c + ColumnSpan);
+
+					Rectangle rect = new Rectangle();
+					rect.HorizontalAlignment = HorizontalAlignment.Stretch;
+					rect.Height = 50 * (e - b);
+					rect.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x0F, 0x83, 0x0C)); // #0F830C
+					SetDate(rect, c);
+					AddInternalChild(rect);
+				}
+			}
+		}
+
+		public static readonly DependencyProperty DateProperty =
+			DependencyProperty.RegisterAttached(
+				"Date",
+				typeof(DateTime),
+				typeof(TimelinePanel),
+				new FrameworkPropertyMetadata(DateTime.MinValue, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
+
+		public static DateTime GetDate(DependencyObject obj)
+		{
+			return (DateTime)obj.GetValue(DateProperty);
+		}
+
+		public static void SetDate(DependencyObject obj, DateTime value)
+		{
+			obj.SetValue(DateProperty, value);
+		}
 	}
 
 	/*
