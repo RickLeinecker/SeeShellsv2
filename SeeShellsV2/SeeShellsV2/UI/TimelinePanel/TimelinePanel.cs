@@ -90,7 +90,7 @@ namespace SeeShellsV2.UI
 			int first = (int)((BeginDate - AbsoluteBeginDate) / ColumnSpan);
 			int last = (int)((EndDate - AbsoluteBeginDate) / ColumnSpan);
 
-			double[] binsHeights = new double[(int) Resolution];
+			double[] binsHeights = new double[(int) Resolution + 1];
 
 			foreach (UIElement child in InternalChildren)
 			{
@@ -468,8 +468,8 @@ namespace SeeShellsV2.UI
 			if (ItemContainerGenerator == null)
 				return;
 
-			int start = SearchGeneratorItems(BeginDate);
-			int end = SearchGeneratorItems(EndDate);
+			int start = SearchGeneratorItems(BeginDate - ColumnSpan);
+			int end = SearchGeneratorItems(EndDate + ColumnSpan);
 
 			if (Zoom >= 20.0)
 			{
@@ -494,14 +494,14 @@ namespace SeeShellsV2.UI
 			}
 			else
 			{
-				for (var c = BeginDate - ColumnSpan * (((BeginDate - AbsoluteBeginDate) / ColumnSpan) % 1); c <= EndDate - ColumnSpan; c = c + ColumnSpan)
+				for (var c = BeginDate - ColumnSpan * (((BeginDate - AbsoluteBeginDate) / ColumnSpan) % 1); c <= EndDate; c = c + ColumnSpan)
 				{
 					int b = SearchGeneratorItems(c);
 					int e = SearchGeneratorItems(c + ColumnSpan);
 
 					Rectangle rect = new Rectangle();
 					rect.HorizontalAlignment = HorizontalAlignment.Stretch;
-					rect.Height = 50 * (e - b);
+					rect.Height = 50 * (e - b) * Resolution / 512;
 					rect.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x0F, 0x83, 0x0C)); // #0F830C
 					SetDate(rect, c);
 					AddInternalChild(rect);
