@@ -159,7 +159,7 @@ namespace SeeShellsV2.UI
 						TimelinePanel t = o as TimelinePanel;
 						t.SetValue(VisibleSpanPropKey, t.AbsoluteSpan / t.Zoom);
 						t.SetValue(ScalePropKey, 1.05 - 1 / t.Zoom);
-						// t.SetValue(ResolutionPropKey, (double)(1 << (7 + 2 / (int)t.Zoom)));
+						t.SetValue(ResolutionPropKey, (double) (1 << (int) (7 / t.Zoom + Math.Log2(6.0 * t.Zoom))));
 						t.SetValue(ColumnSpanPropKey, t.AbsoluteSpan / t.Resolution);
 					},
 					(o, v) => Math.Max((double)v, 1.0) // validation
