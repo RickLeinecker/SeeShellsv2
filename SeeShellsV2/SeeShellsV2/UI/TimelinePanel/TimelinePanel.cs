@@ -102,7 +102,7 @@ namespace SeeShellsV2.UI
 					child.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
 					binsHeights[bucket] += Math.Ceiling(child.DesiredSize.Height);
 
-					double x = calculatedBinWidth * bucket + ((AbsoluteBeginDate - BeginDate) / calculatedPixelSpan);
+					double x = calculatedBinWidth * (bucket - ((BeginDate - AbsoluteBeginDate) / ColumnSpan));
 					double y = finalSize.Height - binsHeights[bucket];
 					double width = calculatedBinWidth;
 					double height = Math.Ceiling(child.DesiredSize.Height);
@@ -494,7 +494,7 @@ namespace SeeShellsV2.UI
 			}
 			else
 			{
-				for (var c = BeginDate; c <= EndDate - ColumnSpan; c = c + ColumnSpan)
+				for (var c = BeginDate - ColumnSpan * (((BeginDate - AbsoluteBeginDate) / ColumnSpan) % 1); c <= EndDate - ColumnSpan; c = c + ColumnSpan)
 				{
 					int b = SearchGeneratorItems(c);
 					int e = SearchGeneratorItems(c + ColumnSpan);
