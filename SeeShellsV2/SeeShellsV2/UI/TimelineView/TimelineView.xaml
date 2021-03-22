@@ -106,7 +106,7 @@
                                           Padding="{TemplateBinding Padding}"
                                           Focusable="False"
                                           HorizontalScrollBarVisibility="Visible"
-                                          VerticalScrollBarVisibility="Hidden">
+                                          VerticalScrollBarVisibility="Visible">
                                 <ItemsPresenter />
                             </ScrollViewer>
                         </Border>
