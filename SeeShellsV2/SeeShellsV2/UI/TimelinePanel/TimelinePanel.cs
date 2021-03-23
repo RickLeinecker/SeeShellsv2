@@ -12,6 +12,8 @@ using System.Windows.Shapes;
 using System.Globalization;
 
 using SeeShellsV2.Utilities;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace SeeShellsV2.UI
 {
@@ -27,6 +29,10 @@ namespace SeeShellsV2.UI
 			LayoutTransform = new ScaleTransform(0.1, 0.1);
 			AbsoluteBeginDate = new DateTime(2020, 1, 1);
 			AbsoluteEndDate = new DateTime(2021, 1, 1);
+			PreviewMouseLeftButtonDown += TimelinePanel_PreviewMouseLeftButtonDown;
+			PreviewMouseLeftButtonUp += TimelinePanel_PreviewMouseLeftButtonUp;
+			PreviewMouseMove += TimelinePanel_PreviewMouseMove;
+			Background = new SolidColorBrush(Colors.Transparent);
 		}
 
 		public double Zoom { get => (double)GetValue(ZoomProp); set => SetValue(ZoomProp, value); }
@@ -137,30 +143,174 @@ namespace SeeShellsV2.UI
 		public double HorizontalOffset => (BeginDate - AbsoluteBeginDate) / ColumnSpan;
 		public double ExtentHeight { get; private set; }
 		public double ViewportHeight => ActualHeight;
-		public double VerticalOffset => Math.Max(ExtentHeight - ActualHeight, 0.0);
+		public double VerticalOffset {get; private set;}
 
-		public void LineDown() { throw new NotImplementedException(); }
-		public void LineLeft() { throw new NotImplementedException(); }
-		public void LineRight() { throw new NotImplementedException(); }
-		public void LineUp() { throw new NotImplementedException(); }
-		public Rect MakeVisible(Visual visual, Rect rectangle) { throw new NotImplementedException(); }
-		public void MouseWheelDown() { throw new NotImplementedException(); }
-		public void MouseWheelLeft() { throw new NotImplementedException(); }
-		public void MouseWheelRight() { throw new NotImplementedException(); }
-		public void MouseWheelUp() { throw new NotImplementedException(); }
-		public void PageDown() { throw new NotImplementedException(); }
-		public void PageLeft() { throw new NotImplementedException(); }
-		public void PageRight() { throw new NotImplementedException(); }
-		public void PageUp() { throw new NotImplementedException(); }
-		public void SetHorizontalOffset(double offset) { throw new NotImplementedException(); }
-		public void SetVerticalOffset(double offset) { throw new NotImplementedException(); }
+		private const double LineSize = 100;
+		Point? lastDragPoint;
+
+		public void LineUp() { SetVerticalOffset(VerticalOffset - LineSize); }
+		public void LineDown() { SetVerticalOffset(VerticalOffset + LineSize); }
+		public void LineLeft() 
+		{
+			DateTime TempBegin = BeginDateInternal.Subtract(VisibleSpan / 10);
+			DateTime TempEnd = EndDateInternal.Subtract(VisibleSpan / 10);
+
+			if (TempBegin.CompareTo(AbsoluteBeginDate) <= 0)
+			{
+				BeginDateInternal = AbsoluteBeginDate;
+				
+			}
+			else
+			{
+				BeginDateInternal = TempBegin;
+				EndDateInternal = TempEnd;
+			}
+		}
+
+		public void LineRight() 
+		{
+			DateTime TempBegin = BeginDateInternal.Add(VisibleSpan / 10);
+			DateTime TempEnd = EndDateInternal.Add(VisibleSpan / 10);
+
+			if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
+			{
+				EndDateInternal = AbsoluteEndDate;
+				
+			}
+			else
+			{
+				EndDateInternal = TempEnd;
+				BeginDateInternal = TempBegin;
+			}
+		}
+		public Rect MakeVisible(Visual visual, Rect rectangle)
+		{
+			return new Rect(HorizontalOffset,
+			VerticalOffset, ViewportWidth, ViewportHeight);
+		}
+		public void MouseWheelDown()
+		{
+			DateTime TempBegin = BeginDateInternal.Subtract(VisibleSpan / 10);
+			DateTime TempEnd = EndDateInternal.Add(VisibleSpan / 10);
+
+			DoubleAnimation animator = new DoubleAnimation(ZoomInternal, ZoomInternal - Math.Sqrt(ZoomInternal), new Duration(TimeSpan.FromSeconds(0.5/ Math.Sqrt(ZoomInternal))));
+			BeginAnimation(ZoomProp, animator, HandoffBehavior.Compose);
+
+			//if (TempBegin.CompareTo(AbsoluteBeginDate) <= 0)
+			//{
+			//	BeginDateInternal = AbsoluteBeginDate;
+			//	if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
+			//	{
+			//		EndDateInternal = AbsoluteEndDate;
+			//	}
+			//	else
+			//	{
+			//		EndDateInternal = TempEnd;
+			//	}
+			//}
+			//else
+			//{
+			//	BeginDateInternal = TempBegin;
+			//	if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
+			//	{
+			//		EndDateInternal = AbsoluteEndDate;
+			//	}
+			//	else
+			//	{
+			//		EndDateInternal = TempEnd;
+			//	}
+			//}
+		}
+		public void MouseWheelUp()
+		{
+			DateTime TempBegin = BeginDateInternal.Add(VisibleSpan / 10);
+			DateTime TempEnd = EndDateInternal.Subtract(VisibleSpan / 10);
+
+			DoubleAnimation animator = new DoubleAnimation(ZoomInternal, ZoomInternal + Math.Sqrt(ZoomInternal), new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			BeginAnimation(ZoomProp, animator, HandoffBehavior.Compose);
+
+			//if (TempBegin.CompareTo(TempEnd) < 0)
+			//{
+			//	BeginDateInternal = TempBegin;
+			//	EndDateInternal = TempEnd;
+			//}
+		}
+		public void MouseWheelLeft() { }
+		public void MouseWheelRight() {  }
+		public void PageDown() { SetVerticalOffset(VerticalOffset + ViewportHeight); }
+		public void PageLeft() {  }
+		public void PageRight() {  }
+		public void PageUp() { SetVerticalOffset(VerticalOffset - ViewportHeight); }
+
+		private void TimelinePanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			var mousePos = e.GetPosition(sender as TimelinePanel);
+			if (mousePos.X <= (sender as TimelinePanel).ActualWidth
+				&& mousePos.Y < (sender as TimelinePanel).ActualHeight)
+			{
+				(sender as TimelinePanel).Cursor = Cursors.SizeAll;
+				lastDragPoint = mousePos;
+				Mouse.Capture(sender as TimelinePanel);
+			}
+		}
+
+		private void TimelinePanel_PreviewMouseMove(object sender, MouseEventArgs e)
+		{
+			if (lastDragPoint.HasValue)
+			{
+				Point posNow = e.GetPosition(sender as TimelinePanel);
+
+				double dX = (posNow.X - lastDragPoint.Value.X);
+				double dY = posNow.Y - lastDragPoint.Value.Y;
+
+				lastDragPoint = posNow;
+
+
+				SetHorizontalOffset(HorizontalOffset - ((dX / ActualWidth) * VisibleSpan) / ColumnSpan);
+				SetVerticalOffset(VerticalOffset + dY);
+			}
+		}
+
+		private void TimelinePanel_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+		{
+			(sender as TimelinePanel).Cursor = Cursors.Arrow;
+			(sender as TimelinePanel).ReleaseMouseCapture();
+			lastDragPoint = null;
+		}
+
+		public void SetHorizontalOffset(double offset)
+		{
+			offset = Math.Clamp(offset, 0, ExtentWidth - ViewportWidth);
+
+			DateTime beginDate = AbsoluteBeginDate + ColumnSpan * offset;
+			DateTime endDate = beginDate + VisibleSpan;
+
+			// make sure VisibleSpan is always positive
+			if (beginDate > BeginDate)
+			{
+				EndDateInternal = endDate;
+				BeginDateInternal = beginDate;
+			}
+			else
+			{
+				BeginDateInternal = beginDate;
+				EndDateInternal = endDate;
+			}
+		}
+
+		public void SetVerticalOffset(double offset)
+		{
+			offset = Math.Clamp(offset, 0, Math.Max(0, ExtentHeight - ViewportHeight));
+			VerticalOffset = offset;
+			InvalidateVisual();
+		}
 
 		private readonly double minScale = 0.02;
 		private readonly double maxScale = 1.0;
 		private readonly double scaleDelay = 3.0;
 		private readonly double minResolution = 8;
 		private readonly double maxResolution = 512;
-		private readonly double cardsVisibleScale = 0.99;
+		private readonly double cardsVisibleScale = 0.90;
 
 		public static readonly DependencyProperty ZoomProp =
 			DependencyProperty.Register(

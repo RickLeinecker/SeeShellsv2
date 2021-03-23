@@ -13,8 +13,8 @@
 			 d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:DateSliderConverter x:Key="DateSlider"/>
-        <converters:ShellEventCollectionSorter x:Key="ShellEventCollectionSorter"/>
-    </UserControl.Resources>
+		<converters:ShellEventCollectionSorter x:Key="ShellEventCollectionSorter"/>
+	</UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -46,27 +46,18 @@
         </mah:RangeSlider>
         <ScrollViewer Name="ScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
             <!-- ItemsControl displays a collection of items -->
-            <ItemsControl x:Name="Timeline" ItemsSource="{Binding ShellEvents, Converter={StaticResource ShellEventCollectionSorter}}">
+			<ItemsControl x:Name="Timeline" ItemsSource="{Binding ShellEvents, Converter={StaticResource ShellEventCollectionSorter}}">
 
-                <ItemsControl.LayoutTransform>
-                    <ScaleTransform x:Name="scaleTransform" />
-                </ItemsControl.LayoutTransform>
-
-                <!--Use a horizontal stack panel to wrap list of collections.
+				<!--Use a horizontal stack panel to wrap list of collections.
 			We can replace this with a custom panel for stack positioning
 			and user interactions.-->
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <local:TimelinePanel
-							BeginDate="{Binding ElementName=Dates, Path=LowerValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=StartDate}" 
-							EndDate="{Binding ElementName=Dates, Path=UpperValue, Mode=TwoWay, Converter={StaticResource DateSlider}, ConverterParameter=EndDate}"
-							/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<local:TimelinePanel/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
 
-
-
-                <ItemsControl.ItemTemplate>
+				<ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel x:Name="Card" VerticalAlignment="Center">
                             <Border BorderBrush="Gainsboro"
@@ -102,13 +93,13 @@
                         <Border BorderThickness="{TemplateBinding BorderThickness}"
 								BorderBrush="{TemplateBinding BorderBrush}"
 								Background="{TemplateBinding Background}">
-                            <ScrollViewer CanContentScroll="True" 
+							<ScrollViewer CanContentScroll="True" 
                                           Padding="{TemplateBinding Padding}"
                                           Focusable="False"
                                           HorizontalScrollBarVisibility="Visible"
-                                          VerticalScrollBarVisibility="Visible">
-                                <ItemsPresenter />
-                            </ScrollViewer>
+                                          VerticalScrollBarVisibility="Hidden">
+								<ItemsPresenter />
+		                    </ScrollViewer>
                         </Border>
                     </ControlTemplate>
                 </ItemsControl.Template>
