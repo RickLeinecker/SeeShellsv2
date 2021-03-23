@@ -119,6 +119,16 @@ namespace SeeShellsV2.UI
 			return finalSize;
 		}
 
+		protected override void OnRender(DrawingContext dc)
+		{
+			base.OnRender(dc);
+
+			if (Scale >= cardsVisibleScale)
+				return;
+
+			DrawRectangles(dc);
+		}
+
 		public ScrollViewer ScrollOwner { get; set; }
 		public bool CanHorizontallyScroll { get; set; }
 		public bool CanVerticallyScroll { get; set; }
@@ -145,7 +155,7 @@ namespace SeeShellsV2.UI
 		public void SetHorizontalOffset(double offset) { throw new NotImplementedException(); }
 		public void SetVerticalOffset(double offset) { throw new NotImplementedException(); }
 
-		private readonly double minScale = 0.1;
+		private readonly double minScale = 0.02;
 		private readonly double maxScale = 1.0;
 		private readonly double scaleDelay = 3.0;
 		private readonly double minResolution = 8;
@@ -160,7 +170,8 @@ namespace SeeShellsV2.UI
 				new FrameworkPropertyMetadata(
 					1.0,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
-					FrameworkPropertyMetadataOptions.AffectsMeasure,
+					FrameworkPropertyMetadataOptions.AffectsMeasure |
+					FrameworkPropertyMetadataOptions.AffectsRender,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
@@ -181,7 +192,8 @@ namespace SeeShellsV2.UI
 				new FrameworkPropertyMetadata(
 					DateTime.MinValue,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
-					FrameworkPropertyMetadataOptions.AffectsMeasure,
+					FrameworkPropertyMetadataOptions.AffectsMeasure |
+					FrameworkPropertyMetadataOptions.AffectsRender,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
@@ -214,7 +226,8 @@ namespace SeeShellsV2.UI
 				new FrameworkPropertyMetadata(
 					DateTime.MaxValue,
 					FrameworkPropertyMetadataOptions.BindsTwoWayByDefault |
-					FrameworkPropertyMetadataOptions.AffectsMeasure,
+					FrameworkPropertyMetadataOptions.AffectsMeasure |
+					FrameworkPropertyMetadataOptions.AffectsRender,
 					(o, args) => // callback
 					{
 						TimelinePanel t = o as TimelinePanel;
@@ -264,7 +277,7 @@ namespace SeeShellsV2.UI
 						DateTime b = (DateTime)v;
 
 						if (b >= t.AbsoluteEndDate)
-							return t.AbsoluteEndDate - new TimeSpan(0, 1, 0);
+							return t.AbsoluteEndDate - new TimeSpan(0, 0, 1);
 
 						return b;
 					}
@@ -298,7 +311,7 @@ namespace SeeShellsV2.UI
 						DateTime e = (DateTime)v;
 
 						if (e <= t.AbsoluteBeginDate)
-							return t.AbsoluteBeginDate + new TimeSpan(0, 1, 0);
+							return t.AbsoluteBeginDate + new TimeSpan(0, 0, 1);
 
 						return e;
 					}
@@ -399,7 +412,11 @@ namespace SeeShellsV2.UI
 						ScaleTransform s = t.LayoutTransform as ScaleTransform;
 						s.ScaleX = s.ScaleY = t.Scale;
 					},
-					(o, v) => Math.Clamp((double)v, 0.05, 1.0) // validation
+					(o, v) => // validation
+					{
+						TimelinePanel t = o as TimelinePanel;
+						return Math.Clamp((double)v, t.minScale, t.maxScale);
+					}
 				)
 			);
 
@@ -415,7 +432,50 @@ namespace SeeShellsV2.UI
 
 		public static readonly DependencyProperty ResolutionProp = ResolutionPropKey.DependencyProperty;
 
-		private int SearchGeneratorItems(DateTime date)
+		private void DrawRectangles(DrawingContext dc)
+		{
+			double maybeWidth = 168.0;
+			double maybeHeight = 87.0;
+			double maybeMargin = 5.0;
+
+			double calculatedBinWidth = Math.Max(ActualWidth / (VisibleSpan / ColumnSpan), maybeWidth);
+			TimeSpan calculatedPixelSpan = ColumnSpan / calculatedBinWidth;
+
+			int first = (int)Math.Floor((BeginDate - AbsoluteBeginDate) / ColumnSpan);
+			int last = (int)Math.Ceiling((EndDate - AbsoluteBeginDate) / ColumnSpan);
+
+			double[] binsHeights = new double[last - first + 1];
+
+			int begin = SearchGeneratorItems(BeginDate - ColumnSpan);
+			int end = SearchGeneratorItems(EndDate + ColumnSpan);
+
+			for (int i = begin; i <= end; i++)
+			{
+				if (ItemContainerGenerator is ItemContainerGenerator generator &&
+					i >= 0 && i < generator.Items.Count &&
+					generator.Items[i] is ITimelineEvent item)
+				{
+					DateTime date = item.TimeStamp;
+					int bucket = (int)((date - AbsoluteBeginDate) / ColumnSpan);
+
+					if (bucket >= first && bucket <= last)
+					{
+						binsHeights[bucket - first] += Math.Ceiling(maybeHeight);
+
+						double x = maybeMargin + calculatedBinWidth * bucket - ((BeginDate - AbsoluteBeginDate) / calculatedPixelSpan) + (maybeWidth == 0.0 ? 0.0 : (calculatedBinWidth - maybeWidth) / 2.0);
+						double y = ActualHeight - binsHeights[bucket - first];
+						double width = ((maybeWidth == 0) ? calculatedBinWidth : maybeWidth) - 2.0 * maybeMargin;
+						double height = Math.Ceiling(maybeHeight) - 2.0 * maybeMargin;
+						var bounds = new Rect(x, y, width, height);
+						dc.DrawRectangle(Brushes.Green, null, bounds);
+					}
+				}
+			}
+
+			ExtentHeight = binsHeights.Max();
+		}
+
+        private int SearchGeneratorItems(DateTime date)
 		{
 			ItemContainerGenerator generator = ItemContainerGenerator as ItemContainerGenerator;
 
@@ -475,22 +535,7 @@ namespace SeeShellsV2.UI
 				return;
 
 			if (Scale < cardsVisibleScale)
-			{
-				for (var c = BeginDate - ColumnSpan * (((BeginDate - AbsoluteBeginDate) / ColumnSpan) % 1); c <= EndDate + ColumnSpan; c = c + ColumnSpan)
-				{
-					int b = SearchGeneratorItems(c);
-					int e = SearchGeneratorItems(c + ColumnSpan);
-
-					Rectangle rect = new Rectangle();
-					rect.HorizontalAlignment = HorizontalAlignment.Stretch;
-					rect.Height = 50 * (e - b) * Resolution / (4 * maxResolution);
-					rect.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x0F, 0x83, 0x0C)); // #0F830C
-					SetDate(rect, c);
-					AddInternalChild(rect);
-				}
-
 				return;
-			}
 
 			int begin = SearchGeneratorItems(BeginDate - ColumnSpan);
 			int end = SearchGeneratorItems(EndDate + ColumnSpan);
