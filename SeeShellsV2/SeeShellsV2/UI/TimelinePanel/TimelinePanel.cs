@@ -101,7 +101,7 @@ namespace SeeShellsV2.UI
 					binsHeights[bucket - first] += Math.Ceiling(child.DesiredSize.Height);
 
 					double x = calculatedBinWidth * bucket - ((BeginDate - AbsoluteBeginDate) / calculatedPixelSpan) + (minColumnWidth == 0.0 ? 0.0 : (calculatedBinWidth - minColumnWidth) / 2.0);
-					double y = finalSize.Height - binsHeights[bucket - first];
+					double y = finalSize.Height - binsHeights[bucket - first] + VerticalOffset;
 					double width = (minColumnWidth == 0) ? calculatedBinWidth : minColumnWidth;
 					double height = Math.Ceiling(child.DesiredSize.Height);
 					var bounds = new Rect(x, y, width, height);
@@ -463,7 +463,7 @@ namespace SeeShellsV2.UI
 						binsHeights[bucket - first] += Math.Ceiling(maybeHeight);
 
 						double x = maybeMargin + calculatedBinWidth * bucket - ((BeginDate - AbsoluteBeginDate) / calculatedPixelSpan) + (maybeWidth == 0.0 ? 0.0 : (calculatedBinWidth - maybeWidth) / 2.0);
-						double y = ActualHeight - binsHeights[bucket - first];
+						double y = ActualHeight - binsHeights[bucket - first] + VerticalOffset;
 						double width = ((maybeWidth == 0) ? calculatedBinWidth : maybeWidth) - 2.0 * maybeMargin;
 						double height = Math.Ceiling(maybeHeight) - 2.0 * maybeMargin;
 						var bounds = new Rect(x, y, width, height);
