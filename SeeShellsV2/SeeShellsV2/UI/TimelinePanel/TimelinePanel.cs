@@ -9,11 +9,15 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Globalization;
 
-using SeeShellsV2.Utilities;
+
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+
+using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.UI
 {
@@ -59,7 +63,7 @@ namespace SeeShellsV2.UI
 
 		private Size MaxElementSize { get; set; }
 		private bool ShowCards { get; set; }
-		private static bool ContinuousScale => true;
+		private static bool ContinuousScale => false;
 
 		private void SetResolutionAndScale()
 		{
@@ -82,6 +86,43 @@ namespace SeeShellsV2.UI
 				SetValue(ResolutionPropKey, newResolution);
 				SetValue(ColumnSpanPropKey, AbsoluteSpan / Resolution);
 			}
+		}
+
+		private CancellationTokenSource tokenSource = null;
+
+        protected override void OnItemsChanged(object sender, ItemsChangedEventArgs args)
+        {
+			ItemContainerGenerator generator = sender as ItemContainerGenerator;
+
+			int index = ItemContainerGenerator.IndexFromGeneratorPosition(args.Position);
+			object o = generator.Items[index];
+
+			if (tokenSource != null)
+				tokenSource.Cancel();
+
+			tokenSource = new CancellationTokenSource();
+
+			Task.Run(() =>
+			{
+				Thread.Sleep(777);
+				if (!tokenSource.Token.IsCancellationRequested)
+					Dispatcher.BeginInvoke((Action)(() =>
+					{
+						AbsoluteBeginDate = generator.Items.OfType<ITimelineEvent>().First().TimeStamp;
+						AbsoluteEndDate = generator.Items.OfType<ITimelineEvent>().Last().TimeStamp;
+
+						BeginDateInternal = AbsoluteBeginDate;
+						EndDateInternal = AbsoluteEndDate;
+						BeginDateInternal = AbsoluteBeginDate;
+
+						InvalidateMeasure();
+					}));
+			}, tokenSource.Token);
+		}
+
+        protected override bool ShouldItemsChangeAffectLayoutCore(bool areItemChangesLocal, ItemsChangedEventArgs args)
+		{
+			return false;
 		}
 
 		protected override Size MeasureOverride(Size availableSize)
@@ -198,9 +239,13 @@ namespace SeeShellsV2.UI
 			double minlineSpacing = 1.5 * testText.Width;
 			double maxVisibleLineCount = ActualWidth / minlineSpacing;
 
-			// magic
 			TimeSpan lineSpan = new TimeSpan(1L << (int)Math.Ceiling(Math.Log2(VisibleSpan.Ticks / maxVisibleLineCount)));
-			IEnumerable<(int, DateTime)> dates = from x in Enumerable.Range((int) ((BeginDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks), (int)((EndDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks)+1) select (x, AbsoluteBeginDate + x * lineSpan);
+			int begin = (int)((BeginDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks);
+			int end = (int)((EndDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks);
+			if (begin > end)
+				begin = begin.Swap(ref end);
+			
+			IEnumerable<(int, DateTime)> dates = from x in Enumerable.Range(begin-1, end - begin + 2) select (x, AbsoluteBeginDate + x * lineSpan);
 
 			double lastX = (dates.First().Item2 - BeginDate) / VisibleSpan * ActualWidth;
 			foreach ((int idx, DateTime date) in dates)
@@ -299,34 +344,45 @@ namespace SeeShellsV2.UI
 			Point p = Mouse.GetPosition(ScrollOwner);
 			double NormX = p.X / ActualWidth;
 
-			if (BeginDateInternal == AbsoluteBeginDate)
-			{
-				TempEnd = EndDateInternal.Add((VisibleSpan / 10));
+			TempBegin = BeginDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
+			TempEnd = EndDateInternal.Add((VisibleSpan / 5) * (NormX));
 
-				EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
 
-				BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
+			BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
 
-			}
-			else if (EndDateInternal == AbsoluteEndDate)
-			{
-				TempBegin = BeginDateInternal.Subtract((VisibleSpan / 10));
+			//if (BeginDateInternal == AbsoluteBeginDate)
+			//{
+			//	TempEnd = EndDateInternal.Add((VisibleSpan / 10));
 
-				BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			//	EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
 
-				BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
-			}
-			else
-			{
-				TempBegin = BeginDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
-				TempEnd = EndDateInternal.Add((VisibleSpan / 5) * (NormX));
+			//	BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
 
-				BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
-				EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			//}
+			//else if (EndDateInternal == AbsoluteEndDate)
+			//{
+			//	TempBegin = BeginDateInternal.Subtract((VisibleSpan / 10));
 
-				BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
-				BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
-			}
+			//	BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+			//	BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			//}
+			//else
+			//{
+			//	TempBegin = BeginDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
+			//	TempEnd = EndDateInternal.Add((VisibleSpan / 5) * (NormX));
+
+			//	BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			//	EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+			//	BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			//	BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
+			//}
+
+
 			//DoubleAnimation ZoomAnimator = new DoubleAnimation(ZoomInternal, ZoomInternal - 5, new Duration(TimeSpan.FromSeconds(0.5/ Math.Sqrt(ZoomInternal))));
 			//BeginAnimation(ZoomProp, ZoomAnimator, HandoffBehavior.Compose);
 		}
@@ -395,27 +451,38 @@ namespace SeeShellsV2.UI
 				DateTime beginDate = AbsoluteBeginDate + ColumnSpan * (HorizontalOffset - ((dX / ActualWidth) * VisibleSpan) / ColumnSpan);
 				DateTime endDate = beginDate + VisibleSpan;
 
-				if(BeginDateInternal == AbsoluteBeginDate && BeginDate > beginDate)
+				if (beginDate > BeginDate)
 				{
-					EndDateInternal = AbsoluteBeginDate + VisibleSpan;
-				}
-				else if (EndDateInternal == AbsoluteEndDate && EndDate < endDate)
-				{
-					BeginDateInternal = AbsoluteEndDate - VisibleSpan;
+					EndDateInternal = endDate;
+					BeginDateInternal = beginDate;
 				}
 				else
 				{
-					if (beginDate > BeginDate)
-					{
-						EndDateInternal = endDate;
-						BeginDateInternal = beginDate;
-					}
-					else
-					{
-						BeginDateInternal = beginDate;
-						EndDateInternal = endDate;
-					}
+					BeginDateInternal = beginDate;
+					EndDateInternal = endDate;
 				}
+
+				//if (BeginDateInternal == AbsoluteBeginDate && BeginDate > beginDate)
+				//{
+				//	EndDateInternal = AbsoluteBeginDate + VisibleSpan;
+				//}
+				//else if (EndDateInternal == AbsoluteEndDate && EndDate < endDate)
+				//{
+				//	BeginDateInternal = AbsoluteEndDate - VisibleSpan;
+				//}
+				//else
+				//{
+				//	if (beginDate > BeginDate)
+				//	{
+				//		EndDateInternal = endDate;
+				//		BeginDateInternal = beginDate;
+				//	}
+				//	else
+				//	{
+				//		BeginDateInternal = beginDate;
+				//		EndDateInternal = endDate;
+				//	}
+				//}
 			}
 		}
 
@@ -447,7 +514,7 @@ namespace SeeShellsV2.UI
 			InvalidateVisual();
 		}
 
-		private readonly double minScale = 0.01;
+		private readonly double minScale = 0.0;
 		private readonly double maxScale = 1.0;
 
 		public static readonly DependencyProperty ZoomProp =
@@ -522,11 +589,11 @@ namespace SeeShellsV2.UI
 						if (b >= t.EndDate)
 							return t.EndDate - new TimeSpan(0, 0, 1);
 
-						if (b >= t.AbsoluteEndDate)
-							return t.AbsoluteEndDate - new TimeSpan(0, 0, 1);
+						//if (b >= t.AbsoluteEndDate)
+						//	return t.AbsoluteEndDate - new TimeSpan(0, 0, 1);
 
-						if (b < t.AbsoluteBeginDate)
-							return t.AbsoluteBeginDate;
+						//if (b < t.AbsoluteBeginDate)
+						//	return t.AbsoluteBeginDate;
 
 						return b;
 					}
@@ -556,11 +623,11 @@ namespace SeeShellsV2.UI
 						if (e <= t.BeginDate)
 							return t.BeginDate + new TimeSpan(0, 0, 1);
 
-						if (e > t.AbsoluteEndDate)
-							return t.AbsoluteEndDate;
+						//if (e > t.AbsoluteEndDate)
+						//	return t.AbsoluteEndDate;
 
-						if (e <= t.AbsoluteBeginDate)
-							return t.AbsoluteBeginDate + new TimeSpan(0, 0, 1);
+						//if (e <= t.AbsoluteBeginDate)
+						//	return t.AbsoluteBeginDate + new TimeSpan(0, 0, 1);
 
 						return e;
 					}
@@ -655,8 +722,8 @@ namespace SeeShellsV2.UI
 						if (value <= TimeSpan.Zero)
 							return new TimeSpan(0, 0, 1);
 
-						if (value > t.AbsoluteSpan)
-							return t.AbsoluteSpan;
+						//if (value > t.AbsoluteSpan)
+						//	return t.AbsoluteSpan;
 
 						return v;
 					}

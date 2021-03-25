@@ -68,7 +68,7 @@
                                 MaxWidth="250">
                                 <Border.Resources>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="TextWrapping" Value="Wrap" />
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
                                     </Style>
                                 </Border.Resources>
                                 <Border.Background>
