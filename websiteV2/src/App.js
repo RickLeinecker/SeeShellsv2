@@ -34,9 +34,20 @@ const styles = {
     display: 'flex',
     width: '100%',
     height: '100%',
+    overflow: 'auto',
+    borderRadius: '0',
   },
 };
 
+/*
+*   App.js
+*   - the outermost portion of the website
+*   - handles all routes and renders the MenuBar, page content associated with the current route, and the Footer
+*   - new pages need to be declared here as follows:
+*       - <Route exact path="/pathname">
+*       -    <PathPage/> (optional: add a subpage field to be handled in PathPage.js)
+*       - </Route>
+*/
 function App(props) {
   return (
     <Paper className={props.classes.application}>
@@ -48,15 +59,76 @@ function App(props) {
           <Route exact path="/">
             <FrontPage/>
           </Route>
+
           <Route exact path="/about">
-            <AboutPage/>
+            <AboutPage subpage="about"/>    
           </Route>
+          <Route exact path="/about/registry">
+            <AboutPage subpage="registry"/>
+          </Route>
+          <Route exact path="/about/shellbags">
+            <AboutPage subpage="shellbags"/>
+          </Route>
+          <Route exact path="/about/seeshells">
+            <AboutPage subpage="seeshells"/>
+          </Route>
+          <Route exact path="/about/parser">
+            <AboutPage subpage="parser"/>
+          </Route>
+          <Route exact path="/about/analysis">
+            <AboutPage subpage="analysis"/>
+          </Route>
+          <Route exact path="/about/timeline">
+            <AboutPage subpage="timeline"/>
+          </Route>
+          <Route exact path="/about/filters">
+            <AboutPage subpage="filters"/>
+          </Route>
+          <Route exact path="/about/case-studies">
+            <AboutPage subpage="case-studies"/>
+          </Route>
+
           <Route exact path="/download">
             <DownloadPage/>
           </Route>
+
           <Route exact path="/documentation">
-            <DocumentationPage/>
+            <DocumentationPage subpage="documentation"/>
           </Route>
+          <Route exact path="/documentation/online">
+            <DocumentationPage subpage="online"/>
+          </Route>
+          <Route exact path="/documentation/offline">
+            <DocumentationPage subpage="offline"/>
+          </Route>
+          <Route exact path="/documentation/advanced">
+            <DocumentationPage subpage="advanced"/>
+          </Route>
+          <Route exact path="/documentation/toolbar">
+            <DocumentationPage subpage="toolbar"/>
+          </Route>
+          <Route exact path="/documentation/data">
+            <DocumentationPage subpage="data"/>
+          </Route>
+          <Route exact path="/documentation/timeline">
+            <DocumentationPage subpage="timeline"/>
+          </Route>
+          <Route exact path="/documentation/events">
+            <DocumentationPage subpage="events"/>
+          </Route>
+          <Route exact path="/documentation/filters">
+            <DocumentationPage subpage="filters"/>
+          </Route>
+          <Route exact path="/documentation/export">
+            <DocumentationPage subpage="export"/>
+          </Route>
+          <Route exact path="/documentation/import">
+            <DocumentationPage subpage="import"/>
+          </Route>
+          <Route exact path="/documentation/licensing">
+            <DocumentationPage subpage="licensing"/>
+          </Route>
+
           <Route exact path="/developers">
             <DeveloperPage/>
           </Route>

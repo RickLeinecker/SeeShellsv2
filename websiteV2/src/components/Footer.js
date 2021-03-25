@@ -15,6 +15,10 @@ const styles = {
     }
 };
 
+/*
+*   Footer.js
+*   - renders a simple footer bar
+*/
 class Footer extends React.Component {
     render() {
         return(

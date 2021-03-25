@@ -1,11 +1,13 @@
 import React from 'react';
-import oldLogo from '../assets/oldLogo.png';
+import logo from '../assets/seeshellsLogo-650.png';
 import beach from '../assets/beach2.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Grow from '@material-ui/core/Grow';
 import ReactPlayer from "react-player";
 
 const styles = {
@@ -15,6 +17,7 @@ const styles = {
         justifyContent: 'center',
         height: '100%',
         width: '100%',
+        overflow: 'auto',
     },
     image: {
         display: 'grid',
@@ -26,8 +29,8 @@ const styles = {
         overflow: 'hidden',
     },
     logo: {
-        height: '100px',
-        width: '100px',
+        height: '150px',
+        width: '150px',
         display: 'flex',
         float: 'left',
     },
@@ -48,15 +51,13 @@ const styles = {
         height: '70%',
         position: 'absolute',
         alignSelf: 'center',
-        minWidth: '300px',
+        minWidth: '360px',
         justifySelf: 'center',
     },
     title: {
         fontSize: '50px',
         fontWeight: 'bold',
         textAlign: 'center',
-        padding: '0px',
-        margin: '0px',
         marginBottom: '5%',
     },
     button: {
@@ -78,6 +79,10 @@ const styles = {
     },
 }
 
+/*
+*   DownloadPage.js
+*   - serves the link to the SeeShells executable, pulled directly from github releases to the SeeShells repository
+*/
 class DownloadPage extends React.Component {
     render() {
         return(
@@ -87,15 +92,16 @@ class DownloadPage extends React.Component {
                         <div id='stars'/>
                         <div id='stars2'/>
                         <div id='stars3'/>
-                    
-                        <Paper className={this.props.classes.contentContainer}>
-                            <p className={this.props.classes.title}>Download SeeShells</p>
-                            <img src={oldLogo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                            <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
-                            <div className={this.props.classes.video}>
-                                <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                            </div>
-                        </Paper>
+                        <Grow in={true}>
+                            <Paper className={this.props.classes.contentContainer}>
+                                <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
+                                <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                                <Button className={this.props.classes.button} href="https://github.com/RickLeinecker/SeeShells/releases/latest/download/SeeShells.exe">SEESHELLS.EXE</Button>
+                                <div className={this.props.classes.video}>
+                                    <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                                </div>
+                            </Paper>
+                        </Grow>
                     </div>
                 </Paper>
             </Paper>
