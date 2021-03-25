@@ -36,6 +36,9 @@ namespace SeeShellsV2.UI
 		}
 
 		public double Zoom { get => (double)GetValue(ZoomProp); set => SetValue(ZoomProp, value); }
+		public double AnimateBegin { get => (double)GetValue(AnimateBeginProp); set => SetValue(AnimateBeginProp, value); }
+		public double AnimateEnd { get => (double)GetValue(AnimateEndProp); set => SetValue(AnimateEndProp, value); }
+
 		public DateTime BeginDate { get => (DateTime)GetValue(BeginDateProp); set => SetValue(BeginDateProp, value); }
 		public DateTime EndDate { get => (DateTime)GetValue(EndDateProp); set => SetValue(EndDateProp, value); }
 
@@ -226,44 +229,12 @@ namespace SeeShellsV2.UI
 		public double ViewportHeight => ActualHeight;
 		public double VerticalOffset {get; private set;}
 
-		private const double LineSize = 100;
+		private const double LineSize = 10;
 		Point? lastDragPoint;
-
 		public void LineUp() { SetVerticalOffset(VerticalOffset - LineSize); }
 		public void LineDown() { SetVerticalOffset(VerticalOffset + LineSize); }
-		public void LineLeft() 
-		{
-			DateTime TempBegin = BeginDateInternal.Subtract(VisibleSpan / 10);
-			DateTime TempEnd = EndDateInternal.Subtract(VisibleSpan / 10);
-
-			if (TempBegin.CompareTo(AbsoluteBeginDate) <= 0)
-			{
-				BeginDateInternal = AbsoluteBeginDate;
-				
-			}
-			else
-			{
-				BeginDateInternal = TempBegin;
-				EndDateInternal = TempEnd;
-			}
-		}
-
-		public void LineRight() 
-		{
-			DateTime TempBegin = BeginDateInternal.Add(VisibleSpan / 10);
-			DateTime TempEnd = EndDateInternal.Add(VisibleSpan / 10);
-
-			if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
-			{
-				EndDateInternal = AbsoluteEndDate;
-				
-			}
-			else
-			{
-				EndDateInternal = TempEnd;
-				BeginDateInternal = TempBegin;
-			}
-		}
+		public void LineLeft() { SetHorizontalOffset(HorizontalOffset - LineSize);}
+		public void LineRight() { SetHorizontalOffset(HorizontalOffset + LineSize);}
 		public Rect MakeVisible(Visual visual, Rect rectangle)
 		{
 			return new Rect(HorizontalOffset,
@@ -271,57 +242,90 @@ namespace SeeShellsV2.UI
 		}
 		public void MouseWheelDown()
 		{
-			DateTime TempBegin = BeginDateInternal.Subtract(VisibleSpan / 10);
-			DateTime TempEnd = EndDateInternal.Add(VisibleSpan / 10);
+			DoubleAnimation BeginAnimator;
+			DoubleAnimation EndAnimator;
+			DateTime TempBegin;
+			DateTime TempEnd;
 
-			DoubleAnimation animator = new DoubleAnimation(ZoomInternal, ZoomInternal - Math.Sqrt(ZoomInternal), new Duration(TimeSpan.FromSeconds(0.5/ Math.Sqrt(ZoomInternal))));
-			BeginAnimation(ZoomProp, animator, HandoffBehavior.Compose);
+			if (Keyboard.Modifiers == ModifierKeys.Control)
+			{
+				SetVerticalOffset(VerticalOffset - LineSize);
+				return;
+			}
+			if (Keyboard.Modifiers == ModifierKeys.Alt)
+			{
+				SetHorizontalOffset(HorizontalOffset - LineSize);
+				return;
+			}
 
-			//if (TempBegin.CompareTo(AbsoluteBeginDate) <= 0)
-			//{
-			//	BeginDateInternal = AbsoluteBeginDate;
-			//	if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
-			//	{
-			//		EndDateInternal = AbsoluteEndDate;
-			//	}
-			//	else
-			//	{
-			//		EndDateInternal = TempEnd;
-			//	}
-			//}
-			//else
-			//{
-			//	BeginDateInternal = TempBegin;
-			//	if (TempEnd.CompareTo(AbsoluteEndDate) >= 0)
-			//	{
-			//		EndDateInternal = AbsoluteEndDate;
-			//	}
-			//	else
-			//	{
-			//		EndDateInternal = TempEnd;
-			//	}
-			//}
+			Point p = Mouse.GetPosition(ScrollOwner);
+			double NormX = p.X / ActualWidth;
+
+			if (BeginDateInternal == AbsoluteBeginDate)
+			{
+				TempEnd = EndDateInternal.Add((VisibleSpan / 10));
+
+				EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+				BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
+
+			}
+			else if (EndDateInternal == AbsoluteEndDate)
+			{
+				TempBegin = BeginDateInternal.Subtract((VisibleSpan / 10));
+
+				BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+				BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			}
+			else
+			{
+				TempBegin = BeginDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
+				TempEnd = EndDateInternal.Add((VisibleSpan / 5) * (NormX));
+
+				BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+				EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+				BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+				BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
+			}
+			//DoubleAnimation ZoomAnimator = new DoubleAnimation(ZoomInternal, ZoomInternal - 5, new Duration(TimeSpan.FromSeconds(0.5/ Math.Sqrt(ZoomInternal))));
+			//BeginAnimation(ZoomProp, ZoomAnimator, HandoffBehavior.Compose);
 		}
 		public void MouseWheelUp()
 		{
-			DateTime TempBegin = BeginDateInternal.Add(VisibleSpan / 10);
-			DateTime TempEnd = EndDateInternal.Subtract(VisibleSpan / 10);
+			if (Keyboard.Modifiers == ModifierKeys.Control)
+			{
+				SetVerticalOffset(VerticalOffset + LineSize);
+				return;
+			}
+			if (Keyboard.Modifiers == ModifierKeys.Alt)
+			{
+				SetHorizontalOffset(HorizontalOffset + LineSize);
+				return;
+			}
 
-			DoubleAnimation animator = new DoubleAnimation(ZoomInternal, ZoomInternal + Math.Sqrt(ZoomInternal), new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
-			BeginAnimation(ZoomProp, animator, HandoffBehavior.Compose);
+			Point p = Mouse.GetPosition(ScrollOwner);
+			double NormX = p.X / ActualWidth;
 
-			//if (TempBegin.CompareTo(TempEnd) < 0)
-			//{
-			//	BeginDateInternal = TempBegin;
-			//	EndDateInternal = TempEnd;
-			//}
+			DateTime TempBegin = BeginDateInternal.Add((VisibleSpan / 5) * NormX);
+			DateTime TempEnd = EndDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
+
+			DoubleAnimation BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			DoubleAnimation EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+
+			BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
+
+			//DoubleAnimation ZoomAnimator = new DoubleAnimation(ZoomInternal, ZoomInternal + 5, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
+			//BeginAnimation(ZoomProp, ZoomAnimator, HandoffBehavior.Compose);
 		}
 		public void MouseWheelLeft() { }
-		public void MouseWheelRight() {  }
-		public void PageDown() { SetVerticalOffset(VerticalOffset + ViewportHeight); }
-		public void PageLeft() {  }
-		public void PageRight() {  }
-		public void PageUp() { SetVerticalOffset(VerticalOffset - ViewportHeight); }
+		public void MouseWheelRight() { }
+		public void PageDown() { SetVerticalOffset(ExtentHeight - ViewportHeight); }
+		public void PageLeft() { SetHorizontalOffset(HorizontalOffset - LineSize); }
+		public void PageRight() { SetHorizontalOffset(HorizontalOffset + LineSize); }
+		public void PageUp() { SetVerticalOffset(0); }
 
 		private void TimelinePanel_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
@@ -347,8 +351,33 @@ namespace SeeShellsV2.UI
 				lastDragPoint = posNow;
 
 
-				SetHorizontalOffset(HorizontalOffset - ((dX / ActualWidth) * VisibleSpan) / ColumnSpan);
 				SetVerticalOffset(VerticalOffset + dY);
+
+
+				DateTime beginDate = AbsoluteBeginDate + ColumnSpan * (HorizontalOffset - ((dX / ActualWidth) * VisibleSpan) / ColumnSpan);
+				DateTime endDate = beginDate + VisibleSpan;
+
+				if(BeginDateInternal == AbsoluteBeginDate && BeginDate > beginDate)
+				{
+					EndDateInternal = AbsoluteBeginDate + VisibleSpan;
+				}
+				else if (EndDateInternal == AbsoluteEndDate && EndDate < endDate)
+				{
+					BeginDateInternal = AbsoluteEndDate - VisibleSpan;
+				}
+				else
+				{
+					if (beginDate > BeginDate)
+					{
+						EndDateInternal = endDate;
+						BeginDateInternal = beginDate;
+					}
+					else
+					{
+						BeginDateInternal = beginDate;
+						EndDateInternal = endDate;
+					}
+				}
 			}
 		}
 
@@ -363,20 +392,14 @@ namespace SeeShellsV2.UI
 		{
 			offset = Math.Clamp(offset, 0, ExtentWidth - ViewportWidth);
 
-			DateTime beginDate = AbsoluteBeginDate + ColumnSpan * offset;
-			DateTime endDate = beginDate + VisibleSpan;
+			DateTime TempBegin = AbsoluteBeginDate.Add(ColumnSpan * offset);
+			DateTime TempEnd = TempBegin.Add(VisibleSpan);
 
-			// make sure VisibleSpan is always positive
-			if (beginDate > BeginDate)
-			{
-				EndDateInternal = endDate;
-				BeginDateInternal = beginDate;
-			}
-			else
-			{
-				BeginDateInternal = beginDate;
-				EndDateInternal = endDate;
-			}
+			DoubleAnimation BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5)));
+			DoubleAnimation EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5)));
+
+			BeginAnimation(AnimateBeginProp, BeginAnimator, HandoffBehavior.Compose);
+			BeginAnimation(AnimateEndProp, EndAnimator, HandoffBehavior.Compose);
 		}
 
 		public void SetVerticalOffset(double offset)
@@ -408,6 +431,36 @@ namespace SeeShellsV2.UI
 					(o, v) => Math.Max((double)v, 1.0) // validation
 				)
 			);
+
+		public static readonly DependencyProperty AnimateBeginProp =
+		DependencyProperty.Register(
+			nameof(AnimateBegin),
+			typeof(double),
+			typeof(TimelinePanel),
+			new FrameworkPropertyMetadata(
+				1.0,
+				(o, args) => // callback
+					{
+					TimelinePanel t = o as TimelinePanel;
+					t.SetCurrentValue(BeginDateProp, new DateTime((long)t.AnimateBegin));
+				}
+			)
+		);
+
+		public static readonly DependencyProperty AnimateEndProp =
+		DependencyProperty.Register(
+			nameof(AnimateEnd),
+			typeof(double),
+			typeof(TimelinePanel),
+			new FrameworkPropertyMetadata(
+				1.0,
+				(o, args) => // callback
+				{
+					TimelinePanel t = o as TimelinePanel;
+					t.SetCurrentValue(EndDateProp, new DateTime((long)t.AnimateEnd));
+				}
+			)
+		);
 
 		public static readonly DependencyProperty BeginDateProp =
 			DependencyProperty.Register(
