@@ -142,6 +142,16 @@ namespace SeeShellsV2.UI
 			return finalSize;
 		}
 
+		protected override void OnRender(DrawingContext dc)
+		{
+			base.OnRender(dc);
+
+			DrawTimelineAxis(dc);
+
+			if (!ShowCards)
+				DrawRectangles(dc);
+		}
+
 		private void DrawRectangles(DrawingContext dc)
 		{
 			SetResolutionAndScale();
@@ -158,7 +168,68 @@ namespace SeeShellsV2.UI
 			ExtentHeight = columns.Values.Any() ? columns.Values.Max() : 0;
 		}
 
-		private Dictionary<long, int> columns = new Dictionary<long, int>();
+
+		private double axisHeight = 32;
+		private double axisBorderThickness = 4;
+		private double axisLineThickness = 1;
+		private double axisFontSize = 12.0;
+		private void DrawTimelineAxis(DrawingContext dc)
+		{
+			FontFamily content = FindResource("MahApps.Fonts.Family.Control") as FontFamily;
+
+			Brush background = FindResource("MahApps.Brushes.ThemeBackground") as Brush;
+			Brush foreground = FindResource("MahApps.Brushes.ThemeForeground") as Brush;
+			Brush gray = FindResource("MahApps.Brushes.Gray10") as Brush;
+
+			Pen line = new Pen(foreground, axisLineThickness);
+			Pen border = new Pen(foreground, axisBorderThickness);
+
+			Typeface font = new Typeface(content, FontStyles.Normal, FontWeights.Normal, FontStretches.Medium);
+
+			dc.DrawRectangle(background, border, new Rect(-axisBorderThickness/2, ActualHeight + axisBorderThickness/2 - axisHeight, ActualWidth + axisBorderThickness, axisHeight));
+
+			FormattedText testText = new FormattedText(
+				AbsoluteBeginDate.ToString(),
+				CultureInfo.CurrentCulture,
+				FlowDirection.LeftToRight,
+				font, axisFontSize, foreground, 1.0
+			);
+
+			double minlineSpacing = 1.5 * testText.Width;
+			double maxVisibleLineCount = ActualWidth / minlineSpacing;
+
+			// magic
+			TimeSpan lineSpan = new TimeSpan(1L << (int)Math.Ceiling(Math.Log2(VisibleSpan.Ticks / maxVisibleLineCount)));
+			IEnumerable<(int, DateTime)> dates = from x in Enumerable.Range((int) ((BeginDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks), (int)((EndDate - AbsoluteBeginDate).Ticks / lineSpan.Ticks)+1) select (x, AbsoluteBeginDate + x * lineSpan);
+
+			double lastX = (dates.First().Item2 - BeginDate) / VisibleSpan * ActualWidth;
+			foreach ((int idx, DateTime date) in dates)
+			{
+				if (date < BeginDate - lineSpan || date > EndDate + lineSpan)
+					continue;
+
+				FormattedText text = new FormattedText(
+					date.ToString(),
+					CultureInfo.CurrentCulture,
+					FlowDirection.LeftToRight,
+					font, axisFontSize, foreground, 1.0
+				);
+
+				double x = (date - BeginDate) / VisibleSpan * ActualWidth;
+
+				if (idx % 2 == 0)
+					dc.DrawRectangle(gray, null, new Rect(lastX, 0, Math.Abs(x - lastX), ActualHeight - axisHeight - axisBorderThickness));
+
+				dc.DrawLine(line, new Point(x, ActualHeight - axisHeight), new Point(x, ActualHeight - 0.25 * axisHeight));
+				dc.DrawText(text, new Point(x + axisBorderThickness, ActualHeight - axisHeight + axisBorderThickness));
+				lastX = x;
+			}
+
+			if (dates.Last().Item1 % 2 == 1)
+				dc.DrawRectangle(gray, null, new Rect(lastX, 0, Math.Abs(ActualWidth - lastX), ActualHeight - axisHeight - axisBorderThickness));
+		}
+
+		private Dictionary<long, double> columns = new Dictionary<long, double>();
 		private Rect GetBounds(DateTime date, double margin = 0.0)
 		{
 			double columnWidth = Math.Max(MaxElementSize.Width, (ColumnSpan / VisibleSpan) * ActualWidth);
@@ -172,9 +243,9 @@ namespace SeeShellsV2.UI
 			if (bucket >= first && bucket <= last)
 			{
 				if (!columns.ContainsKey(bucket))
-					columns.Add(bucket, 0);
+					columns.Add(bucket, axisHeight + axisBorderThickness);
 
-				columns[bucket] += (int)(Math.Ceiling(MaxElementSize.Height));
+				columns[bucket] += Math.Ceiling(MaxElementSize.Height);
 
 				double x = margin + columnWidth * bucket - ((BeginDate - AbsoluteBeginDate) / calculatedPixelSpan) + (MaxElementSize.Width == 0.0 ? 0.0 : (columnWidth - MaxElementSize.Width) / 2.0);
 				double y = ActualHeight - columns[bucket] + VerticalOffset;
@@ -184,14 +255,6 @@ namespace SeeShellsV2.UI
 			}
 
 			return new Rect(0, 0, 0, 0);
-		}
-
-		protected override void OnRender(DrawingContext dc)
-		{
-			base.OnRender(dc);
-
-			if (!ShowCards)
-				DrawRectangles(dc);
 		}
 
 		public ScrollViewer ScrollOwner { get; set; }

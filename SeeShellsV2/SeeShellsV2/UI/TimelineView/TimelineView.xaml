@@ -96,7 +96,7 @@
 							<ScrollViewer CanContentScroll="True" 
                                           Padding="{TemplateBinding Padding}"
                                           Focusable="False"
-                                          HorizontalScrollBarVisibility="Visible"
+                                          HorizontalScrollBarVisibility="Hidden"
                                           VerticalScrollBarVisibility="Hidden">
 								<ItemsPresenter />
 		                    </ScrollViewer>
