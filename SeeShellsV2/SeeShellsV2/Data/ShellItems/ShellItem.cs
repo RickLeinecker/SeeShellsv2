@@ -25,44 +25,44 @@ namespace SeeShellsV2.Data
     {
         public string Description
         {
-            init => fields["Description"] = value;
-            get => fields.GetClassOrDefault("Description", "??");
+            init => fields[nameof(Description)] = value;
+            get => fields.GetClassOrDefault(nameof(Description), "??");
         }
 
         public Place Place
         {
-            init => fields["Place"] = value;
-            get => fields.GetClassOrDefault<Place>("Place", null);
+            init { fields[nameof(Place)] = value; value.Items.Add(this); }
+            get => fields.GetClassOrDefault<Place>(nameof(Place), null);
         }
 
         public RegistryHive RegistryHive
         {
-            init => fields["RegistryHive"] = value;
-            get => fields.GetClassOrDefault<RegistryHive>("RegistryHive", null);
+            init => fields[nameof(RegistryHive)] = value;
+            get => fields.GetClassOrDefault<RegistryHive>(nameof(RegistryHive), null);
         }
 
         public byte[] Value
         {
-            init => fields["Value"] = value;
-            get => fields.GetClassOrDefault<byte[]>("Value", null);
+            init => fields[nameof(Value)] = value;
+            get => fields.GetClassOrDefault<byte[]>(nameof(Value), null);
         }
 
         public int? NodeSlot
         {
-            init => fields["NodeSlot"] = value;
-            get => fields.GetClassOrDefault<object>("NodeSlot", null) as int?;
+            init => fields[nameof(NodeSlot)] = value;
+            get => fields.GetClassOrDefault<object>(nameof(NodeSlot), null) as int?;
         }
 
         public DateTime? SlotModifiedDate
         {
-            init => fields["SlotModifiedDate"] = value;
-            get => fields.GetClassOrDefault<object>("SlotModifiedDate", null) as DateTime?;
+            init => fields[nameof(SlotModifiedDate)] = value;
+            get => fields.GetClassOrDefault<object>(nameof(SlotModifiedDate), null) as DateTime?;
         }
 
         public DateTime LastRegistryWriteDate
         {
-            init => fields["LastRegistryWriteDate"] = value;
-            get => fields.GetStructOrDefault("LastRegistryWriteDate", DateTime.MinValue);
+            init => fields[nameof(LastRegistryWriteDate)] = value;
+            get => fields.GetStructOrDefault(nameof(LastRegistryWriteDate), DateTime.MinValue);
         }
 
         public IShellItem Parent
@@ -77,32 +77,32 @@ namespace SeeShellsV2.Data
 
         public ushort Size
         {
-            init => fields["Size"] = value;
-            get => fields.GetStructOrDefault<ushort>("Size", 0);
+            init => fields[nameof(Size)] = value;
+            get => fields.GetStructOrDefault<ushort>(nameof(Size), 0);
         }
 
         public byte Type
         {
-            init => fields["Type"] = value;
-            get => fields.GetStructOrDefault<byte>("Type", 0);
+            init => fields[nameof(Type)] = value;
+            get => fields.GetStructOrDefault<byte>(nameof(Type), 0);
         }
 
         public uint Signature
         {
-            init => fields["Signature"] = value;
-            get => fields.GetStructOrDefault<uint>("Signature", 0);
+            init => fields[nameof(Signature)] = value;
+            get => fields.GetStructOrDefault<uint>(nameof(Signature), 0);
         }
 
         public string TypeName
         {
-            init => fields["TypeName"] = value;
-            get => fields.GetClassOrDefault("TypeName", "Unknown");
+            init => fields[nameof(TypeName)] = value;
+            get => fields.GetClassOrDefault(nameof(TypeName), "Unknown");
         }
 
         public string SubtypeName
         {
-            init => fields["SubtypeName"] = value;
-            get => fields.GetClassOrDefault("SubtypeName", "Unknown");
+            init => fields[nameof(SubtypeName)] = value;
+            get => fields.GetClassOrDefault(nameof(SubtypeName), "Unknown");
         }
 
         public IReadOnlyDictionary<string, object> Fields
@@ -125,5 +125,10 @@ namespace SeeShellsV2.Data
         protected Dictionary<string, object> fields = new Dictionary<string, object>();
         protected IReadOnlyCollection<IExtensionBlock> extensionBlocks = new List<IExtensionBlock>();
         protected SortedSet<IShellTag> tags = new SortedSet<IShellTag>();
+
+        public int CompareTo(IShellItem other)
+        {
+            return (RegistryHive, Place, Type, Signature).CompareTo((other.RegistryHive, other.Place, other.Type, other.Signature));
+        }
     }
 }

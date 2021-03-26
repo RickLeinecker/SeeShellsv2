@@ -37,7 +37,7 @@ namespace SeeShellsV2.UI
                 await Task.Run(() => RegImporter.ImportRegistry(false, true, hiveLocation));
 
             Selected.Current = root;
-            Selected.CurrentEnumerable = root.Children;
+            // Selected.CurrentEnumerable = root.Items;
 
             await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));
         }

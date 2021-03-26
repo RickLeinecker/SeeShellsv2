@@ -9,6 +9,49 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:CamelCaseConverter x:Key="CamelCaseConverter"/>
+        <local:UpperCaseConverter x:Key="UpperCaseConverter"/>
+
+        <DataTemplate DataType="{x:Type data:User}">
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black">
+                        USER INFORMATION
+                </TextBlock>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="SID" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding SID}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Registries Count" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding RegistryHives.Count}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+        
+        <!-- RegistryHive -->
         <DataTemplate DataType="{x:Type data:RegistryHive}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -37,8 +80,115 @@
                     <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Right"/>
                     <TextBlock Text="{Binding Path}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="User" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding User.Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:RegistryCollection}">
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black">
+                        REGISTRY COLLECTION
+                </TextBlock>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Items Count" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Items.Count}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type data:Place}">
+            <VirtualizingStackPanel
+                Margin="10"
+                Grid.IsSharedSizeScope="True"
+                IsVirtualizing="True">
+                <VirtualizingStackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </VirtualizingStackPanel.Resources>
+                <TextBlock Text="{Binding Type, Converter={StaticResource UpperCaseConverter}}" FontWeight="Black" />
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding PathName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <TextBlock FontWeight="Bold" Margin="0 10 0 0">
+                        ASSOCIATED SHELLBAGS
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="Border"
+                                    Margin="0 10 0 0"
+                                    BorderThickness="1"
+                                    Background="Transparent"
+                                    MouseLeftButtonDown="Item_MouseLeftButtonDown">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentControl Content="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </VirtualizingStackPanel>
+        </DataTemplate>
+
+        <!-- ShellItem -->
         <DataTemplate DataType="{x:Type data:ShellItem}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -124,6 +274,8 @@
                 </ItemsControl>
             </StackPanel>
         </DataTemplate>
+
+        <!-- ShellEvent -->
         <DataTemplate DataType="{x:Type data:ShellEvent}">
             <VirtualizingStackPanel
                 Margin="10"
@@ -177,7 +329,20 @@
                 <ItemsControl ItemsSource="{Binding Evidence}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="0 10 0 0" BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.TextBox.Border}">
+                            <Border Margin="0 10 0 0"
+                                    BorderThickness="1"
+                                    MouseLeftButtonDown="Item_MouseLeftButtonDown"
+                                    Background="Transparent">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
                                 <ContentControl Content="{Binding}"/>
                             </Border>
                         </DataTemplate>

@@ -23,6 +23,7 @@ namespace SeeShellsV2.UI
     {
         ISelected Selected { get; }
         IShellItemCollection ShellItems { get; }
+        IDataRepository<User> Users { get; }
     }
 
     /// <summary>
@@ -37,9 +38,8 @@ namespace SeeShellsV2.UI
             InitializeComponent();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ViewModel.Selected.CurrentEnumerable = (sender as FrameworkElement).Tag as IEnumerable<object>;
             ViewModel.Selected.Current = (sender as FrameworkElement).DataContext;
         }
     }

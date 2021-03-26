@@ -24,6 +24,7 @@ namespace SeeShellsV2.UI
     public interface IShellItemTableViewVM : IViewModel
     {
         ISelected Selected { get; }
+        IShellItemCollection ShellItems { get; }
     }
 
     /// <summary>

@@ -2,38 +2,618 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:SeeShellsV2.UI"
              xmlns:data="clr-namespace:SeeShellsV2.Data"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <Style TargetType="{x:Type TreeViewItem}">
-            <Setter Property="IsExpanded" Value="True" />
-        </Style>
+        <local:IconConverter x:Key="IconConverter"/>
+        <local:RegistryCollectionsConverter x:Key="RegistryCollectionsConverter"/>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:User}" ItemsSource="{Binding RegistryHives}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="User"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+
+            <HierarchicalDataTemplate.ItemContainerStyle>
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </HierarchicalDataTemplate.ItemContainerStyle>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:RegistryHive}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="Archive"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+            <HierarchicalDataTemplate.ItemsSource>
+                <MultiBinding Converter="{StaticResource RegistryCollectionsConverter}"
+                              ConverterParameter="Devices, Drives, Network Locations, Shellbags, MobileRetro, Database, CloudOutline, Folder">
+                    <Binding Path="Devices" />
+                    <Binding Path="Drives" />
+                    <Binding Path="NetworkLocations" />
+                    <Binding Path="Items" />
+                </MultiBinding>
+            </HierarchicalDataTemplate.ItemsSource>
+            <HierarchicalDataTemplate.ItemContainerStyle>
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Items.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </HierarchicalDataTemplate.ItemContainerStyle>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type local:RegistryCollection}" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding Items}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="{Binding Icon}"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:ShellItem}" ItemsSource="{Binding Children}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="FolderOpen"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Description}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:Drive}" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:RemovableDevice}" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:RemovableDrive}" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconFontAwesome Kind="UsbBrands"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type data:NetworkLocation}" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Background="Transparent">
+                <iconPacks:PackIconVaadinIcons Kind="Cloud"/>
+                <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
     </UserControl.Resources>
-    <Grid>
+    <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Users}">
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
+                <Setter Property="IsExpanded" Value="True"/>
+            </Style>
+        </TreeView.ItemContainerStyle>
+        <!--<TreeViewItem>
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconVaadinIcons Kind="User"/>
+                    <TextBlock Margin="5 0 0 0" Text="Devon"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconVaadinIcons Kind="Archive"/>
+                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="UsrClass.dat" ToolTip="C:\Users\User\AppData\Local\Microsoft\Windows\UsrClass.dat"/>
+                    </Grid>
+                </TreeViewItem.Header>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Database"/>
+                            <TextBlock Margin="5 0 0 0" Text="Drives"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                <TextBlock Margin="5 0 0 0" Text="C:"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconFontAwesome Kind="UsbBrands"/>
+                                <TextBlock Margin="5 0 0 0" Text="D:"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="MobileRetro"/>
+                            <TextBlock Margin="5 0 0 0" Text="Devices"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Key"/>
+                            <TextBlock Margin="5 0 0 0" Text="Registry"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_CURRENT_USER"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_USERS"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Cubes"/>
+                            <TextBlock Margin="5 0 0 0" Text="Shellbags"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <iconPacks:PackIconVaadinIcons Kind="Desktop"/>
+                                <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="My Computer"/>
+                            </Grid>
+                        </TreeViewItem.Header>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="C:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="D:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <iconPacks:PackIconVaadinIcons Kind="Bolt"/>
+                                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11 First Connected"/>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconVaadinIcons Kind="Archive"/>
+                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="NTUSER.dat" ToolTip="C:\Users\User\NTUSER.dat"/>
+                    </Grid>
+                </TreeViewItem.Header>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Key"/>
+                            <TextBlock Margin="5 0 0 0" Text="Registry"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_CURRENT_USER"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_USERS"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Cubes"/>
+                            <TextBlock Margin="5 0 0 0" Text="Shellbags"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <iconPacks:PackIconVaadinIcons Kind="Desktop"/>
+                                <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="My Computer"/>
+                            </Grid>
+                        </TreeViewItem.Header>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="C:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="D:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <iconPacks:PackIconVaadinIcons Kind="Bolt"/>
+                                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11 First Connected"/>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeViewItem>
+        </TreeViewItem>
+        <TreeViewItem>
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconVaadinIcons Kind="User"/>
+                    <TextBlock Margin="5 0 0 0" Text="User"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconVaadinIcons Kind="Archive"/>
+                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="UsrClass.dat" ToolTip="C:\Users\User\AppData\Local\Microsoft\Windows\UsrClass.dat"/>
+                    </Grid>
+                </TreeViewItem.Header>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Key"/>
+                            <TextBlock Margin="5 0 0 0" Text="Registry"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_CURRENT_USER"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_USERS"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Cubes"/>
+                            <TextBlock Margin="5 0 0 0" Text="Shellbags"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <iconPacks:PackIconVaadinIcons Kind="Desktop"/>
+                                <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="My Computer"/>
+                            </Grid>
+                        </TreeViewItem.Header>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="C:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="D:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <iconPacks:PackIconVaadinIcons Kind="Bolt"/>
+                                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11 First Connected"/>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconVaadinIcons Kind="Archive"/>
+                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="NTUSER.dat" ToolTip="C:\Users\User\NTUSER.dat"/>
+                    </Grid>
+                </TreeViewItem.Header>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Key"/>
+                            <TextBlock Margin="5 0 0 0" Text="Registry"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_CURRENT_USER"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <iconPacks:PackIconVaadinIcons Kind="Folder"/>
+                                <TextBlock Margin="5 0 0 0" Text="HKEY_USERS"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                        <TreeViewItem />
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconVaadinIcons Kind="Cubes"/>
+                            <TextBlock Margin="5 0 0 0" Text="Shellbags"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <iconPacks:PackIconVaadinIcons Kind="Desktop"/>
+                                <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="My Computer"/>
+                            </Grid>
+                        </TreeViewItem.Header>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="C:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="D:/"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem/>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            <TreeViewItem.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
+                                    <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11"/>
+                                </Grid>
+                            </TreeViewItem.Header>
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <iconPacks:PackIconVaadinIcons Kind="Bolt"/>
+                                        <TextBlock Grid.Column="1" Margin="5 0 0 0" Text="Galaxy S11 First Connected"/>
+                                    </Grid>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeViewItem>
+            </TreeViewItem>
+        </TreeViewItem>-->
+    </TreeView>
+        <!--
         <TreeView ItemsSource="{Binding ShellItems.RegistryRoots}">
             <TreeView.Resources>
+                <local:IconConverter x:Key="IconConverter"/>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:RegistryHive}">
-                    <Button Click="MenuItem_Click" Tag="{Binding Children}">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <TextBlock Text="{Binding Name}"></TextBlock>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                    <StackPanel Orientation="Horizontal" Tag="{Binding Children}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+                        <iconPacks:PackIconVaadinIcons Kind="{Binding Converter={StaticResource IconConverter}}"/>
+                        <TextBlock Text="{Binding Name}" Margin="5 0 0 0"/>
+                        <TextBlock Text="(User)" Margin="5 0 0 0"/>
+                    </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type data:ShellItem}">
-                    <Button Click="MenuItem_Click" Tag="{Binding Children}">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <TextBlock Text="{Binding Description}"></TextBlock>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                    <StackPanel Orientation="Horizontal" Tag="{Binding Children}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+                        <iconPacks:PackIconVaadinIcons Kind="{Binding Converter={StaticResource IconConverter}}"/>
+                        <TextBlock Text="{Binding Description}" Margin="5 0 0 0"/>
+                    </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>
-    </Grid>
+        -->
 </UserControl>

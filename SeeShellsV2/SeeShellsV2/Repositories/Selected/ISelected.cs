@@ -13,6 +13,6 @@ namespace SeeShellsV2.Repositories
     {
         object Current { get; set; }
 
-        IEnumerable<object> CurrentEnumerable { get; set; }
+        // IEnumerable<object> CurrentEnumerable { get; set; }
     }
 }

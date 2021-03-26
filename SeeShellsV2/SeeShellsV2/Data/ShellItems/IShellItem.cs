@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
 {
-    public interface IShellItem
+    public interface IShellItem : IComparable<IShellItem>
     {
         /// <summary>
         /// A best effort description for a particular ShellItem meant to give the most important / recognizable

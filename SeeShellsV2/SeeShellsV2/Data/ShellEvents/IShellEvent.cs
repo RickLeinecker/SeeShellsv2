@@ -10,7 +10,7 @@ namespace SeeShellsV2.Data
     /// <summary>
     /// Represents a suspected action performed by a user
     /// </summary>
-    public interface IShellEvent
+    public interface IShellEvent : IComparable<IShellEvent>
     {
         /// <summary>
         /// The type of event that occured (File Create, File Download, etc.)

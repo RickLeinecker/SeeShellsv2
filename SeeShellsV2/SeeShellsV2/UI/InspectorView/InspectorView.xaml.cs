@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Unity;
+using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
@@ -29,11 +30,16 @@ namespace SeeShellsV2.UI
     public partial class InspectorView : UserControl
     {
         [Dependency]
-        public IInspectorViewVM ViewModel { set => DataContext = value; }
+        public IInspectorViewVM ViewModel { set => DataContext = value; get => DataContext as IInspectorViewVM; }
 
         public InspectorView()
         {
             InitializeComponent();
+        }
+
+        private void Item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

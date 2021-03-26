@@ -67,7 +67,7 @@ namespace SeeShellsV2.Data
                 }
                 else if (BlockHelper.UnpackDWord(value, 0x06) == 0xf5a6b710 && BlockHelper.UnpackWord(value, 0x0A) > 0)
                 {
-                    subtypename = "Delegate";
+                    subtypename = "Removable Drive";
                     signature = 0xf5a6b710;
                     description = rootfoldername = BlockHelper.UnpackString(value, 0x0D);
                 }
@@ -129,6 +129,24 @@ namespace SeeShellsV2.Data
                         break;
                 }
 
+                Place p = subtypename == "Removable Drive" ?
+                new RemovableDrive()
+                {
+                    Name = rootfoldername,
+                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                }
+                :
+                new Place()
+                {
+                    Name = rootfoldername,
+                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                };
+
+                if (hive.Places.Contains(p))
+                    p = hive.Places.First(place => place == p);
+                else
+                    hive.Places.Add(p);
+
                 RootFolderShellItem item = new RootFolderShellItem()
                 {
                     Size = size,
@@ -139,11 +157,7 @@ namespace SeeShellsV2.Data
                     RootFolderGuid = rootfolderguid,
                     SortIndex = sortindex,
                     SortIndexDescription = sortindexdescription,
-                    Place = new Place()
-                    {
-                        Name = rootfoldername,
-                        PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                    },
+                    Place = p,
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

@@ -15,5 +15,10 @@ namespace SeeShellsV2.Data
         public User User { get; init; }
         public Place Place { get; init; }
         public IEnumerable<IShellItem> Evidence { get; init; }
+
+        public int CompareTo(IShellEvent other)
+        {
+            return (User, Place, TypeName).CompareTo((other.User, other.Place, other.TypeName));
+        }
     }
 }

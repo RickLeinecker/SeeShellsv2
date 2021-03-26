@@ -24,6 +24,8 @@ namespace SeeShellsV2.Utilities
             this.comparer = comparer;
         }
 
+        public SynchronizationContext SynchronizationContext => _synchronizationContext;
+
         public int Count { get => data.Count; }
 
         public bool IsReadOnly { get => false; }

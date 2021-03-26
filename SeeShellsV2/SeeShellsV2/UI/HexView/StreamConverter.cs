@@ -36,6 +36,13 @@ namespace SeeShellsV2.UI
                 return m;
             }
 
+            if (value is Place p)
+            {
+                MemoryStream m = new MemoryStream();
+                m.Write(p.Items.First().Value, 0, p.Items.First().Value.Length);
+                return m;
+            }
+
 
             else return new MemoryStream(0);
         }

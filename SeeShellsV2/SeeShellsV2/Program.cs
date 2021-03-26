@@ -38,6 +38,8 @@ namespace SeeShellsV2
             container.RegisterType<IShellEventFactory, ShellEventFactory>();
 
             // Register Repository Types
+            container.RegisterSingleton<IDataRepository<User>, UserCollection>();
+            container.RegisterSingleton<IDataRepository<RegistryHive>, RegistryHiveCollection>();
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
             container.RegisterSingleton<IShellEventCollection, ShellEventCollection>();
             container.RegisterSingleton<ISelected, Selected>();

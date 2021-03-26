@@ -75,17 +75,31 @@ namespace SeeShellsV2.Data
                     }
                 }
 
+                Place p = subtypename == "Local Disk" ?
+                new Drive()
+                {
+                    Name = volumename,
+                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                }
+                :
+                new Place()
+                {
+                    Name = volumename,
+                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                };
+
+                if (hive.Places.Contains(p))
+                    p = hive.Places.First(place => place == p);
+                else
+                    hive.Places.Add(p);
+
                 VolumeShellItem item = new VolumeShellItem()
                 {
                     Size = size,
                     Type = type,
                     TypeName = typename,
                     SubtypeName = subtypename,
-                    Place = new Place()
-                    {
-                        Name = volumename,
-                        PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                    },
+                    Place = p,
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

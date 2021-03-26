@@ -41,6 +41,8 @@ namespace SeeShellsV2.Services
     public class RegistryImporter : IRegistryImporter
     {
         private IConfig Config { get; set; }
+        private IDataRepository<User> Users { get; set; }
+        private IDataRepository<RegistryHive> RegistryHives { get; set; }
         private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
@@ -49,11 +51,15 @@ namespace SeeShellsV2.Services
 
         public RegistryImporter(
             [Dependency] IConfig config,
+            [Dependency] IDataRepository<User> users,
+            [Dependency] IDataRepository<RegistryHive> registryHives,
             [Dependency] IShellItemCollection shellItems,
             [Dependency] IShellItemFactory shellFactory
         )
         {
             Config = config;
+            Users = users;
+            RegistryHives = registryHives;
             ShellItems = shellItems;
             ShellFactory = shellFactory;
         }
@@ -66,9 +72,12 @@ namespace SeeShellsV2.Services
 
             IList<IShellItem> parsedItems = new List<IShellItem>();
 
-            RegistryHive hive = useOfflineHive ?
-                new RegistryHive() { Name = Path.GetFileName(hiveLocation), Path = hiveLocation, User = new User { Name = "oops" } } :
-                new RegistryHive() { Name = "Live Registry", Path = "N/A", User = new User { Name = "oops" } };
+            User user = null;
+            RegistryHive hive = null;
+
+            //RegistryHive hive = useOfflineHive ?
+            //    new RegistryHive() { Name = Path.GetFileName(hiveLocation), Path = hiveLocation, User = new User { Name = "oops", SID = "" } } :
+            //    new RegistryHive() { Name = "Live Registry", Path = "N/A", User = new User { Name = "oops", SID = "" } };
 
             IEnumerable<RegistryKeyWrapper> registryEnumerator = useOfflineHive ?
                 GetOfflineRegistryKeyIterator(hiveLocation) :
@@ -80,6 +89,43 @@ namespace SeeShellsV2.Services
                 {
                     byte[] buffer = keyWrapper.Value;
                     int off = 0;
+
+                    if (user == null)
+                    {
+                        user = Users.FirstOrDefault(
+                            u => u.Name == keyWrapper.RegistryUser && u.SID == keyWrapper.RegistrySID
+                        );
+
+                        if (user == null)
+                        {
+                            Users.SynchronizationContext?.Send((_) =>
+                            {
+                                user = new User { Name = keyWrapper.RegistryUser, SID = keyWrapper.RegistrySID };
+                                Users.Add(user);
+                            }, null);
+                        }
+                    }
+
+                    if (hive == null)
+                    {
+                        string name = useOfflineHive ? Path.GetFileName(hiveLocation) : "Live Registry";
+                        string pathname = useOfflineHive ? hiveLocation : "N/A";
+
+                        hive = RegistryHives.FirstOrDefault(
+                             u => u.Name == name && u.Path == pathname && u.User == user
+                         );
+
+                        if (hive == null)
+                        {
+                            RegistryHives.SynchronizationContext?.Send((_) =>
+                            {
+                                hive = new RegistryHive { Name = name, Path = pathname, User = user };
+                                RegistryHives.Add(hive);
+                            }, null);
+                        }
+
+                        user.RegistryHives.Add(hive);
+                    }
 
                     // extract shell items from registry value
                     while (off + 2 <= buffer.Length && BlockHelper.UnpackWord(buffer, off) != 0)
@@ -128,14 +174,14 @@ namespace SeeShellsV2.Services
 
                         // if the shell item has no parent then it belongs to root
                         if (shellItem.Parent == null)
-                            hive.Children.Add(shellItem);
+                            hive.Items.Add(shellItem);
                     }
                 }
             }
 
             // add the root item to the collection in the caller's thread
-            if (hive.Children.Count > 0)
-                ShellItems.RegistryRoots.Add(hive);
+            if (hive.Items.Count > 0)
+                RegistryHives.Add(hive);
 
             RegistryImportEnd?.Invoke(this, EventArgs.Empty);
             return (hive, parsedItems);
