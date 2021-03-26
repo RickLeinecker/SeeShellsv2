@@ -14,13 +14,13 @@
             <Menu Background="Transparent">
                 <MenuItem Header="File" Background="Transparent">
                     <MenuItem Header="Import">
-                        <MenuItem Header="From CSV" Click="Import_CSV_Click"/>
+                        <!--<MenuItem Header="From CSV" Click="Import_CSV_Click"/>-->
                         <MenuItem Header="From Live Registry"  Click="Import_Live_Registry_Click"/>
                         <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
                     </MenuItem>
-                    <MenuItem Header="Export">
+                    <!--<MenuItem Header="Export">
                         <MenuItem Header="To CSV" Click="Export_CSV_Click"/>
-                    </MenuItem>
+                    </MenuItem>-->
                 </MenuItem>
             </Menu>
         </mah:WindowCommands>
