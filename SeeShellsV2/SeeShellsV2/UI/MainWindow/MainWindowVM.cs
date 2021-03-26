@@ -36,6 +36,9 @@ namespace SeeShellsV2.UI
                 await Task.Run(() => RegImporter.ImportRegistry(true)) :
                 await Task.Run(() => RegImporter.ImportRegistry(false, true, hiveLocation));
 
+            if (root == null || parsedItems == null)
+                return;
+
             Selected.Current = root;
             // Selected.CurrentEnumerable = root.Items;
 

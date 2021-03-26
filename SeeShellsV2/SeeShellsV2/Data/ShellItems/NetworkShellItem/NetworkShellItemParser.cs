@@ -86,8 +86,8 @@ namespace SeeShellsV2.Data
 
                 Place p = new NetworkLocation()
                 {
-                    Name = name,
-                    PathName = pathname,
+                    Name = networklocation,
+                    PathName = string.Empty,
                 };
 
                 if (hive.Places.Contains(p))
@@ -111,7 +111,7 @@ namespace SeeShellsV2.Data
                     NodeSlot = keyWrapper?.NodeSlot,
                     SlotModifiedDate = keyWrapper?.SlotModifiedDate,
                     LastRegistryWriteDate = keyWrapper?.LastRegistryWriteDate ?? DateTime.MinValue,
-                    Description = name,
+                    Description = networklocation,
                     Parent = parent
                 };
 

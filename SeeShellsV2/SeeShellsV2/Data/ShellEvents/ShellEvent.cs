@@ -18,7 +18,7 @@ namespace SeeShellsV2.Data
 
         public int CompareTo(IShellEvent other)
         {
-            return (User, Place, TypeName).CompareTo((other.User, other.Place, other.TypeName));
+            return (TimeStamp, User, Place, TypeName).CompareTo((other.TimeStamp, other.User, other.Place, other.TypeName));
         }
     }
 }

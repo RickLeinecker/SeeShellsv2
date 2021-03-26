@@ -96,14 +96,14 @@ namespace SeeShellsV2.Services
                             u => u.Name == keyWrapper.RegistryUser && u.SID == keyWrapper.RegistrySID
                         );
 
-                        if (user == null)
+                        if (user != null)
+                            return (null, null);
+
+                        Users.SynchronizationContext?.Send((_) =>
                         {
-                            Users.SynchronizationContext?.Send((_) =>
-                            {
-                                user = new User { Name = keyWrapper.RegistryUser, SID = keyWrapper.RegistrySID };
-                                Users.Add(user);
-                            }, null);
-                        }
+                            user = new User { Name = keyWrapper.RegistryUser, SID = keyWrapper.RegistrySID };
+                            Users.Add(user);
+                        }, null);
                     }
 
                     if (hive == null)
@@ -115,14 +115,14 @@ namespace SeeShellsV2.Services
                              u => u.Name == name && u.Path == pathname && u.User == user
                          );
 
-                        if (hive == null)
+                        if (hive != null)
+                            return (null, null);
+
+                        RegistryHives.SynchronizationContext?.Send((_) =>
                         {
-                            RegistryHives.SynchronizationContext?.Send((_) =>
-                            {
-                                hive = new RegistryHive { Name = name, Path = pathname, User = user };
-                                RegistryHives.Add(hive);
-                            }, null);
-                        }
+                            hive = new RegistryHive { Name = name, Path = pathname, User = user };
+                            RegistryHives.Add(hive);
+                        }, null);
 
                         user.RegistryHives.Add(hive);
                     }
@@ -180,8 +180,8 @@ namespace SeeShellsV2.Services
             }
 
             // add the root item to the collection in the caller's thread
-            if (hive.Items.Count > 0)
-                RegistryHives.Add(hive);
+            //if (hive.Items.Count > 0)
+            //    RegistryHives.Add(hive);
 
             RegistryImportEnd?.Invoke(this, EventArgs.Empty);
             return (hive, parsedItems);

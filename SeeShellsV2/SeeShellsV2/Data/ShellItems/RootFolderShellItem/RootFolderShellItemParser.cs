@@ -93,40 +93,43 @@ namespace SeeShellsV2.Data
                 byte sortindex = BlockHelper.UnpackByte(value, 0x03);
                 string sortindexdescription = string.Empty;
 
-                switch (sortindex)
+                if (subtypename != "Removable Drive")
                 {
-                    case 0x00:
-                        sortindexdescription = "INTERNET_EXPLORER";
-                        break;
-                    case 0x42:
-                        sortindexdescription = "LIBRARIES";
-                        break;
-                    case 0x44:
-                        sortindexdescription = "USERS";
-                        break;
-                    case 0x48:
-                        sortindexdescription = "MY_DOCUMENTS";
-                        break;
-                    case 0x50:
-                        sortindexdescription = "MY_COMPUTER";
-                        break;
-                    case 0x58:
-                        sortindexdescription = "NETWORK";
-                        break;
-                    case 0x60:
-                        sortindexdescription = "RECYCLE_BIN";
-                        break;
-                    case 0x68:
-                        sortindexdescription = "INTERNET_EXPLORER";
-                        break;
-                    case 0x70:
-                        sortindexdescription = "UNKNOWN";
-                        break;
-                    case 0x80:
-                        sortindexdescription = "MY_GAMES";
-                        break;
-                    default:
-                        break;
+                    switch(sortindex)
+                    {
+                        case 0x00:
+                            sortindexdescription = "INTERNET_EXPLORER";
+                            break;
+                        case 0x42:
+                            sortindexdescription = "LIBRARIES";
+                            break;
+                        case 0x44:
+                            sortindexdescription = "USERS";
+                            break;
+                        case 0x48:
+                            sortindexdescription = "MY_DOCUMENTS";
+                            break;
+                        case 0x50:
+                            sortindexdescription = "MY_COMPUTER";
+                            break;
+                        case 0x58:
+                            sortindexdescription = "NETWORK";
+                            break;
+                        case 0x60:
+                            sortindexdescription = "RECYCLE_BIN";
+                            break;
+                        case 0x68:
+                            sortindexdescription = "INTERNET_EXPLORER";
+                            break;
+                        case 0x70:
+                            sortindexdescription = "UNKNOWN";
+                            break;
+                        case 0x80:
+                            sortindexdescription = "MY_GAMES";
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 Place p = subtypename == "Removable Drive" ?

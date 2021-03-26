@@ -71,6 +71,9 @@
                                 <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:HexView />
                                 </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                    <local:FilterControlView />
+                                </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutPanel>
 
@@ -93,22 +96,12 @@
                                 <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:RegistryView />
                                 </xcad:LayoutAnchorable>
-                                <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <!--<xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                     <local:FileSystemView />
-                                </xcad:LayoutAnchorable>
+                                </xcad:LayoutAnchorable>-->
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
                     </xcad:LayoutPanel>
-
-                    <xcad:LayoutRoot.LeftSide>
-                        <xcad:LayoutAnchorSide>
-                            <xcad:LayoutAnchorGroup>
-                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:FilterControlView />
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorGroup>
-                        </xcad:LayoutAnchorSide>
-                    </xcad:LayoutRoot.LeftSide>
                 </xcad:LayoutRoot>
             </xcad:DockingManager>
 

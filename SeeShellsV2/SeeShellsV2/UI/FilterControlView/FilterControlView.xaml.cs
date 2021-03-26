@@ -15,12 +15,18 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
     public interface IFilterControlViewVM : IViewModel
     {
-        
+        IDataRepository<User> UserCollection { get; }
+        IDataRepository<RegistryHive> RegistryHiveCollection { get; }
+        User User { get; set; }
+        RegistryHive RegistryHive { get; set; }
+        DateTime? Begin { get;  set; }
+        DateTime? End { get; set; }
     }
 
     /// <summary>
