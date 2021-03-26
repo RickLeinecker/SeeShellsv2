@@ -8,6 +8,13 @@ namespace SeeShellsV2
 {
     public static class Extensions
     {
+        public static T Swap<T>(this T a, ref T b)
+        {
+            T temp = b;
+            b = a;
+            return temp;
+        }
+
         public static T GetClassOrDefault<T>(this IDictionary<string, object> dict, string key, T defaultValue) where T : class
         {
             return dict.ContainsKey(key) ? dict[key] as T ?? defaultValue : defaultValue;

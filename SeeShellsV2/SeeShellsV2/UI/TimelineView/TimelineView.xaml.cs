@@ -15,24 +15,40 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
+using System.Globalization;
+using System.Diagnostics;
 
 namespace SeeShellsV2.UI
 {
-    public interface ITimelineViewVM : IViewModel
-    {
-        
-    }
+	public interface ITimelineViewVM : IViewModel
+	{
+		IShellEventCollection ShellEvents { get; }
 
-    /// <summary>
-    /// Interaction logic for TimelineView.xaml
-    /// </summary>
-    public partial class TimelineView : UserControl
-    {
-        [Dependency]
-        public ITimelineViewVM ViewModel { set => DataContext = value; }
-        public TimelineView()
-        {
-            InitializeComponent();
-        }
-    }
+		void GenerateRandomShellEvents();
+	}
+
+	/// <summary>
+	/// Interaction logic for TimelineView.xaml
+	/// </summary>
+	public partial class TimelineView : UserControl
+	{
+		[Dependency]
+		public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
+
+		public TimelineView()
+		{
+			InitializeComponent();
+		}
+
+		bool initialized = false;
+		private void GenerateTimeline(object sender, RoutedEventArgs e)
+		{
+			if (!initialized)
+			{
+				initialized = true;
+				ViewModel.GenerateRandomShellEvents();
+			}
+		}
+	}
 }
