@@ -10,6 +10,7 @@
     <UseWPF>true</UseWPF>
     <StartupObject>SeeShellsV2.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>SeeShells.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
