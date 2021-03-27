@@ -124,7 +124,10 @@ namespace SeeShellsV2.Services
                             RegistryHives.Add(hive);
                         }, null);
 
-                        user.RegistryHives.Add(hive);
+                        Users.SynchronizationContext?.Send((_) =>
+                        {
+                            user.RegistryHives.Add(hive);
+                        }, null);
                     }
 
                     // extract shell items from registry value
