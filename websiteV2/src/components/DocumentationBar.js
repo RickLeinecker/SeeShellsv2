@@ -85,9 +85,7 @@ class DocumentationBar extends React.Component {
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="events">Events</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filters</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="export">Exporting</Button>
-                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="import">Importing</Button>
                         </ButtonGroup>
-                        <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="licensing">Licensing</Button>
                     </Paper>
             </div>
         );
