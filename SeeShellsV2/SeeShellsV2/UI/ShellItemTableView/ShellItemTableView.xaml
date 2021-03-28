@@ -13,6 +13,8 @@
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding TypeName}"/>
                 <DataGridTextColumn Header="Subtype" Binding="{Binding SubtypeName}"/>
+                <DataGridTextColumn Header="Location Name" Binding="{Binding Place.Name}"/>
+                <DataGridTextColumn Header="Location Path" Binding="{Binding Place.PathName}"/>
                 <DataGridTextColumn Header="Registry" Binding="{Binding RegistryHive.Name}"/>
                 <DataGridTextColumn Header="User" Binding="{Binding RegistryHive.User.Name}"/>
                 <DataGridTextColumn Header="Last Registry Write" Binding="{Binding LastRegistryWriteDate}"/>

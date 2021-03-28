@@ -14,6 +14,9 @@ namespace SeeShellsV2.UI
     public class TimelineViewVM : ViewModel, ITimelineViewVM
     {
         [Dependency]
+        public ISelected Selected { get; set; }
+
+        [Dependency]
         public IShellEventCollection ShellEvents { get; set; }
 
         [Dependency]

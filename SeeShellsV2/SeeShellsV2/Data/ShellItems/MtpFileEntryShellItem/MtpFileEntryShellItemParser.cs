@@ -45,8 +45,8 @@ namespace SeeShellsV2.Data
                 string typename = "Media Transfer Protocol";
                 string subtypename = "File Entry";
 
-                DateTime modified = BlockHelper.UnpackFileTime(value, 0x1A);
-                DateTime created = BlockHelper.UnpackFileTime(value, 0x22);
+                //DateTime modified = BlockHelper.UnpackFileTime(value, 0x1A);
+                //DateTime created = BlockHelper.UnpackFileTime(value, 0x22);
 
                 int offset = 0x4A;
                 string foldername = BlockHelper.UnpackWString(value, offset);
@@ -77,8 +77,8 @@ namespace SeeShellsV2.Data
                     Signature = signature,
                     TypeName = typename,
                     SubtypeName = subtypename,
-                    ModifiedDate = modified,
-                    CreationDate = created,
+                    //ModifiedDate = modified,
+                    //CreationDate = created,
                     Place = p,
                     RegistryHive = hive,
                     Value = value,

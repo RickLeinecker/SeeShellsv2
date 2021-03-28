@@ -101,7 +101,7 @@ namespace SeeShellsV2.UI
 
 			Task.Run(() =>
 			{
-				Thread.Sleep(777);
+				Thread.Sleep(333);
 				if (!tokenSource.Token.IsCancellationRequested)
 					Dispatcher.BeginInvoke((Action)(() =>
 					{
@@ -116,6 +116,8 @@ namespace SeeShellsV2.UI
 						}
 
 						InvalidateMeasure();
+						InvalidateArrange();
+						InvalidateVisual();
 					}));
 			}, tokenSource.Token);
 		}
@@ -431,7 +433,7 @@ namespace SeeShellsV2.UI
 			{
 				(sender as TimelinePanel).Cursor = Cursors.SizeAll;
 				lastDragPoint = mousePos;
-				Mouse.Capture(sender as TimelinePanel);
+				// Mouse.Capture(sender as TimelinePanel);
 			}
 		}
 
@@ -856,7 +858,7 @@ namespace SeeShellsV2.UI
 				UIElement element = InternalChildren[i];
 				DateTime date = GetDate(element);
 
-				if (!ShowCards || date < BeginDate || date > EndDate)
+				if (!ShowCards || date < BeginDate - ColumnSpan || date > EndDate + ColumnSpan)
 				{
 					RemoveInternalChildRange(i, 1);
 					int index = generator.IndexFromContainer(element);

@@ -18,11 +18,13 @@ using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using System.Globalization;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SeeShellsV2.UI
 {
 	public interface ITimelineViewVM : IViewModel
 	{
+		ISelected Selected { get; }
 		IShellEventCollection ShellEvents { get; }
 
 		void GenerateRandomShellEvents();
@@ -50,5 +52,33 @@ namespace SeeShellsV2.UI
 				ViewModel.GenerateRandomShellEvents();
 			}
 		}
-	}
+
+		private Border eventMaybeSelected = null;
+		private readonly Stopwatch sw = new Stopwatch();
+
+		private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			sw.Reset();
+			sw.Start();
+			eventMaybeSelected = sender as Border;
+
+			Task.Run(() =>
+			{
+				Thread.Sleep(500);
+				if (sw.IsRunning)
+					sw.Stop();
+			});
+		}
+
+		private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+			if (sw.IsRunning && sender is Border b && b == eventMaybeSelected)
+			{
+				sw.Stop();
+
+				if (sw.ElapsedMilliseconds < 300)
+					ViewModel.Selected.Current = (sender as FrameworkElement).DataContext;
+			}
+		}
+    }
 }
