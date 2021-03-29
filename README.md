@@ -1,6 +1,6 @@
 # SeeShells: Windows Shellbag Timeline Display & Parser
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/RickLeinecker/SeeShells)](https://github.com/RickLeinecker/SeeShells/releases)
-[![GitHub All Releases](https://img.shields.io/github/downloads/RickLeinecker/SeeShells/total)](https://github.com/RickLeinecker/SeeShells/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ShellBags/v2)](https://github.com/ShellBags/v2/releases/tag/v2.0-beta.1)
+[![GitHub All Releases](https://img.shields.io/github/downloads/ShellBags/v2/total)](https://github.com/ShellBags/v2/releases)
 [![SeeShells License](https://img.shields.io/github/license/RickLeinecker/SeeShells)](https://github.com/RickLeinecker/SeeShells/blob/master/LICENSE)
 
 [![SeeShells Logo](website/src/assets/logo.png)](https://rickleinecker.github.io/SeeShells/)
@@ -12,8 +12,9 @@ SeeShells is a configurable Windows desktop application which focuses on extract
 The goal of SeeShell is to assist digital forensics investigators in their course of actions and provide more information that can be used as evidence in a court of law.
 
 In addition to the timeline, SeeShells provides exporting:
- - a CSV of all ShelBag information parsed.
- - an HTML representation of the timeline
+ - CSV of all ShelBag information parsed.
+ - HTML representation of the timeline
+ - PDF for formal forensics reporting
  
  SeeShells operates on both running machines (live) and registry hive files (offline).
 
@@ -39,7 +40,7 @@ See the [Help Section](https://rickleinecker.github.io/SeeShells/help) for modif
 ### v2 Developers
  - Spencer Ross [@serspencer](https://github.com/serspencer)
  - Jake Meyer [@jaymey](https://github.com/jaymey)
- - Josh [@SecurityNoodle](https://github.com/SecurityNoodle)
+ - Josh Rueda [@SecurityNoodle](https://github.com/SecurityNoodle)
  - Devon Gadarowski [@devon-gadarowski ](https://github.com/devon-gadarowski)
  - Kaylee Hoyt [@hoytk6](https://github.com/hoytk6)
 
