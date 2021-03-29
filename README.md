@@ -4,7 +4,8 @@
 [![SeeShells License](https://img.shields.io/github/license/RickLeinecker/SeeShells)](https://github.com/RickLeinecker/SeeShells/blob/master/LICENSE)
 
 [![SeeShells Logo](website/src/assets/logo.png)](https://rickleinecker.github.io/SeeShells/)
-### [Visit Website](https://rickleinecker.github.io/SeeShells/)
+### [Visit v1 Website](https://rickleinecker.github.io/SeeShells/)
+### [Visit v2 Website](https://shellbags.github.io/v2/#/)
 
 SeeShells is a configurable Windows desktop application which focuses on extracting specific Registry data known as ShellBags. SeeShells displays this information in a interactive timeline that highlights user events as they were recorded.
 
@@ -28,12 +29,19 @@ This ensures that if any new discoveries are found in the future regarding Shell
 See the [Help Section](https://rickleinecker.github.io/SeeShells/help) for modifying SeeShells configurations. 
 
 ## Contributors
-### Developers
+### v1 Developers
 - Sara Frackiewicz
 - Klayton Killough [@klaki892](https://github.com/klaki892)
 - Aleksandar Stoyanov [@AlekStoyanov](https://github.com/AlekStoyanov)
 - Bridget Woodye [@bridCquinn](https://github.com/bridCquinn)
 - Yara As-Saidi [@yara-58](https://github.com/yara-58)
+
+### v2 Developers
+ - Spencer Ross [@serspencer](https://github.com/serspencer)
+ - Jake Meyer [@jaymey](https://github.com/jaymey)
+ - Josh [@SecurityNoodle](https://github.com/SecurityNoodle)
+ - Devon Gadarowski [@devon-gadarowski ](https://github.com/devon-gadarowski)
+ - Kaylee Hoyt [@hoytk6](https://github.com/hoytk6)
 
 ### Sponsor
 - Richard Leinecker [@RickLeinecker](https://github.com/RickLeinecker)
