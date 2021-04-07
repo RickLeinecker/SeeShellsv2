@@ -14,12 +14,14 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Repositories;
+using System.Collections;
 
 namespace SeeShellsV2.UI
 {
     public interface IExportWindowVM : IViewModel
-    { 
-        
+    {
+        IList moduleList { get; }
+        public void Export_PDF();
     }
 
     /// <summary>
@@ -28,10 +30,15 @@ namespace SeeShellsV2.UI
     public partial class ExportWindow : Window, IWindow
     {
         [Dependency]
-        public IExportWindowVM ViewModel { set => DataContext = value; }
+        public IExportWindowVM ViewModel { get => DataContext as IExportWindowVM; set => DataContext = value; }
         public ExportWindow()
         {
             InitializeComponent();
         }
-    }
+
+		private void Export_Click(object sender, RoutedEventArgs e)
+		{
+            ViewModel.Export_PDF();
+		}
+	}
 }

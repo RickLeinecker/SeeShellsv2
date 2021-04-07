@@ -15,11 +15,10 @@ namespace SeeShellsV2.UI
     public interface IMainWindowVM : IViewModel
     {
         public void ImportFromCSV(string path);
-        public void ExportToCSV(string path);
         public void ImportFromRegistry(string hiveLocation = null);
         string WebsiteUrl { get; }
         string GithubUrl { get; }
-    }
+	}
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -56,15 +55,15 @@ namespace SeeShellsV2.UI
             win.Show();
         }
 
-        private void Export_CSV_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-                ViewModel.ExportToCSV(openFileDialog.FileName);
-        }
+		//private void Export_CSV_Click(object sender, RoutedEventArgs e)
+		//{
+		//	OpenFileDialog openFileDialog = new OpenFileDialog();
+		//	openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
+		//	if (openFileDialog.ShowDialog() == true)
+		//		ViewModel.ExportToCSV(openFileDialog.FileName);
+		//}
 
-        private void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
+		private void Import_Live_Registry_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.ImportFromRegistry();
         }

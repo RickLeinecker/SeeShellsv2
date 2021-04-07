@@ -3,14 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:converters="clr-namespace:SeeShellsV2.UI.Converters"
         xmlns:local="clr-namespace:SeeShellsV2.UI"
         xmlns:data="clr-namespace:SeeShellsV2.Data"
         mc:Ignorable="d"
         Height="450" Width="800">
+	<Window.Resources>
+		<converters:ModuleViewConverter x:Key="ModuleViewConverter"/>
+	</Window.Resources>
     <Grid>
-        <StackPanel>
-            <TextBlock Text="Hello"></TextBlock>
-            <TextBlock Text="World"></TextBlock>
-        </StackPanel>
-    </Grid>
+		<ItemsControl ItemsSource="{Binding moduleList}">
+		<ItemsControl.ItemTemplate>
+			<DataTemplate>
+				<Border>
+					<ContentPresenter Content="{Binding Converter={StaticResource ModuleViewConverter}}"/>
+				</Border>
+			</DataTemplate>
+		</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
 </Window>

@@ -25,10 +25,10 @@ namespace SeeShellsV2.UI
             // importer.Import(path); => needs work
         }
 
-        public void ExportToCSV(string path)
-        {
+        //public void ExportToCSV(string path)
+        //{
 
-        }
+        //}
 
         public async void ImportFromRegistry(string hiveLocation = null)
         {

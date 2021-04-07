@@ -46,6 +46,7 @@ namespace SeeShellsV2
 
             // Register Service Types
             container.RegisterType<ICsvImporter, CsvImporter>();
+            container.RegisterType<IPdfExporter, PdfExporter>();
             container.RegisterType<IRegistryImporter, RegistryImporter>();
             container.RegisterType<IShellEventManager, ShellEventManager>();
 
