@@ -15,13 +15,14 @@ using System.Windows.Shapes;
 using Unity;
 using SeeShellsV2.Repositories;
 using System.Collections;
+using Microsoft.Win32;
 
 namespace SeeShellsV2.UI
 {
     public interface IExportWindowVM : IViewModel
     {
         IList moduleList { get; }
-        public void Export_PDF();
+        public void Export_PDF(string filename);
     }
 
     /// <summary>
@@ -38,7 +39,13 @@ namespace SeeShellsV2.UI
 
 		private void Export_Click(object sender, RoutedEventArgs e)
 		{
-            ViewModel.Export_PDF();
+            // do file save here in the view (presentation logic)
+            SaveFileDialog svg = new SaveFileDialog();
+            svg.Filter = "PDF Document (*.pdf)|*.pdf";
+            svg.DefaultExt = ".pdf";
+            svg.FileName = "SeeShellsReport";
+            if (svg.ShowDialog() == true)
+                ViewModel.Export_PDF(svg.FileName);
 		}
 	}
 }

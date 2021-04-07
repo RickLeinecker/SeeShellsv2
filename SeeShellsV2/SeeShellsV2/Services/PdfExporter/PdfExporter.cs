@@ -36,20 +36,11 @@ namespace SeeShellsV2.Services
 			}
 		}
 
-		public void Export()
+		public void Export(string filename)
 		{
 			PdfDocument doc = new PdfDocument();
 			// Organize Views
 			int pages = doc.PageCount;
-			string filename = String.Empty;
-
-			SaveFileDialog svg = new SaveFileDialog();
-			svg.Filter = "PDF Document (*.pdf)|*.pdf";
-			svg.DefaultExt = ".pdf";
-			svg.FileName = "SeeShellsReport";
-			if (svg.ShowDialog() == true)
-				filename = svg.FileName;
-
 			doc.Save(filename);
 		}
 	}

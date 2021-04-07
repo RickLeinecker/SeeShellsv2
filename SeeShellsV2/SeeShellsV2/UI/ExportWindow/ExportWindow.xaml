@@ -11,15 +11,20 @@
 	<Window.Resources>
 		<converters:ModuleViewConverter x:Key="ModuleViewConverter"/>
 	</Window.Resources>
-    <Grid>
-		<ItemsControl ItemsSource="{Binding moduleList}">
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<Border>
-					<ContentPresenter Content="{Binding Converter={StaticResource ModuleViewConverter}}"/>
-				</Border>
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
+    <DockPanel>
+        <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding moduleList}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border>
+						<ContentPresenter Content="{Binding Converter={StaticResource ModuleViewConverter}}"/>
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-	</Grid>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button Click="Export_Click">
+                <TextBlock Text="{Binding Status}"/>
+            </Button>
+        </StackPanel>
+	</DockPanel>
 </Window>

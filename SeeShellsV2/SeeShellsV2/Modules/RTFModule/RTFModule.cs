@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -21,54 +22,32 @@ namespace SeeShellsV2.Modules
 	public class RTFModule : IPdfModule
 	{
 		public string Name => "RTFModule";
-		private string Text { get; set; }
-		public RichTextBox Rtb { get; set; }
 
-		public ToggleButton btnBold { get; set; }
-		public ToggleButton btnItalic { get; set; }
-		public ToggleButton btnUnderline { get; set; }
-		public ComboBox cmbFontFamily { get; set; }
-		public ComboBox cmbFontSize { get; set; }
+		public FontFamily SelectedFontFamily { get; set; }
+		public double SelectedFontSize { get; set; }
+
+		public bool IsBold { get; set; }
+		public bool IsItalic { get; set; }
+		public bool IsUnderline { get; set; }
+
+		public IEnumerable<FontFamily> FontFamilies => Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+		public IEnumerable<double> FontSizes => new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
+
+		private RichTextBox Rtb { get; set; }
 
 		public RTFModule()
 		{
-			Rtb = new RichTextBox();
-			Rtb.Height = 50;
-			Rtb.SelectionChanged += Rtb_SelectionChanged;
-
-			btnBold = new ToggleButton();
-			btnItalic = new ToggleButton();
-			btnUnderline = new ToggleButton();
-			cmbFontFamily = new ComboBox();
-			cmbFontSize = new ComboBox();
-
-			btnBold.Command = EditingCommands.ToggleBold;
-			//Image bold = new Image();
-			//BitmapImage bi = new BitmapImage();
-			//bi.BeginInit();
-			//bi.UriSource = new Uri("/SeeShellsV2;UI/Images/SeeShells.png", UriKind.RelativeOrAbsolute);
-			//bi.EndInit();
-			//bold.Width = 16;
-			//bold.Height = 16;
-			//bold.Source = bi;
-
-			btnItalic.Command = EditingCommands.ToggleItalic;
-			btnUnderline.Command = EditingCommands.ToggleUnderline;
-
-			cmbFontFamily.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
-			cmbFontFamily.Width = 150;
-			cmbFontFamily.SelectionChanged += CmbFontFamily_SelectionChanged;
-
-
-			cmbFontSize.ItemsSource = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
-			cmbFontSize.Width = 50;
-			cmbFontSize.IsEditable = true;
-			cmbFontSize.SelectionChanged += CmbFontSize_SelectionChanged;
+			// default font properties
+			SelectedFontFamily = new FontFamily("Arial");
+			SelectedFontSize = 12;
+			IsBold = IsItalic = IsUnderline = false;
 		}
 
-		public void Clone()
+		public IPdfModule Clone()
 		{
-			throw new NotImplementedException();
+			// we only really need a basic copy here to let the exporter
+			// use this object as a template to make more objects
+			return MemberwiseClone() as IPdfModule;
 		}
 
 		public void Render(PdfDocument doc)
@@ -113,49 +92,87 @@ namespace SeeShellsV2.Modules
 
 		public FrameworkElement View()
 		{
-			StackPanel sp = new StackPanel();
+			// the view we will display for the user to configure this object
+			string view = @"
+			<StackPanel>
+				<ToolBar>
+					<ToggleButton Name=""BoldBtn"" IsChecked=""{Binding IsBold}""
+                                  Command=""EditingCommands.ToggleBold"" />
+					<ToggleButton Name=""ItalicBtn"" IsChecked=""{Binding IsItalic}""
+                                  Command=""EditingCommands.ToggleItalic"" />
+					<ToggleButton Name=""UnderlineBtn"" IsChecked=""{Binding IsUnderline}""
+                                  Command=""EditingCommands.ToggleUnderline"" />
+					<ComboBox Name=""FontFamilyCmb""
+                              SelectedItem=""{Binding SelectedFontFamily}""
+                              ItemsSource=""{Binding FontFamilies}"" Width=""150"" />
+					<ComboBox Name=""FontSizeCmb""
+                              SelectedItem=""{Binding SelectedFontSize}""
+                              ItemsSource=""{Binding FontSizes}""
+                              Width=""50"" IsEditable=""True"" />
+				</ToolBar>
+				<RichTextBox Name=""RichTextBox"" Height=""50"" />
+			</StackPanel>";
 
-			ToolBar tool = new ToolBar();
+			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
+			ParserContext context = new ParserContext();
+            context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
+			context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
+			context.XmlnsDictionary.Add("d", "http://schemas.microsoft.com/expression/blend/2008");
+			context.XmlnsDictionary.Add("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
 
-			tool.Items.Add(btnBold);
-			tool.Items.Add(btnItalic);
-			tool.Items.Add(btnUnderline);
-			tool.Items.Add(cmbFontFamily);
-			tool.Items.Add(cmbFontSize);
+			// construct the view using an XAML parser
+			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
-			sp.Children.Add(tool);
-			sp.Children.Add(Rtb);
+			// assign this object as the data context so the view can get/set module properties
+            e.DataContext = this;
 
-			string s = System.Windows.Markup.XamlWriter.Save(sp);
-			FrameworkElement e = System.Xaml.XamlServices.Parse(s) as FrameworkElement;
-			e.DataContext = this;
+			// extract the elements from the view. this is only necessary if we
+			// want to use these elements *directly* to do work inside this class.
+			// **any data access that can be done with xaml bindings should be done with xaml bindings**
+			var rtb = e.FindName("RichTextBox") as RichTextBox;
+			var btnBold = e.FindName("BoldBtn") as ToggleButton;
+			var btnItalic = e.FindName("ItalicBtn") as ToggleButton;
+			var btnUnderline = e.FindName("UnderlineBtn") as ToggleButton;
+			var cmbFontFamily = e.FindName("FontFamilyCmb") as ComboBox;
+			var cmbFontSize = e.FindName("FontSizeCmb") as ComboBox;
+
+			// hook up event listeners
+			rtb.SelectionChanged += Rtb_SelectionChanged;
+			cmbFontSize.SelectionChanged += CmbFontSize_SelectionChanged;
+			cmbFontFamily.SelectionChanged += CmbFontFamily_SelectionChanged;
+
+			// save RTB element for later
+			Rtb = rtb;
+
 			return e;
 		}
 
 		private void Rtb_SelectionChanged(object sender, RoutedEventArgs e)
 		{
 			object temp = Rtb.Selection.GetPropertyValue(Inline.FontWeightProperty);
-			btnBold.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontWeights.Bold));
+			IsBold = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontWeights.Bold));
 			temp = Rtb.Selection.GetPropertyValue(Inline.FontStyleProperty);
-			btnItalic.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontStyles.Italic));
+			IsItalic = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontStyles.Italic));
 			temp = Rtb.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-			btnUnderline.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(TextDecorations.Underline));
+			IsUnderline = (temp != DependencyProperty.UnsetValue) && (temp.Equals(TextDecorations.Underline));
 
 			temp = Rtb.Selection.GetPropertyValue(Inline.FontFamilyProperty);
-			cmbFontFamily.SelectedItem = temp;
+			if (temp is FontFamily f)
+				SelectedFontFamily = f;
 			temp = Rtb.Selection.GetPropertyValue(Inline.FontSizeProperty);
-			cmbFontSize.Text = temp.ToString();
+			if (temp is double size)
+				SelectedFontSize = size;
 		}
 
 		private void CmbFontSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			Rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cmbFontSize.Text);
+			Rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, SelectedFontSize);
 		}
 
 		private void CmbFontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (cmbFontFamily.SelectedItem != null)
-				Rtb.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, cmbFontFamily.SelectedItem);
+			if (SelectedFontFamily != null)
+				Rtb.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, SelectedFontFamily);
 		}
 	}
 }

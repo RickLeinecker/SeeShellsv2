@@ -9,6 +9,6 @@ namespace SeeShellsV2.Services
 {
 	public interface IPdfExporter
 	{
-		public void Export();
+		public void Export(string filename);
 	}
 }

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace SeeShellsV2.UI.Converters
@@ -13,12 +14,12 @@ namespace SeeShellsV2.UI.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			return (value as IPdfModule).View();
+			return (value as IPdfModule)?.View() ?? null;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			throw new NotImplementedException();
+			return (value as FrameworkElement)?.DataContext ?? null;
 		}
 	}
 }

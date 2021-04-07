@@ -13,6 +13,6 @@ namespace SeeShellsV2.Modules
 		public string Name { get; }
 		public void Render(PdfDocument doc);
 		public FrameworkElement View();
-		public void Clone();
+		public IPdfModule Clone();
 	}
 }
