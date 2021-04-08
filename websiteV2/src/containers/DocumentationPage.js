@@ -13,6 +13,17 @@ import RegistryToInspector from '../assets/registry-to-inspector.png';
 import EmptyFilter from '../assets/empty-filter-controls.png';
 import FilterTime from '../assets/filter-time-selection.png';
 import ShellInspector from '../assets/shell-inspector.png';
+import HexViewer from '../assets/hex-viewer.png';
+import HexHighlight from '../assets/hex-viewer-highlight.png';
+import ShellbagTable from '../assets/shellbag-table.png';
+import OfflineParse from '../assets/offline-parse.png';
+import OnlineParse from '../assets/online-parse.png';
+import TimelineView from '../assets/timeline-view.png';
+import ShellbagEvent from '../assets/shellbag-event.png';
+import RegistryHive from '../assets/registry-hive.png';
+import ImportSelect from '../assets/import-select.png';
+import ImportHive from '../assets/import-hive.png';
+import OfflineHive from '../assets/offline-hive.png';
 
 const styles = {
     content: {
@@ -32,7 +43,6 @@ const styles = {
         alignSelf: 'center',
         color: '#33A1FD',
         textAlign: 'center',
-        paddingBottom: '1%',
     },
     text: {
         textAlign: 'center',
@@ -147,6 +157,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 Online Parsing refers to parsing shellbag data directly from the machine presently in use.
                             </Typography>
+                            <img src={OnlineParse} alt="online-parse" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 To parse an active registry:
                             </Typography>
@@ -156,6 +167,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 a. Alternatively, if SeeShells is already running, select Import > From Live Registry
                             </Typography>
+                            <img src={ImportSelect} alt="import-select" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 2. The shellbags from the live machine will populate the multiple views available in SeeShells and 
                                 the user can explore the shellbags and the extrapolated shellbag events.
@@ -168,6 +180,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 Offline Parsing refers to parsing shellbag data from a Windows Registry hive, the UsrClass.dat file.
                             </Typography>
+                            <img src={OfflineParse} alt="offline-parse" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 To get an offline hive for SeeShells from a Windows machine:
                             </Typography>
@@ -177,7 +190,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 2. Navigate to $USERHOME\AppData\Local\Microsoft\Windows\
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
+                            <img src={RegistryHive} alt="registry-hive" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 3. Copy and Paste the UsrClass.dat file from the Windows folder to the destination folder
                             </Typography>
@@ -196,33 +209,35 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 2. Under "Import Registry" on the Start Menu, select "From Registry File"
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 a. Alternatively, a user can navigate to the global menu in the upper left corner and select
                                  File > Import > From Offline Registry
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
+                            <img src={ImportSelect} alt="import-select" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 3. In the File Dialog, navigate to the UsrClass.dat file to be parsed
                             </Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 4. Click on the UsrClass.dat file and select Open
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
+                            <img src={ImportHive} alt="import-hive" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 5. The Timeline, Registry, Shellbags, and Events views will populate with the parsed file contents
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
+                            <img src={OfflineHive} alt="offline-hive" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 Once the UsrClass.dat file is loaded into SeeShells, the user will be able to explore the 
                                 shellbags and extrapolated shellbag events using the multiple views available in SeeShells.
                             </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "inspector" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Shell Inspector</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+
+                            </Typography>
+                            <img src={ShellInspector} alt="shellbag-inspector" />
                         </Paper>
                     }
                     {this.props.subpage === "timeline" &&
@@ -231,6 +246,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 The Timeline view allows users to view ShellBag Events in chronological order.
                             </Typography>
+                            <img src={TimelineView} alt="timeline-view" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 The Timeline view starts at the lowest zoom level, providing users with a chronologically 
                                 sorted activity histogram that allows the user to quickly identify time periods of high 
@@ -294,6 +310,7 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 Shellbags store information that can be used to make inferences about how a Windows machine was used in the past. 
                             </Typography>
+                            <img src={ShellbagEvent} alt="shellbag-event" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 SeeShells analyzes the shellbags stored in a Windows registry hive and interprets them as Shell Events. 
@@ -337,22 +354,31 @@ class DocumentationPage extends React.Component {
                     {this.props.subpage === "table" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Shellbag Table</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+
+                            </Typography>
+                            <img src={ShellbagTable} alt="shellbag-table" />
                         </Paper>
                     }
                     {this.props.subpage === "hex" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Hex Viewer</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+
+                            </Typography>
+                            <img src={HexViewer} alt="hex-viewer" />
+                            <img src={HexHighlight} alt="highlighted-hex-viewer" />
                         </Paper>
                     }
                     {this.props.subpage === "registry" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Registry View</Typography>
-                            <img src={RegistryImage} alt="registry" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 The registry view presents a recreation of the Windows Registry at the time harvested shellbags were created. 
                                 This view allows the user to explore the file system for any folders of interest, and use that folder information
                                  to narrow down their search for incriminating evidence.
                             </Typography>
+                            <img src={RegistryImage} alt="registry" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 To use the registry view:
                             </Typography>
@@ -371,10 +397,10 @@ class DocumentationPage extends React.Component {
                     {this.props.subpage === "filters" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Shellbag Filtering</Typography>
-                            <img src={EmptyFilter} alt="shellbag-filtering" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 Shellbag filter controls allow the user to pick a small range of shellbags to view at a time.
                             </Typography>
+                            <img src={EmptyFilter} alt="shellbag-filtering" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 To use the filter controls:
                             </Typography>
