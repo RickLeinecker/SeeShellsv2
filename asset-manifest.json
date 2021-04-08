@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/v2/static/css/main.4b80fef8.chunk.css",
-    "main.js": "/v2/static/js/main.9517cf3d.chunk.js",
-    "main.js.map": "/v2/static/js/main.9517cf3d.chunk.js.map",
+    "main.js": "/v2/static/js/main.63c7a191.chunk.js",
+    "main.js.map": "/v2/static/js/main.63c7a191.chunk.js.map",
     "runtime-main.js": "/v2/static/js/runtime-main.9fe4bb44.js",
     "runtime-main.js.map": "/v2/static/js/runtime-main.9fe4bb44.js.map",
     "static/js/2.08477084.chunk.js": "/v2/static/js/2.08477084.chunk.js",
@@ -17,16 +17,23 @@
     "static/media/croppedUcfLogo.f07e9818.png": "/v2/static/media/croppedUcfLogo.f07e9818.png",
     "static/media/croppedV2Logo.f5010341.png": "/v2/static/media/croppedV2Logo.f5010341.png",
     "static/media/filter-time-selection.ae37a4b3.png": "/v2/static/media/filter-time-selection.ae37a4b3.png",
+    "static/media/hex-viewer-highlight.6b123352.png": "/v2/static/media/hex-viewer-highlight.6b123352.png",
+    "static/media/hex-viewer.a25ce16c.png": "/v2/static/media/hex-viewer.a25ce16c.png",
+    "static/media/import-hive.adc8f14c.png": "/v2/static/media/import-hive.adc8f14c.png",
     "static/media/live-registry.4a3993c6.png": "/v2/static/media/live-registry.4a3993c6.png",
+    "static/media/offline-hive.d614ca5b.png": "/v2/static/media/offline-hive.d614ca5b.png",
     "static/media/pearl.9c3f4de4.png": "/v2/static/media/pearl.9c3f4de4.png",
+    "static/media/registry-hive.ca75ebe1.png": "/v2/static/media/registry-hive.ca75ebe1.png",
     "static/media/registry-to-inspector.cb0069c7.png": "/v2/static/media/registry-to-inspector.cb0069c7.png",
     "static/media/seeshellsLogo-650.6fdc9ab0.png": "/v2/static/media/seeshellsLogo-650.6fdc9ab0.png",
-    "static/media/shell-inspector.b74b9ed1.png": "/v2/static/media/shell-inspector.b74b9ed1.png"
+    "static/media/shell-inspector.b74b9ed1.png": "/v2/static/media/shell-inspector.b74b9ed1.png",
+    "static/media/shellbag-table.23cba5af.png": "/v2/static/media/shellbag-table.23cba5af.png",
+    "static/media/timeline-view.8f939c56.png": "/v2/static/media/timeline-view.8f939c56.png"
   },
   "entrypoints": [
     "static/js/runtime-main.9fe4bb44.js",
     "static/js/2.08477084.chunk.js",
     "static/css/main.4b80fef8.chunk.css",
-    "static/js/main.9517cf3d.chunk.js"
+    "static/js/main.63c7a191.chunk.js"
   ]
 }
