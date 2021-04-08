@@ -76,13 +76,12 @@ class DocumentationBar extends React.Component {
                         <ButtonGroup orientation="vertical">
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="online">Online Parsing</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="offline">Offline Parsing</Button>
-                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="advanced">Advanced Configuration</Button>
-                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="toolbar">Toolbar</Button>
-                        </ButtonGroup>
-                        <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="data">Viewing the Data</Button>
-                        <ButtonGroup orientation="vertical">
-                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">The Timeline</Button>
-                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="events">Events</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="inspector">Shell Inspector</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">Event Timeline</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="events">Shellbag Events</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="table">Shellbag Table</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="hex">Hex Viewer</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="registry">Registry View</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filters</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="export">Exporting</Button>
                         </ButtonGroup>

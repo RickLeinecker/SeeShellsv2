@@ -4,11 +4,15 @@ import { withRouter, HashRouter as Router } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import DocumentationBar from '../components/DocumentationBar.js';
 import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ReactPlayer from "react-player";
+import RegistryImage from '../assets/live-registry.png';
+import RegistryToInspector from '../assets/registry-to-inspector.png';
+import EmptyFilter from '../assets/empty-filter-controls.png';
+import FilterTime from '../assets/filter-time-selection.png';
+import ShellInspector from '../assets/shell-inspector.png';
 
 const styles = {
     content: {
@@ -28,6 +32,7 @@ const styles = {
         alignSelf: 'center',
         color: '#33A1FD',
         textAlign: 'center',
+        paddingBottom: '1%',
     },
     text: {
         textAlign: 'center',
@@ -128,22 +133,41 @@ class DocumentationPage extends React.Component {
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>How To Use</Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
-                                SeeShells collects ShellBags specific Windows Registry keys and parses through them, 
-                                and organizes the data found in them to display them on a graphical timeline. The 
-                                graphical timeline is the unique feature that SeeShells offers over other existing parsers: 
-                                this timeline makes ShellBag data easier to understand and facilitates the process of
-                                finding a significant pattern or piece of evidence.
+                                Select a subheading for step-by-step guides on how to use the SeeShells application.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                SeeShells is intended to be run on Windows machines. The application 
+                                must be run as administrator in order to have access to the registry.
                             </Typography>
                         </Paper>
                     }
                     {this.props.subpage === "online" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Online Parsing</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                Online Parsing refers to parsing shellbag data directly from the machine presently in use.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                To parse an active registry:
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                1. Select the option that says "From Active Registry" from the start menu of the application.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                a. Alternatively, if SeeShells is already running, select Import > From Live Registry
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                2. The shellbags from the live machine will populate the multiple views available in SeeShells and 
+                                the user can explore the shellbags and the extrapolated shellbag events.
+                            </Typography>
                         </Paper>
                     }
                     {this.props.subpage === "offline" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Offline Parsing</Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                Offline Parsing refers to parsing shellbag data from a Windows Registry hive, the UsrClass.dat file.
+                            </Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
                                 To get an offline hive for SeeShells from a Windows machine:
                             </Typography>
@@ -196,19 +220,9 @@ class DocumentationPage extends React.Component {
                             <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
                         </Paper>
                     }
-                    {this.props.subpage === "advanced" &&
+                    {this.props.subpage === "inspector" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Advanced Configuration</Typography>
-                        </Paper>
-                    }
-                    {this.props.subpage === "toolbar" &&
-                        <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Toolbar</Typography>
-                        </Paper>
-                    }
-                    {this.props.subpage === "data" &&
-                        <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Viewing The Data</Typography>
+                            <Typography variant="title" className={this.props.classes.title}>Shell Inspector</Typography>
                         </Paper>
                     }
                     {this.props.subpage === "timeline" &&
@@ -320,9 +334,63 @@ class DocumentationPage extends React.Component {
                             </Typography>
                         </Paper>
                     }
+                    {this.props.subpage === "table" &&
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Shellbag Table</Typography>
+                        </Paper>
+                    }
+                    {this.props.subpage === "hex" &&
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Hex Viewer</Typography>
+                        </Paper>
+                    }
+                    {this.props.subpage === "registry" &&
+                        <Paper className={this.props.classes.content}>
+                            <Typography variant="title" className={this.props.classes.title}>Registry View</Typography>
+                            <img src={RegistryImage} alt="registry" />
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                The registry view presents a recreation of the Windows Registry at the time harvested shellbags were created. 
+                                This view allows the user to explore the file system for any folders of interest, and use that folder information
+                                 to narrow down their search for incriminating evidence.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                To use the registry view:
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                1. Clicking the triangle next to a drive or folder name will open up the subtree of folders within it.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                2. Selecting a drive or folder will bring up associated shellbag information in the shell inspector.
+                            </Typography>
+                            <img src={RegistryToInspector} alt="registry-to-inspector" />
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                3. Information presented in the shell inspector can narrow down a timespan of interest.
+                            </Typography>
+                        </Paper>
+                    }
                     {this.props.subpage === "filters" &&
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>Shellbag Filtering</Typography>
+                            <img src={EmptyFilter} alt="shellbag-filtering" />
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                Shellbag filter controls allow the user to pick a small range of shellbags to view at a time.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                To use the filter controls:
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                1. Select a user of interest.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                2. Select a hive to filter from.
+                            </Typography>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                3. Select a beginning and end date and time.
+                            </Typography>
+                            <img src={FilterTime} alt="shellbag-filtering-time-selector" />
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                4. All views should update to only display shellbags within the selected criteria.
+                            </Typography>
                         </Paper>
                     }
                     {this.props.subpage === "export" &&
