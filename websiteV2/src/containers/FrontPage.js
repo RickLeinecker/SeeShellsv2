@@ -4,10 +4,7 @@ import pearl from '../assets/pearl.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Grow from '@material-ui/core/Grow';
+import { Button, Paper, Typography, Grow, Tooltip } from '@material-ui/core';
 
 const styles = {
     frontPage: {
@@ -148,7 +145,9 @@ class FrontPage extends React.Component {
                         </Grow>
                     </Paper>
                     <Paper elevation={0} className={this.props.classes.featuresContainer}>
-                        <Typography variant="title" className={this.props.classes.title}>Why SeeShells?</Typography>
+                        <Tooltip title="We search seeshells on your C: shore!">
+                            <Typography variant="title" className={this.props.classes.title}>Why SeeShells?</Typography>
+                        </Tooltip>
                         <Grow in={true}>
                             <Paper elevation={0} className={this.props.classes.infoContainer}>
                                 <Paper elevation={0} className={this.props.classes.info}>

@@ -3,11 +3,7 @@ import logo from '../assets/seeshellsLogo-100.png';
 import logoClicked from '../assets/seeshellsLogo-100-click.png';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
+import { Button, AppBar, Toolbar, Paper, Collapse, Tooltip } from '@material-ui/core';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
 const styles = {
@@ -122,7 +118,9 @@ class MenuBar extends React.Component {
             <Router basename="/">
                 <AppBar position="static" className={this.props.classes.menuBar}>
                     <Toolbar>
-                        <div alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
+                        <Tooltip title='Return Home'>
+                            <div alt='SeeShells Logo' className={this.props.classes.logo} onClick={this.handleClick}/>
+                        </Tooltip>
                         <p className={this.props.classes.title}>SEESHELLS</p>
                         {!this.state.hideNav && 
                             <div className={this.props.classes.buttonContainer}> 
