@@ -1,8 +1,15 @@
 import React from 'react';
-import { withStyles, withTheme } from '@material-ui/core/styles';
-import { withRouter, HashRouter as Router, Route } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import { withRouter, HashRouter as Router } from 'react-router-dom';
 import AboutBar from '../components/AboutBar.js';
-import { Paper, Typography, Slide, Collapse, Button } from '@material-ui/core';
+import WindowsRegistry from '../components/about-page/WindowsRegistry.js';
+import Shellbags from '../components/about-page/Shellbags.js';
+import SeeShells from '../components/about-page/SeeShells.js';
+import Parsing from '../components/about-page/Parsing.js';
+import Analysis from '../components/about-page/Analysis.js';
+import Timeline from '../components/about-page/Timeline.js';
+import CaseStudies from '../components/about-page/CaseStudies.js';
+import { Paper, Typography, Collapse, Button } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ReactPlayer from "react-player";
 
@@ -41,20 +48,6 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: '#424242',
-    },
-    caseStudies: {
-        display: 'flex',
-        justifyContent: 'space-evenly',
-        flexWrap: 'wrap',
-        height: '100%',
-        width: '100%',
-        overflow: 'auto',
-    },
-    caseStudy: {
-        textAlign: 'center',
-        fontSize: '30px',
-        fontWeight: 'bold',
-        color: 'white',
     },
     sidebarContainer: {
         height: '100%',
@@ -170,94 +163,37 @@ class AboutPage extends React.Component {
                     }
                     {this.props.subpage === "registry" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>The Windows Registry</Typography>
+                            <WindowsRegistry/>
                         </Paper>
                     }
                     {this.props.subpage === "shellbags" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Shellbags</Typography>
+                            <Shellbags/>
                         </Paper>
                     }
                     {this.props.subpage === "seeshells" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>SeeShells</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                SeeShells is an information extraction software. The objective is to create a standalone open 
-                                source executable that can run both online and offline. It extracts and parses through Windows 
-                                Registry information. This data is then converted into two forms. The first is a csv file that 
-                                contains all the raw data we obtain from the registry. The second is a human readable timeline 
-                                that can be downloaded and used as evidence in a courtroom. The timeline provides an interactive 
-                                easier to read visualization of the data extracted from the windows registries. This information 
-                                is otherwise difficult and time consuming to comb through and understand. The timeline can be 
-                                filtered by date, event name, the contents of the event (e.g. accessed, modified, created), user, 
-                                and the event type. These filters can be applied to all events and cleared out individually as the 
-                                users see fit. The application also contains an about page as well as a help page so that users who 
-                                are not able to connect to the internet are still able to use the program and obtain guidance if the need it.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The parsing and extraction of information has a slightly different process for each of the windows 
-                                versions including Windows XP, Windows Vista Windows 7,8,8.1 and 10. In order to create a robust 
-                                application we have set up a server to store database information on parsing different registry 
-                                versions. We have implemented the use of embedded scripting in order to keep the application 
-                                up-to-date without requiring the users to update the program or redownload it. Currently, we do not 
-                                know all there is to know about shellbags. Currently unidentifiable shellbag items check if a script exists to parse it.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The software expediates the process of extracting, parsing, and presenting the registry information 
-                                in a way that is condensed and easily understandable. We hope others will benefit from our interactive 
-                                timeline generated from the ShellBag information and we hope to make a great impact on the digital forensics community.
-                            </Typography>
+                            <SeeShells/>
                         </Paper>
                     }
                     {this.props.subpage === "parser" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>The SeeShells Parser</Typography>
+                            <Parsing/>
                         </Paper>
                     }
                     {this.props.subpage === "analysis" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>SeeShells Shellbag Analysis</Typography>
+                            <Analysis/>
                         </Paper>
                     }
                     {this.props.subpage === "timeline" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>SeeShells Timeline View</Typography>
-                        </Paper>
-                    }
-                    {this.props.subpage === "filters" &&
-                        <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>SeeShells Shellbag Filtering</Typography>
+                            <Timeline/>
                         </Paper>
                     }
                     {this.props.subpage === "case-studies" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Case Studies</Typography>
-                            <Paper className={this.props.classes.caseStudies}>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                                <Paper className={this.props.classes.video}>
-                                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                    <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                                </Paper>
-                            </Paper>
+                            <CaseStudies/>
                         </Paper>
                     }
                 </Paper>
