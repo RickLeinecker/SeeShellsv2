@@ -21,16 +21,13 @@ const styles = {
         width: '100%',
         height: '600px',
         textAlign: 'center',
-        alignSelf: 'center',
-        justifyContent: 'center',
         backgroundImage: 'url(' + beach + ')',
         overflow: 'hidden',
+        borderRadius: '0',
     },
     logo: {
         height: '150px',
         width: '150px',
-        display: 'flex',
-        float: 'left',
     },
     downloadContainer: {
         display: 'flex',
@@ -70,6 +67,10 @@ const styles = {
         justifyContent: 'center',
         marginTop: '5%',
     },
+    githubContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
     github: {
         paddingTop: '5%',
         width: '45%',
@@ -84,23 +85,23 @@ const styles = {
 class DownloadPage extends React.Component {
     render() {
         return(
-            <Paper className={this.props.classes.downloadPage}>
-                <Paper className={this.props.classes.downloadContainer}>
-                    <div className={this.props.classes.image}>
+            <Paper elevation={0} className={this.props.classes.downloadPage}>
+                <Paper elevation={0} className={this.props.classes.downloadContainer}>
+                    <Paper elevation={0} className={this.props.classes.image}>
                         <div id='stars'/>
                         <div id='stars2'/>
                         <div id='stars3'/>
-                        <Grow in={true}>
-                            <Paper className={this.props.classes.contentContainer}>
-                                <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
-                                <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                                <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.2/SeeShellsV2.exe">SEESHELLS.EXE</Button>
-                                <a href="https://github.com/ShellBags/v2">
-                                    <img src={github} alt='Github Logo' className={this.props.classes.github}/>
-                                </a>
-                            </Paper>
-                        </Grow>
-                    </div>
+                    </Paper>
+                    <Grow in={true}>
+                        <Paper className={this.props.classes.contentContainer}>
+                            <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
+                            <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                            <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.2/SeeShellsV2.exe">SEESHELLS.EXE</Button>
+                            <a href="https://github.com/ShellBags/v2" className={this.props.classes.githubContainer} >
+                                <img src={github} alt='Github Logo' className={this.props.classes.github}/>
+                            </a>
+                        </Paper>
+                    </Grow>
                 </Paper>
             </Paper>
         );
