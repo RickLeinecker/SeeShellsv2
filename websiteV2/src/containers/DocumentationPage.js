@@ -1,29 +1,22 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import DocumentationBar from '../components/DocumentationBar.js';
-import Typography from '@material-ui/core/Typography';
-import Collapse from '@material-ui/core/Collapse';
-import Button from '@material-ui/core/Button';
+import { Paper, Typography, Collapse, Button } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+
+import DocumentationBar from '../components/DocumentationBar.js';
+import OnlineParsing from '../components/documentation-page/OnlineParsing.js';
+import OfflineParsing from '../components/documentation-page/OfflineParsing.js';
+import ShellInspector from '../components/documentation-page/ShellInspector.js';
+import EventTimeline from '../components/documentation-page/EventTimeline.js';
+import ShellbagEvents from '../components/documentation-page/ShellbagEvents.js';
+import ShellbagTable from '../components/documentation-page/ShellbagTable.js';
+import HexViewer from '../components/documentation-page/HexViewer.js';
+import RegistryView from '../components/documentation-page/RegistryView.js';
+import Filtering from '../components/documentation-page/Filtering.js';
+import Exporting from '../components/documentation-page/Exporting.js';
+
 import ReactPlayer from "react-player";
-import RegistryImage from '../assets/live-registry.png';
-import RegistryToInspector from '../assets/registry-to-inspector.png';
-import EmptyFilter from '../assets/empty-filter-controls.png';
-import FilterTime from '../assets/filter-time-selection.png';
-import ShellInspector from '../assets/shell-inspector.png';
-import HexViewer from '../assets/hex-viewer.png';
-import HexHighlight from '../assets/hex-viewer-highlight.png';
-import ShellbagTable from '../assets/shellbag-table.png';
-import OfflineParse from '../assets/offline-parse.png';
-import OnlineParse from '../assets/online-parse.png';
-import TimelineView from '../assets/timeline-view.png';
-import ShellbagEvent from '../assets/shellbag-event.png';
-import RegistryHive from '../assets/registry-hive.png';
-import ImportSelect from '../assets/import-select.png';
-import ImportHive from '../assets/import-hive.png';
-import OfflineHive from '../assets/offline-hive.png';
 
 const styles = {
     content: {
@@ -153,275 +146,52 @@ class DocumentationPage extends React.Component {
                     }
                     {this.props.subpage === "online" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Online Parsing</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Online Parsing refers to parsing shellbag data directly from the machine presently in use.
-                            </Typography>
-                            <img src={OnlineParse} alt="online-parse" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                To parse an active registry:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. Select the option that says "From Active Registry" from the start menu of the application.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                a. Alternatively, if SeeShells is already running, select Import > From Live Registry
-                            </Typography>
-                            <img src={ImportSelect} alt="import-select" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. The shellbags from the live machine will populate the multiple views available in SeeShells and 
-                                the user can explore the shellbags and the extrapolated shellbag events.
-                            </Typography>
+                            <OnlineParsing/>
                         </Paper>
                     }
                     {this.props.subpage === "offline" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Offline Parsing</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Offline Parsing refers to parsing shellbag data from a Windows Registry hive, the UsrClass.dat file.
-                            </Typography>
-                            <img src={OfflineParse} alt="offline-parse" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                To get an offline hive for SeeShells from a Windows machine:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. Access the Windows File Explorer as an Admin user
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. Navigate to $USERHOME\AppData\Local\Microsoft\Windows\
-                            </Typography>
-                            <img src={RegistryHive} alt="registry-hive" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                3. Copy and Paste the UsrClass.dat file from the Windows folder to the destination folder
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Currently, SeeShells only supports the parsing of .dat files. UsrClass.dat is the 
-                                recommended file to be parsed in SeeShells since it contains information pertaining to 
-                                shellbags. Conversely, NTUSER.dat is a supported filetype, but contains no information 
-                                pertaining to shellbags and will not be usful to a SeeShells user.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                To load a registry hive into SeeShells:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. Run SeeShells
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. Under "Import Registry" on the Start Menu, select "From Registry File"
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                a. Alternatively, a user can navigate to the global menu in the upper left corner and select
-                                 File > Import > From Offline Registry
-                            </Typography>
-                            <img src={ImportSelect} alt="import-select" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                3. In the File Dialog, navigate to the UsrClass.dat file to be parsed
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                4. Click on the UsrClass.dat file and select Open
-                            </Typography>
-                            <img src={ImportHive} alt="import-hive" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                5. The Timeline, Registry, Shellbags, and Events views will populate with the parsed file contents
-                            </Typography>
-                            <img src={OfflineHive} alt="offline-hive" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Once the UsrClass.dat file is loaded into SeeShells, the user will be able to explore the 
-                                shellbags and extrapolated shellbag events using the multiple views available in SeeShells.
-                            </Typography>
+                            <OfflineParsing/>
                         </Paper>
                     }
                     {this.props.subpage === "inspector" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Shell Inspector</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-
-                            </Typography>
-                            <img src={ShellInspector} alt="shellbag-inspector" />
+                            <ShellInspector/>
                         </Paper>
                     }
                     {this.props.subpage === "timeline" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Timeline View</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The Timeline view allows users to view ShellBag Events in chronological order.
-                            </Typography>
-                            <img src={TimelineView} alt="timeline-view" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The Timeline view starts at the lowest zoom level, providing users with a chronologically 
-                                sorted activity histogram that allows the user to quickly identify time periods of high 
-                                and low levels of activity on the machine.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The user can narrow the timespan being viewed by using the mouse scroll wheel:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. While hovering the cursor over the area they want to expand, the user can move the 
-                                mouse scroll wheel up to zoom in and shorten the viewable timespan and enlarge the cards.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. As the user zooms in, the Shellbag event cards will sort themselves so that the 
-                                viewable cards fall within the timespan area focused on by the user.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                3. By zooming in further, the user can further narrow the timespan and Shellbag 
-                                Event data will begin to populate the cards.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                4. At this zoom level, the user can either further zoom in or navigate the timeline using the listed controls:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                a. To navigate left and right on the Timeline, the user can click and drag the Timeline left or right to navigate in either direction
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                i. Alternatively, holding the ALT key will allow the user to scroll left and right on the Timeline using the mouse scroll wheel
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                b. To navigate up and down on the Timeline, the user can click and drag the Timeline up or down to navigate in either direction
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                i. Alternatively, holding the CTRL key will allow the user to scroll up and down on the Timeline using the mouse scroll wheel
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                5. To zoom out, the user can move the mouse wheel down and this will lengthen the viewable timespan 
-                                and shrink the cards, allowing the user to view the activity histogram.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                6. Alternatively, users can filter the Shellbag Events on the Timeline using the Begin Date and End 
-                                Date filters on the Filter Controls panel:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                a. Setting a Begin Date will filter the list for all Shellbag Events occurring after that date
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                b. Setting an End Date will filter the list for all Shellbag Events occurring before that date
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                7. Using the Filter Controls, the user will be able to shorten the displayed timespan without needing to use the mouse scroll wheel controls.
-                            </Typography>
+                            <EventTimeline/>
                         </Paper>
                     }
                     {this.props.subpage === "events" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Shellbag Events</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Shellbags store information that can be used to make inferences about how a Windows machine was used in the past. 
-                            </Typography>
-                            <img src={ShellbagEvent} alt="shellbag-event" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>[image placeholder]</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                SeeShells analyzes the shellbags stored in a Windows registry hive and interprets them as Shell Events. 
-                                Each Shell Event documents an action taken by a user that resulted in a change to their Windows Machine. 
-                                For example, when a user connects a removable storage device to their Windows system, the file system is 
-                                altered to display the removable storage device and its contents. The resulting changes to the user's 
-                                Windows registry hive can be read and interpreted by SeeShells as a Shell Event that describes the Removable 
-                                Storage Device Connect action.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Shell Events contain key information about an action taken on a Windows system including the type of 
-                                action, the user that performed the action, the time at which the action was taken, any file system 
-                                locations associated with the action, and all parsed shellbag data that provide evidence for the action.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Shellbag Events include:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Item Creation
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Item Last Access
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Item Last Modify
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Item Last Registry Write
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Program Installation Event
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Feature Update Event
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                File Download Event 
-                            </Typography>
+                            <ShellbagEvents/>
                         </Paper>
                     }
                     {this.props.subpage === "table" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Shellbag Table</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-
-                            </Typography>
-                            <img src={ShellbagTable} alt="shellbag-table" />
+                            <ShellbagTable/>
                         </Paper>
                     }
                     {this.props.subpage === "hex" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Hex Viewer</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-
-                            </Typography>
-                            <img src={HexViewer} alt="hex-viewer" />
-                            <img src={HexHighlight} alt="highlighted-hex-viewer" />
+                            <HexViewer/>
                         </Paper>
                     }
                     {this.props.subpage === "registry" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Registry View</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                The registry view presents a recreation of the Windows Registry at the time harvested shellbags were created. 
-                                This view allows the user to explore the file system for any folders of interest, and use that folder information
-                                 to narrow down their search for incriminating evidence.
-                            </Typography>
-                            <img src={RegistryImage} alt="registry" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                To use the registry view:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. Clicking the triangle next to a drive or folder name will open up the subtree of folders within it.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. Selecting a drive or folder will bring up associated shellbag information in the shell inspector.
-                            </Typography>
-                            <img src={RegistryToInspector} alt="registry-to-inspector" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                3. Information presented in the shell inspector can narrow down a timespan of interest.
-                            </Typography>
+                            <RegistryView/>
                         </Paper>
                     }
                     {this.props.subpage === "filters" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Shellbag Filtering</Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Shellbag filter controls allow the user to pick a small range of shellbags to view at a time.
-                            </Typography>
-                            <img src={EmptyFilter} alt="shellbag-filtering" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                To use the filter controls:
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                1. Select a user of interest.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                2. Select a hive to filter from.
-                            </Typography>
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                3. Select a beginning and end date and time.
-                            </Typography>
-                            <img src={FilterTime} alt="shellbag-filtering-time-selector" />
-                            <Typography variant="subtitle1" className={this.props.classes.text}>
-                                4. All views should update to only display shellbags within the selected criteria.
-                            </Typography>
+                            <Filtering/>
                         </Paper>
                     }
                     {this.props.subpage === "export" &&
                         <Paper className={this.props.classes.content}>
-                            <Typography variant="title" className={this.props.classes.title}>Exporting</Typography>
+                            <Exporting/>
                         </Paper>
                     }
                 </Paper>
