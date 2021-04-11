@@ -81,9 +81,6 @@ function App(props) {
           <Route exact path="/about/timeline">
             <AboutPage subpage="timeline"/>
           </Route>
-          <Route exact path="/about/filters">
-            <AboutPage subpage="filters"/>
-          </Route>
           <Route exact path="/about/case-studies">
             <AboutPage subpage="case-studies"/>
           </Route>

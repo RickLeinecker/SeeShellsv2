@@ -2,8 +2,7 @@ import React from 'react';
 import DeveloperProfile from '../components/DeveloperProfile.js';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import { Typography, Paper } from '@material-ui/core';
 
 const styles = {
     devContainer: {

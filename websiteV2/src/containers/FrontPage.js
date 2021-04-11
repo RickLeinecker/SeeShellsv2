@@ -62,7 +62,6 @@ const styles = {
     title: {
         color: '#082998',
         fontSize: 'calc(12px + 2.5vw)',
-        textDecoration: 'underline',
         fontWeight: 'bold',
     },
     featuresContainer: {
@@ -156,7 +155,7 @@ class FrontPage extends React.Component {
                                 </Paper>
                                 <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging</Typography>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with event-based pattern recognition</Typography>
                                 </Paper>
                                 <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
@@ -166,9 +165,17 @@ class FrontPage extends React.Component {
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
                                     <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends</Typography>
                                 </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Exportation</span> for convenient reporting</Typography>
+                                </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Recreation</span> of the File Explorer to find folders of interest</Typography>
+                                </Paper>
                             </Paper>
                         </Grow>
-                        <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
+                        <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">LEARN MORE</Button>
                     </Paper>
                 </Paper>
             </Router>

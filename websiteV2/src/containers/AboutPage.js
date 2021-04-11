@@ -2,11 +2,7 @@ import React from 'react';
 import { withStyles, withTheme } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router, Route } from 'react-router-dom';
 import AboutBar from '../components/AboutBar.js';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
-import Collapse from '@material-ui/core/Collapse';
-import Button from '@material-ui/core/Button';
+import { Paper, Typography, Slide, Collapse, Button } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ReactPlayer from "react-player";
 
