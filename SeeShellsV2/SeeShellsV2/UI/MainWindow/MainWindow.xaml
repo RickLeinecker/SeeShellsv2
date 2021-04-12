@@ -44,68 +44,80 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
-        <Grid>
-            <xcad:DockingManager AllowMixedOrientation="True"
-                                 BorderBrush="Black"
-                                 BorderThickness="1">
-                <xcad:DockingManager.DocumentHeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
-                            <TextBlock Text="{Binding Title}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </xcad:DockingManager.DocumentHeaderTemplate>
+        <xcad:DockingManager AllowMixedOrientation="True"
+                             BorderBrush="Black"
+                             BorderThickness="1">
+            <xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding Title}" />
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>
 
-                <xcad:LayoutRoot x:Name="_layoutRoot">
-                    <xcad:LayoutPanel Orientation="Horizontal">
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel Orientation="Horizontal">
 
-                        <xcad:LayoutPanel Orientation="Vertical" DockWidth="320">
-                            <xcad:LayoutAnchorablePane DockMinWidth="200">
-                                <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:InspectorView />
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorablePane>
+                    <xcad:LayoutPanel Orientation="Vertical" DockWidth="320">
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:InspectorView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
 
-                            <xcad:LayoutAnchorablePane DockMinWidth="200">
-                                <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:HexView />
-                                </xcad:LayoutAnchorable>
-                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:FilterControlView />
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutPanel>
-
-                        <xcad:LayoutDocumentPaneGroup >
-                            <xcad:LayoutDocumentPane>
-                                <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" >
-                                    <local:TimelineView />
-                                </xcad:LayoutDocument>
-                                <xcad:LayoutDocument ContentId="tableview" Title="Shellbags" CanClose="False" >
-                                    <local:ShellItemTableView />
-                                </xcad:LayoutDocument>
-                                <xcad:LayoutDocument ContentId="eventview" Title="Events" CanClose="False" >
-                                    <local:ShellEventTableView />
-                                </xcad:LayoutDocument>
-                            </xcad:LayoutDocumentPane>
-                        </xcad:LayoutDocumentPaneGroup >
-
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="320">
-                            <xcad:LayoutAnchorablePane DockMinWidth="200">
-                                <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:RegistryView />
-                                </xcad:LayoutAnchorable>
-                                <!--<xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" >
-                                    <local:FileSystemView />
-                                </xcad:LayoutAnchorable>-->
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:HexView />
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:FilterControlView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
                     </xcad:LayoutPanel>
-                </xcad:LayoutRoot>
-            </xcad:DockingManager>
 
-            <local:QuickStartView />
-        </Grid>
+                    <xcad:LayoutDocumentPaneGroup >
+                        <xcad:LayoutDocumentPane>
+                            <!--<xcad:LayoutDocument ContentId="timelineview" Title="Timeline 1" CanClose="False" >
+                                <local:TimelineView />
+                            </xcad:LayoutDocument>-->
+                            <xcad:LayoutDocument ContentId="timelineview" Title="Events" CanClose="False" ToolTip="A timeline of user activity">
+                                <local:TimelineViewAlt />
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument ContentId="tableview" Title="Shellbags" CanClose="False" ToolTip="A list of shellbags found in the loaded registry hives">
+                                <local:ShellItemTableView />
+                            </xcad:LayoutDocument>
+                            <!--<xcad:LayoutDocument ContentId="eventview" Title="Events" CanClose="False" >
+                                <local:ShellEventTableView />
+                            </xcad:LayoutDocument>-->
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup >
+
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="320">
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:RegistryView />
+                            </xcad:LayoutAnchorable>
+                            <!--<xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:FileSystemView />
+                            </xcad:LayoutAnchorable>-->
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+
+
+        <DockPanel IsEnabled="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False">
+            <StackPanel Visibility="{Binding StatusVisibility}" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Border Background="{StaticResource MahApps.Brushes.ThemeBackground}"
+                        BorderBrush="{StaticResource MahApps.Brushes.Gray2}"
+                        BorderThickness="1" Margin="5" Padding="5">
+                    <TextBlock Text="{Binding Status}" />
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <local:QuickStartView />
     </Grid>
 </mah:MetroWindow>

@@ -3,6 +3,7 @@ using System.Windows.Media;
 using Unity;
 
 using SeeShellsV2.UI;
+using System.Windows;
 
 namespace SeeShellsV2.Factories
 {
@@ -28,26 +29,8 @@ namespace SeeShellsV2.Factories
         {
             IWindow window = container.Resolve<IWindow>(name);
 
-            foreach (var child in (window.Content as Visual).GetChildren())
-            {
-                if (child is AvalonDock.DockingManager)
-                {
-                    var dockableEnumerator = (child as AvalonDock.DockingManager).LogicalChildrenPublic;
-                    while (dockableEnumerator.MoveNext())
-                    {
-                        container.BuildUp(dockableEnumerator.Current.GetType(), dockableEnumerator.Current);
-
-                        foreach (var child2 in (dockableEnumerator.Current as Visual).GetChildren())
-                        {
-                            container.BuildUp(child2.GetType(), child2);
-                        }
-                    }
-                }
-                else
-                {
-                    container.BuildUp(child.GetType(), child);
-                }
-            }
+            foreach (var child in (window.Content as DependencyObject).GetChildren())
+                container.BuildUp(child.GetType(), child);
 
             return window;
         }
@@ -61,23 +44,19 @@ namespace SeeShellsV2.Factories
         /// <param name="parent">the parent Visual</param>
         /// <param name="recurse">enable to recursively iterate over the tree</param>
         /// <returns>WPF Visual Tree enumerable</returns>
-        public static IEnumerable<Visual> GetChildren(this Visual parent, bool recurse = true)
+        public static IEnumerable<DependencyObject> GetChildren(this DependencyObject parent, bool recurse = true)
         {
             if (parent != null)
             {
-                int count = VisualTreeHelper.GetChildrenCount(parent);
-                for (int i = 0; i < count; i++)
+                foreach (var child in LogicalTreeHelper.GetChildren(parent))
                 {
-                    // Retrieve child visual at specified index value.
-                    var child = VisualTreeHelper.GetChild(parent, i) as Visual;
-
-                    if (child != null)
+                    if (child is DependencyObject d)
                     {
-                        yield return child;
+                        yield return d;
 
                         if (recurse)
                         {
-                            foreach (var grandChild in child.GetChildren(true))
+                            foreach (var grandChild in d.GetChildren(true))
                             {
                                 yield return grandChild;
                             }

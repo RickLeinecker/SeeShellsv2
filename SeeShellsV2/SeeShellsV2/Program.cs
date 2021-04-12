@@ -64,6 +64,7 @@ namespace SeeShellsV2
             container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
             container.RegisterType<IHexViewVM, HexViewVM>();
+            container.RegisterType<ITimelineViewAltVM, TimelineViewAltVM>();
 
             // Create and run app with main window
             App app = container.Resolve<App>();

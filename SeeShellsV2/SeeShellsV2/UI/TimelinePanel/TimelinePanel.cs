@@ -348,8 +348,8 @@ namespace SeeShellsV2.UI
 			Point p = Mouse.GetPosition(ScrollOwner);
 			double NormX = p.X / ActualWidth;
 
-			TempBegin = BeginDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
-			TempEnd = EndDateInternal.Add((VisibleSpan / 5) * (NormX));
+			TempBegin = BeginDateInternal.Subtract((VisibleSpan / 2) * (1 - NormX));
+			TempEnd = EndDateInternal.Add((VisibleSpan / 2) * (NormX));
 
 			BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
 			EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
@@ -406,8 +406,8 @@ namespace SeeShellsV2.UI
 			Point p = Mouse.GetPosition(ScrollOwner);
 			double NormX = p.X / ActualWidth;
 
-			DateTime TempBegin = BeginDateInternal.Add((VisibleSpan / 5) * NormX);
-			DateTime TempEnd = EndDateInternal.Subtract((VisibleSpan / 5) * (1 - NormX));
+			DateTime TempBegin = BeginDateInternal.Add((VisibleSpan / 2) * NormX);
+			DateTime TempEnd = EndDateInternal.Subtract((VisibleSpan / 2) * (1 - NormX));
 
 			DoubleAnimation BeginAnimator = new DoubleAnimation(BeginDateInternal.Ticks, TempBegin.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));
 			DoubleAnimation EndAnimator = new DoubleAnimation(EndDateInternal.Ticks, TempEnd.Ticks, new Duration(TimeSpan.FromSeconds(0.5 / Math.Sqrt(ZoomInternal))));

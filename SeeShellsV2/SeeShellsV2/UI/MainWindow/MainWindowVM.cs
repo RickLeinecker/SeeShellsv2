@@ -7,6 +7,8 @@ using Unity;
 using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.Services;
+using System.Threading;
+using System.Windows;
 
 namespace SeeShellsV2.UI
 {
@@ -20,6 +22,10 @@ namespace SeeShellsV2.UI
         public string WebsiteUrl => @"https://shellbags.github.io/v2";
         public string GithubUrl => @"https://github.com/ShellBags/v2";
 
+        public Visibility StatusVisibility => Status != string.Empty ? Visibility.Visible : Visibility.Collapsed;
+        public string Status { get => _status; private set { _status = value; NotifyPropertyChanged(nameof(Status)); NotifyPropertyChanged(nameof(StatusVisibility)); } }
+        private string _status = string.Empty;
+
         public void ImportFromCSV(string path)
         {
             // importer.Import(path); => needs work
@@ -32,17 +38,28 @@ namespace SeeShellsV2.UI
 
         public async void ImportFromRegistry(string hiveLocation = null)
         {
+            Status = "Parsing Registry Hive...";
             (RegistryHive root, IEnumerable<IShellItem> parsedItems) = hiveLocation == null ? 
                 await Task.Run(() => RegImporter.ImportRegistry(true)) :
                 await Task.Run(() => RegImporter.ImportRegistry(false, true, hiveLocation));
 
             if (root == null || parsedItems == null)
-                return;
+            {
+                Status = "No New Shellbags Found.";
+            }
+            else
+            {
 
-            Selected.Current = root;
-            // Selected.CurrentEnumerable = root.Items;
+                Selected.Current = root;
+                // Selected.CurrentEnumerable = root.Items;
 
-            await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));
+                Status = "Generating User Action Events...";
+                await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));
+                Status = "Done.";
+            }
+
+            await Task.Run(() => Thread.Sleep(3000));
+            Status = string.Empty;
         }
     }
 }

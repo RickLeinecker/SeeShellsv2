@@ -19,6 +19,9 @@ namespace SeeShellsV2.UI
         public void ImportFromRegistry(string hiveLocation = null);
         string WebsiteUrl { get; }
         string GithubUrl { get; }
+
+        Visibility StatusVisibility { get; }
+        string Status { get; }
     }
 
     /// <summary>
