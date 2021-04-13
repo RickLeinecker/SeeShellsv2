@@ -14,6 +14,8 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
+
+        <local:RadioButtonSelector x:Key="RadioSelector" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -31,27 +33,46 @@
         <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Transparent"/>
         <GridSplitter Grid.Row="1" Grid.ColumnSpan="1" Background="Transparent"/>
 
-        <Border BorderThickness="1" BorderBrush="{StaticResource MahApps.Brushes.Gray8}"
+        <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="0" Grid.RowSpan="1"
                 Grid.Column="0" Grid.ColumnSpan="1">
-            <local:TimeSeriesHistogram YAxisTitle="User Action Frequency"
-                                       ItemsSource="{Binding ShellEvents}" DateTimeProperty="TimeStamp"
-                                       TextColor="{StaticResource MahApps.Colors.ThemeForeground}"
-                                       PlotAreaBorderColor="{StaticResource MahApps.Colors.Gray9}"
-                                       TicklineColor="{StaticResource MahApps.Colors.Gray9}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="9*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <RadioButton GroupName="color" IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=TypeName}">Type</RadioButton>
+                    <RadioButton GroupName="color" IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=User.Name}">User</RadioButton>
+                </StackPanel>
+
+                <local:TimeSeriesHistogram Grid.Row="1"
+                                           ColorProperty="{Binding ColorProperty}"
+                                           YAxisTitle="User Action Frequency"
+                                           MinimumDate="{Binding DateSelectionBegin}"
+                                           MaximumDate="{Binding DateSelectionEnd}"
+                                           ItemsSource="{Binding ShellEvents}" DateTimeProperty="TimeStamp"
+                                           TextColor="{StaticResource MahApps.Colors.ThemeForeground}"
+                                           PlotAreaBorderColor="{StaticResource MahApps.Colors.Gray9}"
+                                           TicklineColor="{StaticResource MahApps.Colors.Gray9}"/>
+            </Grid>
         </Border>
 
-        <Border BorderThickness="1" BorderBrush="{StaticResource MahApps.Brushes.Gray8}"
+        <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="0" Grid.RowSpan="3"
                 Grid.Column="2" Grid.ColumnSpan="1">
             <local:CalendarHeatMap ColorAxisTitle="User Action Frequency"
                                    ItemsSource="{Binding FilteredShellEvents}"
-                                   SelectionBegin="{Binding SelectionBegin}"
-                                   SelectionEnd="{Binding SelectionEnd}"
+                                   SelectionBegin="{Binding DateSelectionBegin}"
+                                   SelectionEnd="{Binding DateSelectionEnd}"
+                                   TextColor="{DynamicResource MahApps.Colors.ThemeForeground}"
+                                   GridColor="{DynamicResource MahApps.Colors.Gray9}"
+                                   SelectionColor="{DynamicResource MahApps.Colors.Accent}"
                                    DateTimeProperty="TimeStamp" Orientation="Vertical"/>
         </Border>
 
-        <Border BorderThickness="1" BorderBrush="{StaticResource MahApps.Brushes.Gray8}"
+        <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="2" Grid.RowSpan="1"
                 Grid.Column="0" Grid.ColumnSpan="1">
             <DataGrid ItemsSource="{Binding ShellEvents}" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">

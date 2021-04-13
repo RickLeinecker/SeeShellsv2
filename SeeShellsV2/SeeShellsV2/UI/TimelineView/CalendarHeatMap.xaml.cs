@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,52 +23,111 @@ namespace SeeShellsV2.UI
 {
     public partial class CalendarHeatMap : UserControl
     {
+        /// <summary>
+        /// The year that is currently being displayed on the heatmap
+        /// </summary>
         public int Year { get => (int)GetValue(YearProp); set => SetValue(YearProp, value); }
 
+        /// <summary>
+        /// The first date in the currently selected date range
+        /// </summary>
         public DateTime? SelectionBegin { get => GetValue(SelectionBeginProp) as DateTime?; set => SetValue(SelectionBeginProp, value); }
+
+        /// <summary>
+        /// The last date in the currently selected date range
+        /// </summary>
         public DateTime? SelectionEnd { get => GetValue(SelectionEndProp) as DateTime?; set => SetValue(SelectionEndProp, value); }
 
+        /// <summary>
+        /// The data to be displayed on the heatmap
+        /// </summary>
         public IEnumerable ItemsSource
         {
             get => GetValue(ItemsSourceProp) as IEnumerable;
             set => SetValue(ItemsSourceProp, value);
         }
-        public string DateTimeProperty { get; set; }
 
-        public string ColorAxisTitle { get; set; }
+        /// <summary>
+        /// View of the data to be displayed on the heatmap
+        /// </summary>
+        private ICollectionView Items { get; set; }
 
-        public Orientation Orientation { get => (Orientation)GetValue(OrientationProp); set => SetValue(OrientationProp, value); }
+        /// <summary>
+        /// The name of the DateTime property to use when calculating frequency data.
+        /// Items bound to ItemsSource should have a DateTime property with this name
+        /// </summary>
+        public string DateTimeProperty
+        {
+            get => GetValue(DateTimePropertyProp) as string;
+            set => SetValue(DateTimePropertyProp, value);
+        }
 
+        /// <summary>
+        /// The title displayed with the color axis
+        /// </summary>
+        public string ColorAxisTitle
+        {
+            get => GetValue(ColorAxisTitleProp) as string;
+            set => SetValue(ColorAxisTitleProp, value);
+        }
+
+        public Color TextColor
+        {
+            get => (Color) GetValue(TextColorProp);
+            set => SetValue(TextColorProp, value);
+        }
+
+        public Color GridColor
+        {
+            get => (Color) GetValue(GridColorProp);
+            set => SetValue(GridColorProp, value);
+        }
+
+        public Color SelectionColor
+        {
+            get => (Color) GetValue(SelectionColorProp);
+            set => SetValue(SelectionColorProp, value);
+        }
+
+        /// <summary>
+        /// The orientation of the chart. can be displayed horizontally or vertically
+        /// </summary>
+        public Orientation Orientation
+        {
+            get => (Orientation)GetValue(OrientationProp);
+            set => SetValue(OrientationProp, value);
+        }
+
+        private DateTime? _last_selected = null;
+        private readonly string[] weekdays = new string[] { "S", "M", "T", "W", "T", "F", "S" };
+        private readonly string[] months = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+        /// <summary>
+        /// construct a new heat map
+        /// </summary>
         public CalendarHeatMap()
         {
             InitializeComponent();
             (HeatMapSeries.InternalSeries as OxyPlot.Series.HeatMapSeries).Interpolate = false;
-            // SizeChanged += OnSizeChanged;
         }
 
+        /// <summary>
+        /// reset the date range selection
+        /// </summary>
         public void ClearSelected()
         {
             _last_selected = null;
-            SelectionBegin = SelectionEnd = null; //_selected.Clear();
+            SetCurrentValue(SelectionBeginProp, null);
+            SetCurrentValue(SelectionEndProp, null);
         }
 
-        private ICollectionView Items { get; set; }
-
+        private void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args) => ResetHeatMap();
+        private void Clear_MenuItem_Click(object sender, RoutedEventArgs e) => ClearSelected();
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ClearSelected();
         private void Left_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year - 1);
-
         private void Right_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year + 1);
-
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ClearSelected();
-        }
-
-        private DateTime? _last_selected = null;
-        //private Point? _last_selected = null;
-        //private readonly SortedSet<Point> _selected = new SortedSet<Point>(Comparer<Point>.Create((Point a, Point b) => (a.X, a.Y).CompareTo((b.X, b.Y))));
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            Point p;
             DateTime date;
             double i, j;
 
@@ -79,21 +139,38 @@ namespace SeeShellsV2.UI
 
             OxyPlot.OxyMouseEventArgs args = ConverterExtensions.ToMouseEventArgs(e, sender as IInputElement);
 
+            if (!HeatMapPlot.ActualModel.PlotArea.Contains(args.Position))
+                return;
+
             if (Orientation == Orientation.Vertical)
             {
                 i = Math.Ceiling(DayAxis.InternalAxis.InverseTransform(args.Position.X) - 0.5);
                 j = Math.Ceiling(WeekAxis.InternalAxis.InverseTransform(args.Position.Y) - 0.5);
                 date = new DateTime(Year, 1, 1).AddDays((52 - j) * 7 + i - (int)new DateTime(Year, 1, 1).DayOfWeek);
-                p = new Point(i, j);
             }
             else
             {
                 i = Math.Ceiling(WeekAxis.InternalAxis.InverseTransform(args.Position.X) - 0.5);
                 j = Math.Ceiling(DayAxis.InternalAxis.InverseTransform(args.Position.Y) - 0.5);
                 date = new DateTime(Year, 1, 1).AddDays(i * 7 + (6 - j) - (int)new DateTime(Year, 1, 1).DayOfWeek);
-                p = new Point(i, j);
             }
 
+            UpdateSelection(date);
+        }
+
+        protected override Size MeasureOverride(Size constraint)
+        {
+            HeatMapPlot.InvalidatePlot();
+
+            return base.MeasureOverride(constraint);
+        }
+
+        /// <summary>
+        /// attempt to add a date to the selected date range
+        /// </summary>
+        /// <param name="date">the date to add to the selection</param>
+        protected void UpdateSelection(DateTime date)
+        {
             if (date.Year != Year)
                 return;
 
@@ -104,60 +181,28 @@ namespace SeeShellsV2.UI
 
             if (SelectionBegin == null || SelectionEnd == null)
             {
-                SelectionBegin = date; SelectionEnd = date.AddDays(1);
+                SetCurrentValue(SelectionBeginProp, date);
+                SetCurrentValue(SelectionEndProp, date.AddDays(1));
             }
             else if (_last_selected == SelectionEnd || date > SelectionBegin)
-                SelectionEnd = date.AddDays(1);
-            else if (_last_selected == SelectionBegin || date < SelectionEnd)
-                SelectionBegin = date;
-
-            //if (_selected.Contains(p))
-            //    _selected.Remove(p);
-            //else
-            //    _selected.Add(p);
-        }
-
-        private readonly double _aspectRatio = 203.42857142857144 / 723.3733333333333;
-        protected void OnSizeChanged(object sender, SizeChangedEventArgs args)
-        {
-            double ar = (args.NewSize.Width < args.NewSize.Height) ? _aspectRatio : 1 / _aspectRatio;
-
-            if (args.HeightChanged)
-                Width = args.NewSize.Height * ar;
-            else if (args.WidthChanged)
-                Height = args.NewSize.Width / ar;
-        }
-
-        private CancellationTokenSource _tokenSource = null;
-        protected void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            if (_tokenSource != null)
-                _tokenSource.Cancel();
-
-            _tokenSource = new CancellationTokenSource();
-            var token = _tokenSource.Token;
-
-            Task.Run(() =>
             {
-                Thread.Sleep(200);
-
-                if (token.IsCancellationRequested)
-                    return;
-
-                Dispatcher.Invoke(() =>
-                {
-                    ResetHeatMap();
-                    HeatMapPlot.InvalidatePlot();
-                });
-            }, token);
+                SetCurrentValue(SelectionEndProp, date.AddDays(1));
+            }
+            else if (_last_selected == SelectionBegin || date < SelectionEnd)
+            {
+                SetCurrentValue(SelectionBeginProp, date);
+            }
         }
 
-        private readonly string[] weekdays = new string[] { "S", "M", "T", "W", "T", "F", "S" };
-        private readonly string[] months = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
+        /// <summary>
+        /// clear and redraw the heatmap grid, including the selection and month separators
+        /// </summary>
         protected void UpdateGrid()
         {
             HeatMapPlot.Annotations.Clear();
+
+            HeatMapPlot.PlotAreaBorderColor = TextColor;
+            HeatMapPlot.PlotAreaBorderThickness = new Thickness(1);
 
             for (int i = 0; i < 6; i++)
                 HeatMapPlot.Annotations.Add(new LineAnnotation
@@ -167,7 +212,7 @@ namespace SeeShellsV2.UI
                     Type = (Orientation == Orientation.Vertical) ?
                         OxyPlot.Annotations.LineAnnotationType.Vertical : OxyPlot.Annotations.LineAnnotationType.Horizontal,
                     LineStyle = OxyPlot.LineStyle.Solid,
-                    Color = HeatMapPlot.PlotAreaBorderColor
+                    Color = GridColor
                 });
 
             for (int i = 0; i < 53; i++)
@@ -178,7 +223,7 @@ namespace SeeShellsV2.UI
                     Type = (Orientation == Orientation.Horizontal) ?
                         OxyPlot.Annotations.LineAnnotationType.Vertical : OxyPlot.Annotations.LineAnnotationType.Horizontal,
                     LineStyle = OxyPlot.LineStyle.Solid,
-                    Color = HeatMapPlot.PlotAreaBorderColor
+                    Color = GridColor
                 });
 
             DateTime begin = new DateTime(Year, 1, 1);
@@ -192,33 +237,33 @@ namespace SeeShellsV2.UI
                     HeatMapPlot.Annotations.Add(new PolygonAnnotation
                     {
                         Points = new List<OxyPlot.DataPoint>
-                    {
-                        new OxyPlot.DataPoint(-0.5, 52 - ((int)begin.DayOfWeek + p1 - 1 + 7) / 7 + 0.5),
-                        new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5),
-                        new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5),
-                        new OxyPlot.DataPoint(6.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5),
+                        {
+                            new OxyPlot.DataPoint(-0.5, 52 - ((int)begin.DayOfWeek + p1 - 1 + 7) / 7 + 0.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5),
+                            new OxyPlot.DataPoint(6.5, 52 - ((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5),
 
-                        new OxyPlot.DataPoint(6.5, 52 - ((int)begin.DayOfWeek + p0 - 1 - 7) / 7 + ((i == 1) ?  0.5 : -0.5)),
-                        new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 + 0.5),
-                        new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 - 0.5),
-                        new OxyPlot.DataPoint(-0.5, 52 - ((int)begin.DayOfWeek + p0 - 1 + 7) / 7 + 0.5),
-                    },
+                            new OxyPlot.DataPoint(6.5, 52 - ((int)begin.DayOfWeek + p0 - 1 - 7) / 7 + ((i == 1) ?  0.5 : -0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 + 0.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 - 0.5),
+                            new OxyPlot.DataPoint(-0.5, 52 - ((int)begin.DayOfWeek + p0 - 1 + 7) / 7 + 0.5),
+                        },
                         LineStyle = OxyPlot.LineStyle.Solid,
-                        Stroke = MonthAxis.TextColor,
+                        Stroke = TextColor,
                         Fill = Colors.Transparent,
                         StrokeThickness = 1
                     });
                 }
                 else
                 {
-                    // TODO
+                    // TODO figure out the shapes when horizontal (not necessary unless we want to change the display to horizontal)
                 }
             }
 
             if (SelectionBegin is DateTime start && SelectionEnd is DateTime end)
             {
                 int p0 = start.DayOfYear;
-                int p1 = end.DayOfYear - 1;
+                int p1 = end.AddDays(-1).DayOfYear;
 
                 if (Orientation == Orientation.Vertical)
                 {
@@ -235,32 +280,35 @@ namespace SeeShellsV2.UI
                             new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 + 0.5),
                             new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5, 52 - ((int)begin.DayOfWeek + p0 - 1) / 7 - 0.5),
                             new OxyPlot.DataPoint(-0.5, 52 - ((int)begin.DayOfWeek + p0 - 1 + 7) / 7 + 0.5),
-                        }
+                        },
+                        Fill = SelectionColor
                     });
                 }
                 else
                 {
-                    // TODO
+                    // TODO figure out the shapes when horizontal (not necessary unless we want to change the display to horizontal)
                 }
             }
-
-            //foreach (Point p in _selected)
-            //{
-            //    HeatMapPlot.Annotations.Add(new RectangleAnnotation
-            //    {
-            //        MinimumX = p.X-0.5,
-            //        MaximumX = p.X+0.5,
-            //        MinimumY = p.Y-0.5,
-            //        MaximumY = p.Y+0.5
-            //    });
-            //}
         }
 
+        /// <summary>
+        /// Set axis bounds, labels
+        /// </summary>
         protected void UpdateAxes()
         {
             HeatMapTitle.Text = Year.ToString();
 
+            HeatMapPlot.TitleColor = TextColor;
+
+            ColorAxis.TitleColor = TextColor;
+            ColorAxis.TextColor = TextColor;
+            ColorAxis.TicklineColor = Colors.Transparent;
+
             ColorAxis.Title = ColorAxisTitle;
+
+            DayAxis.TitleColor = TextColor;
+            DayAxis.TextColor = TextColor;
+            DayAxis.TicklineColor = Colors.Transparent;
 
             DayAxis.Position = (Orientation == Orientation.Horizontal) ?
                 OxyPlot.Axes.AxisPosition.Left : OxyPlot.Axes.AxisPosition.Bottom;
@@ -268,11 +316,19 @@ namespace SeeShellsV2.UI
             DayAxis.ItemsSource = (Orientation == Orientation.Horizontal) ?
                 weekdays.Reverse() : weekdays;
 
+            WeekAxis.TitleColor = TextColor;
+            WeekAxis.TextColor = TextColor;
+            WeekAxis.TicklineColor = Colors.Transparent;
+
             WeekAxis.Position = (Orientation == Orientation.Horizontal) ?
                         OxyPlot.Axes.AxisPosition.Top : OxyPlot.Axes.AxisPosition.Right;
 
             WeekAxis.Minimum = -0.5;
             WeekAxis.Maximum = 52.5;
+
+            MonthAxis.TitleColor = TextColor;
+            MonthAxis.TextColor = TextColor;
+            MonthAxis.TicklineColor = Colors.Transparent;
 
             MonthAxis.Position = (Orientation == Orientation.Horizontal) ?
                 OxyPlot.Axes.AxisPosition.Bottom : OxyPlot.Axes.AxisPosition.Left;
@@ -286,33 +342,67 @@ namespace SeeShellsV2.UI
             HeatMapSeries.Y1 = (Orientation == Orientation.Horizontal) ? 6 : 52;
         }
 
-        protected void ResetHeatMap()
+
+        private CancellationTokenSource _tokenSource = null;
+        private readonly object _resetLock = new object();
+        /// <summary>
+        /// Clear and recalculate frequency data
+        /// </summary>
+        protected void ResetHeatMap(int delay = 200)
         {
-            if (Items != null)
+            if (_tokenSource != null)
+                _tokenSource.Cancel();
+
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
+
+            var orientation = Orientation;
+            var year = Year;
+            var dateProp = DateTimeProperty;
+
+            // run the update with a small delay to prevent rapid fire updates.
+            Task.Run(() =>
             {
-                var bins = Items
-                    .OfType<object>()
-                    .Select(x => ((DateTime)x.GetType().GetProperty(DateTimeProperty).GetValue(x, null), x))
-                    .Where(x => x.Item1.Year == Year)
-                    .GroupBy(x => x.Item1.DayOfYear)
-                    .Select(x => (x.Key, x.Count()));
+                Thread.Sleep(delay);
 
-                HeatMapSeries.Data = (Orientation == Orientation.Horizontal) ?
-                    new double[53, 7] : new double[7, 53];
+                if (token.IsCancellationRequested)
+                    return;
 
-                DateTime begin = new DateTime(Year, 1, 1);
-
-                foreach (var item in bins)
+                if (Items != null)
                 {
-                    int x = ((int)begin.DayOfWeek + item.Item1 - 1) / 7;
-                    int y = ((int)begin.DayOfWeek + item.Item1 - 1) % 7;
+                    var bins = Items
+                        .OfType<object>()
+                        .Select(x => ((DateTime)x.GetType().GetProperty(dateProp).GetValue(x, null), x))
+                        .Where(x => x.Item1.Year == year)
+                        .GroupBy(x => x.Item1.DayOfYear)
+                        .Select(x => (x.Key, x.Count()));
 
-                    if (Orientation == Orientation.Horizontal)
-                        HeatMapSeries.Data[x, 6 - y] = item.Item2;
-                    else
-                        HeatMapSeries.Data[y, 52 - x] = item.Item2;
+                    double[,] data = (orientation == Orientation.Horizontal) ?
+                        new double[53, 7] : new double[7, 53];
+
+                    DateTime begin = new DateTime(year, 1, 1);
+
+                    foreach (var item in bins)
+                    {
+                        int x = ((int)begin.DayOfWeek + item.Key - 1) / 7;
+                        int y = ((int)begin.DayOfWeek + item.Key - 1) % 7;
+
+                        if (orientation == Orientation.Horizontal)
+                            data[x, 6 - y] = item.Item2;
+                        else
+                            data[y, 52 - x] = item.Item2;
+                    }
+
+                    lock (_resetLock)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            HeatMapSeries.Data = data;
+                            InvalidateMeasure();
+                        });
+                    }
                 }
-            }
+            }, token);
         }
 
         public static readonly DependencyProperty ItemsSourceProp =
@@ -337,7 +427,42 @@ namespace SeeShellsV2.UI
                             c.UpdateAxes();
                             c.UpdateGrid();
                             c.ResetHeatMap();
-                            c.HeatMapPlot.InvalidatePlot();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty DateTimePropertyProp =
+            DependencyProperty.Register(
+                nameof(DateTimeProperty),
+                typeof(string),
+                typeof(CalendarHeatMap),
+                new FrameworkPropertyMetadata(
+                    null,
+                    (o, v) =>
+                    {
+                        if (o is CalendarHeatMap c)
+                        {
+                            c.UpdateAxes();
+                            c.UpdateGrid();
+                            c.ResetHeatMap();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty ColorAxisTitleProp =
+            DependencyProperty.Register(
+                nameof(ColorAxisTitle),
+                typeof(string),
+                typeof(CalendarHeatMap),
+                new FrameworkPropertyMetadata(
+                    null, FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    (o, v) =>
+                    {
+                        if (o is CalendarHeatMap c)
+                        {
+                            c.UpdateAxes();
                         }
                     }
                 )
@@ -354,14 +479,10 @@ namespace SeeShellsV2.UI
                     {
                         if (o is CalendarHeatMap c)
                         {
-                            if (c.Items != null)
-                                c.Items.Refresh();
-
-                            c.ClearSelected();
-                            c.UpdateAxes();
                             c.UpdateGrid();
-                            c.ResetHeatMap();
-                            c.HeatMapPlot.InvalidatePlot();
+                            c.UpdateAxes();
+                            c.ClearSelected();
+                            c.ResetHeatMap(0);
                         }
                     }
                 )
@@ -373,13 +494,12 @@ namespace SeeShellsV2.UI
                 typeof(DateTime?),
                 typeof(CalendarHeatMap),
                 new FrameworkPropertyMetadata(
-                    null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsMeasure,
                     (o, v) =>
                     {
                         if (o is CalendarHeatMap c)
                         {
                             c.UpdateGrid();
-                            c.HeatMapPlot.InvalidatePlot();
                         }
                     }
                 )
@@ -391,13 +511,12 @@ namespace SeeShellsV2.UI
                 typeof(DateTime?),
                 typeof(CalendarHeatMap),
                 new FrameworkPropertyMetadata(
-                    null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                    null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsMeasure,
                     (o, v) =>
                     {
                         if (o is CalendarHeatMap c)
                         {
                             c.UpdateGrid();
-                            c.HeatMapPlot.InvalidatePlot();
                         }
                     }
                 )
@@ -409,18 +528,102 @@ namespace SeeShellsV2.UI
                 typeof(Orientation),
                 typeof(CalendarHeatMap),
                 new FrameworkPropertyMetadata(
-                    Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsRender,
+                    Orientation.Horizontal,
+                    (o, v) =>
+                    {
+                        if (o is CalendarHeatMap c && v.NewValue is Orientation orientation)
+                        {
+                            c.UpdateAxes();
+                            c.UpdateGrid();
+                            c.ResetHeatMap();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty TextColorProp =
+            DependencyProperty.Register(
+                nameof(TextColor),
+                typeof(Color),
+                typeof(CalendarHeatMap),
+                new FrameworkPropertyMetadata(
+                    Colors.Black, FrameworkPropertyMetadataOptions.AffectsMeasure,
                     (o, v) =>
                     {
                         if (o is CalendarHeatMap c)
                         {
                             c.UpdateAxes();
                             c.UpdateGrid();
-                            c.ResetHeatMap();
-                            c.HeatMapPlot.InvalidatePlot();
                         }
                     }
                 )
             );
+
+        public static readonly DependencyProperty GridColorProp =
+            DependencyProperty.Register(
+                nameof(GridColor),
+                typeof(Color),
+                typeof(CalendarHeatMap),
+                new FrameworkPropertyMetadata(
+                    Colors.DarkGray, FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    (o, v) =>
+                    {
+                        if (o is CalendarHeatMap c)
+                        {
+                            c.UpdateAxes();
+                            c.UpdateGrid();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty SelectionColorProp =
+            DependencyProperty.Register(
+                nameof(SelectionColor),
+                typeof(Color),
+                typeof(CalendarHeatMap),
+                new FrameworkPropertyMetadata(
+                    Colors.Yellow,  FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    (o, v) =>
+                    {
+                        if (o is CalendarHeatMap c)
+                        {
+                            c.UpdateAxes();
+                            c.UpdateGrid();
+                        }
+                    }
+                )
+            );
+    }
+
+    internal class CalendarHeatMapTrackerTextConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length == 2 &&  values[0] is OxyPlot.TrackerHitResult result && values[1] is CalendarHeatMap c)
+            {
+                IList<(string, string)> trakerText = result.Text
+                    .Split('\n')
+                    .Skip(1)
+                    .Select(s => s.Split(": "))
+                    .Select(s => (s[0], s[1]))
+                    .ToList();
+
+                int offset = (int) (c.Orientation == Orientation.Horizontal ?
+                    (6 - result.DataPoint.X) + 7 * result.DataPoint.Y : result.DataPoint.X + 7 * (52 - result.DataPoint.Y));
+
+                DateTime date = new DateTime(c.Year, 1, 1);
+                date = date.AddDays(offset - (int) date.DayOfWeek);
+
+                return date.ToShortDateString() + '\n' + "Count: " + trakerText[2].Item2;
+            }
+
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

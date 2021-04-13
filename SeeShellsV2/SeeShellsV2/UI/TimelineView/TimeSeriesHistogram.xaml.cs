@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -28,13 +29,12 @@ namespace SeeShellsV2.UI
     /// </summary>
     public partial class TimeSeriesHistogram : UserControl
     {
-        public IEnumerable ItemsSource
-        {
-            get => GetValue(ItemsSourceProp) as IEnumerable;
-            set => SetValue(ItemsSourceProp, value);
-        }
+        public IEnumerable ItemsSource { get => GetValue(ItemsSourceProp) as IEnumerable; set => SetValue(ItemsSourceProp, value); }
 
-        public string ColorProperty => "TypeName";
+        public DateTime? MinimumDate { get => GetValue(MinimumDateProp) as DateTime?; set => SetValue(MinimumDateProp, value); }
+        public DateTime? MaximumDate { get => GetValue(MaximumDateProp) as DateTime?; set => SetValue(MaximumDateProp, value); }
+
+        public string ColorProperty { get => GetValue(ColorPropertyProp) as string; set => SetValue(ColorPropertyProp, value); }
         public string DateTimeProperty { get; set; }
 
         public Color PlotAreaBorderColor { get; set; }
@@ -44,10 +44,8 @@ namespace SeeShellsV2.UI
         public string YAxisTitle { get; set; }
 
         private ICollectionView Items { get; set; }
-        private IList<TimeSeriesHistogramItem> Bins { get; set; }
 
         private readonly PlotModel _histPlotModel = new PlotModel();
-        private readonly HistogramSeries _histSeries = new HistogramSeries();
         private readonly DateTimeAxis _dateAxis = new DateTimeAxis { Position = AxisPosition.Bottom };
         private readonly LinearAxis _freqAxis = new LinearAxis { Position = AxisPosition.Left, IsZoomEnabled = false, IsPanEnabled = false };
 
@@ -60,11 +58,37 @@ namespace SeeShellsV2.UI
             _histPlotModel.Axes.Add(_freqAxis);
 
             _histPlotModel.MouseDown += _histPlotModel_MouseDown;
+            _histPlotModel.MouseMove += _histPlotModel_MouseMove;
 
             HistogramPlot.Model = _histPlotModel;
 
             ResetHistSeries();
             UpdateAxes();
+        }
+
+        private void _histPlotModel_MouseMove(object sender, OxyMouseEventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                var results = _histPlotModel.HitTest(new HitTestArguments(e.Position, 10));
+
+                var result = results
+                    .Where(r => r.Element is Series)
+                    .Select(r => (r, r.Element as Series))
+                    .OrderBy(r => !r.Item2.IsSelected())
+                    .ThenBy(r => r.Item2.Tag)
+                    .Select(r => r.Item2.GetNearestPoint(e.Position, true))
+                    .FirstOrDefault();
+
+                if (result != null)
+                {
+                    HistogramPlot.ShowTracker(result);
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            HistogramPlot.HideTracker();
         }
 
         private void _histPlotModel_MouseDown(object sender, OxyMouseDownEventArgs e)
@@ -90,7 +114,7 @@ namespace SeeShellsV2.UI
                     return;
                 }
 
-                if (_histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.IsSelected()).Count() == 0)
+                if (!_histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.IsSelected()).Any())
                 {
                     _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor(255, s.ActualFillColor));
                 }
@@ -101,10 +125,16 @@ namespace SeeShellsV2.UI
 
                 HistogramPlot.InvalidatePlot();
             }
+            else
+            {
+                _histPlotModel_MouseMove(sender, e);
+            }
         }
 
+        protected void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args) => Update();
+
         private CancellationTokenSource _tokenSource = null;
-        protected void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args)
+        protected void Update()
         {
             if (_tokenSource != null)
                 _tokenSource.Cancel();
@@ -114,7 +144,7 @@ namespace SeeShellsV2.UI
 
             Task.Run(() =>
             {
-                Thread.Sleep(500);
+                Thread.Sleep(200);
 
                 if (token.IsCancellationRequested)
                     return;
@@ -148,7 +178,7 @@ namespace SeeShellsV2.UI
 
         protected void ResetHistSeries()
         {
-            if (Items == null || Items.OfType<object>().Count() < 2)
+            if (Items == null || !Items.OfType<object>().Any())
                 return;
 
             IOrderedEnumerable<(DateTime date, object item)> items = Items
@@ -162,27 +192,31 @@ namespace SeeShellsV2.UI
                 BinningExtremeValueMode.IncludeExtremeValues
             );
 
+            DateTime begin = MinimumDate ?? items.First().date;
+            DateTime end = MaximumDate ?? items.Last().date;
+
+            if (end == begin)
+                end = end.AddMinutes(15);
+
             var binBreaks = HistogramHelpers.CreateUniformBins(
-                DateTimeAxis.ToDouble(items.First().date),
-                DateTimeAxis.ToDouble(items.Last().date),
-                100
+                DateTimeAxis.ToDouble(begin),
+                DateTimeAxis.ToDouble(end),
+                50
             );
 
-            var groups = items
-                .GroupBy(x => x.item.GetType().GetProperty(ColorProperty).GetValue(x.item, null))
-                .OrderByDescending(x => x.Count());
+            IOrderedEnumerable<IGrouping<object, (DateTime date, object item)>> groups;
+            if (ColorProperty == null)
+                groups = items.GroupBy(x => (object) null).OrderByDescending(x => x.Count());
+            else
+                groups = items
+                    .GroupBy(x => x.item.GetDeepPropertyValue(ColorProperty))
+                    .OrderByDescending(x => x.Count());
 
             _histPlotModel.Series.Clear();
 
-            var bins = HistogramHelpers.Collect(
-                items.Select(x => DateTimeAxis.ToDouble(x.date)),
-                binBreaks,
-                options
-            ).Select(i => new TimeSeriesHistogramItem(i));
-
             foreach (var group in groups)
             {
-                TimeSeriesHistogramSeries s = new TimeSeriesHistogramSeries();
+                HistogramSeries s = new HistogramSeries();
 
                 var dates = group
                 .Select(x => x.date)
@@ -192,32 +226,18 @@ namespace SeeShellsV2.UI
                     dates.Select(x => DateTimeAxis.ToDouble(x)),
                     binBreaks,
                     options
-                ).Select(i => new TimeSeriesHistogramItem(i))
-                .Select(i => { i.Area = i.Area * dates.Count() / items.Count(); return i; });
+                );
 
-                s.Title = group.Key.ToString();
+                s.ItemsSource
+                    .OfType<HistogramItem>()
+                    .ForEach(i => { i.Area = i.Area * dates.Count() / items.Count(); });
+
+                s.Title = group.Key?.ToString() ?? string.Empty;
                 s.ToolTip = s.Title;
+                s.Tag = dates.Count();
 
                 _histPlotModel.Series.Add(s);
             }
-        }
-
-        protected void ResetHistBins()
-        {
-            if (Items == null || Items.OfType<object>().Count() < 2)
-                return;
-
-            var dates = Items
-                .OfType<object>()
-                .Select(x => (DateTime)x.GetType().GetProperty(DateTimeProperty).GetValue(x, null))
-                .OrderBy(x => x);
-
-            var binBreaks = HistogramHelpers.CreateUniformBins(DateTimeAxis.ToDouble(dates.First()), DateTimeAxis.ToDouble(dates.Last()), 100);
-            BinningOptions options = new BinningOptions(BinningOutlierMode.CountOutliers, BinningIntervalType.InclusiveLowerBound, BinningExtremeValueMode.IncludeExtremeValues);
-            Bins = HistogramHelpers.Collect(dates.Select(x => DateTimeAxis.ToDouble(x)), binBreaks, options).Select(i => new TimeSeriesHistogramItem(i)).ToList();
-
-            _histSeries.Items.Clear();
-            _histSeries.Items.AddRange(Bins);
         }
 
         public static readonly DependencyProperty ItemsSourceProp =
@@ -239,34 +259,89 @@ namespace SeeShellsV2.UI
                             if (t.Items != null)
                                 t.Items.CollectionChanged += t.OnItemsChange;
 
-                            t.HistogramPlot.InvalidatePlot();
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty MinimumDateProp =
+            DependencyProperty.Register(
+                nameof(MinimumDate),
+                typeof(DateTime?),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    null,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            if (a.NewValue is DateTime d)
+                            {
+                                t._dateAxis.Reset();
+                                t._dateAxis.Minimum = DateTimeAxis.ToDouble(d);
+                            }
+                            else
+                            {
+                                t._dateAxis.Minimum = double.NaN;
+                            }
+
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty MaximumDateProp =
+            DependencyProperty.Register(
+                nameof(MaximumDate),
+                typeof(DateTime?),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    null,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            if (a.NewValue is DateTime d)
+                            {
+                                t._dateAxis.Maximum = DateTimeAxis.ToDouble(d);
+                            }
+                            else
+                            {
+                                t._dateAxis.Maximum = double.NaN;
+                            }
+
+                            t._dateAxis.Reset();
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty ColorPropertyProp =
+            DependencyProperty.Register(
+                nameof(ColorProperty),
+                typeof(string),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    null,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            t.Update();
                         }
                     }
                 )
             );
     }
 
-    public class TimeSeriesHistogramItem : HistogramItem
+    internal class TimeSeriesHistogramTrackerTextConverter : IMultiValueConverter
     {
-        new public double Value => Count;
-
-        public DateTime DateRangeStart => DateTimeAxis.ToDateTime(RangeStart);
-        public DateTime DateRangeEnd => DateTimeAxis.ToDateTime(RangeEnd);
-        public DateTime DateRangeCenter => DateRangeStart + ((DateRangeEnd - DateRangeStart) / 2);
-
-
-        public TimeSeriesHistogramItem(HistogramItem item)
-            : base(item.RangeStart, item.RangeEnd, item.Area, item.Count, item.Color)
-        { }
-    }
-
-    public class TimeSeriesHistogramSeries : HistogramSeries
-    {
-        public override TrackerHitResult GetNearestPoint(ScreenPoint point, bool interpolate)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var result = base.GetNearestPoint(point, interpolate);
-
-            if (result != null)
+            if (values.Length == 2 && values[0] is TrackerHitResult result && values[1] is TimeSeriesHistogram t)
             {
                 IList<(string, string)> trakerText = result.Text
                     .Split('\n')
@@ -278,13 +353,18 @@ namespace SeeShellsV2.UI
                 trakerText[0] = (trakerText[0].Item1, DateTimeAxis.ToDateTime(double.Parse(trakerText[0].Item2)).ToString());
                 trakerText[1] = (trakerText[1].Item1, DateTimeAxis.ToDateTime(double.Parse(trakerText[1].Item2)).ToString());
 
-                result.Text = trakerText
+                return result.Series.Title + "\n" + trakerText
                     .Select(i => i.Item1 + ' ' + i.Item2)
                     .Aggregate(string.Empty, (string a, string i) => a + '\n' + i)
                     .Trim();
             }
 
-            return result;
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
