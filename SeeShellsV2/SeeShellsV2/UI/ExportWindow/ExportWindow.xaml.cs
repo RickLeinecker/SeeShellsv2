@@ -16,14 +16,21 @@ using Unity;
 using SeeShellsV2.Repositories;
 using System.Collections;
 using Microsoft.Win32;
+using SeeShellsV2.Modules;
+using System.Collections.ObjectModel;
 
 namespace SeeShellsV2.UI
 {
     public interface IExportWindowVM : IViewModel
     {
-        IList moduleList { get; }
+        ObservableCollection<IPdfModule> moduleList { get; }
+        ObservableCollection<string> moduleSelector { get; }
         public void Export_PDF(string filename);
-    }
+		void Remove(IPdfModule sender);
+		void MoveDown(IPdfModule pdfModule);
+		void MoveUp(IPdfModule pdfModule);
+		void AddModule(string module);
+	}
 
     /// <summary>
     /// Interaction logic for ExportWindow.xaml
@@ -46,6 +53,29 @@ namespace SeeShellsV2.UI
             svg.FileName = "SeeShellsReport";
             if (svg.ShowDialog() == true)
                 ViewModel.Export_PDF(svg.FileName);
+		}
+
+		private void Remove_Click(object sender, RoutedEventArgs e)
+		{
+            ViewModel.Remove((sender as Button).DataContext as IPdfModule);
+		}
+
+		private void MoveUp_Click(object sender, RoutedEventArgs e)
+		{
+            ViewModel.MoveUp((sender as Button).DataContext as IPdfModule);
+        }
+
+		private void MoveDown_Click(object sender, RoutedEventArgs e)
+		{
+            ViewModel.MoveDown((sender as Button).DataContext as IPdfModule);
+        }
+
+		private void Add_Module_Click(object sender, RoutedEventArgs e)
+		{
+            if (moduleSelector.SelectedIndex != 0)
+            {
+                ViewModel.AddModule(moduleSelector.SelectedItem as string);
+            }
 		}
 	}
 }

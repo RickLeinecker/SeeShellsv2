@@ -10,6 +10,7 @@ using SeeShellsV2.Services;
 using System.Collections;
 using SeeShellsV2.Modules;
 using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace SeeShellsV2.UI
 {
@@ -18,7 +19,9 @@ namespace SeeShellsV2.UI
 		[Dependency]
 		public PdfExporter Exporter { get; set; }
 
-		public IList moduleList { get; set; }
+		public ObservableCollection<IPdfModule> moduleList { get; set; }
+
+		public ObservableCollection<string> moduleSelector { get; set; }
 
 		public string Status
 		{
@@ -30,8 +33,12 @@ namespace SeeShellsV2.UI
 
 		public ExportWindowVM([Dependency] PdfExporter Export) 
 		{
-			moduleList = new List<IPdfModule>();
-			moduleList.Add(Export.moduleNames["RTFModule"]);
+			moduleList = new ObservableCollection<IPdfModule>();
+			moduleList.Add(Export.moduleNames["RTFModule"].Clone());
+			moduleList.Add(Export.moduleNames["RTFModule"].Clone());
+
+			moduleSelector = new ObservableCollection<string>(Export.moduleNames.Keys);
+			moduleSelector.Insert(0, "Select Module");
 
 			Status = "Save";
 		}
@@ -43,6 +50,30 @@ namespace SeeShellsV2.UI
 			Status = "Saved";
 			await Task.Run(() => Thread.Sleep(5000));
 			Status = "Save";
+		}
+
+		public void Remove(IPdfModule pdfModule)
+		{
+			moduleList.Remove(pdfModule);
+		}
+
+		public void MoveDown(IPdfModule pdfModule)
+		{
+			int pos = moduleList.IndexOf(pdfModule);
+			if (pos < moduleList.Count - 1)
+				moduleList.Move(pos, pos + 1);
+		}
+
+		public void MoveUp(IPdfModule pdfModule)
+		{
+			int pos = moduleList.IndexOf(pdfModule);
+			if (pos >= 1)
+				moduleList.Move(pos, pos - 1);
+		}
+
+		public void AddModule(string module)
+		{
+			moduleList.Add(Exporter.moduleNames[module].Clone());
 		}
 	}
 }

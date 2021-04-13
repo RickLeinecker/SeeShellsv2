@@ -97,18 +97,19 @@ namespace SeeShellsV2.Modules
 			<StackPanel>
 				<ToolBar>
 					<ToggleButton Name=""BoldBtn"" IsChecked=""{Binding IsBold}""
-                                  Command=""EditingCommands.ToggleBold"" />
+                                  Command=""EditingCommands.ToggleBold"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DD;""/>
 					<ToggleButton Name=""ItalicBtn"" IsChecked=""{Binding IsItalic}""
-                                  Command=""EditingCommands.ToggleItalic"" />
+                                  Command=""EditingCommands.ToggleItalic"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DB;""/>
 					<ToggleButton Name=""UnderlineBtn"" IsChecked=""{Binding IsUnderline}""
-                                  Command=""EditingCommands.ToggleUnderline"" />
+                                  Command=""EditingCommands.ToggleUnderline"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DC;"">
+						</ToggleButton>
 					<ComboBox Name=""FontFamilyCmb""
                               SelectedItem=""{Binding SelectedFontFamily}""
                               ItemsSource=""{Binding FontFamilies}"" Width=""150"" />
 					<ComboBox Name=""FontSizeCmb""
                               SelectedItem=""{Binding SelectedFontSize}""
                               ItemsSource=""{Binding FontSizes}""
-                              Width=""50"" IsEditable=""True"" />
+                              Width=""50"" IsEditable=""False"" />
 				</ToolBar>
 				<RichTextBox Name=""RichTextBox"" Height=""50"" />
 			</StackPanel>";
@@ -159,14 +160,17 @@ namespace SeeShellsV2.Modules
 			temp = Rtb.Selection.GetPropertyValue(Inline.FontFamilyProperty);
 			if (temp is FontFamily f)
 				SelectedFontFamily = f;
+
 			temp = Rtb.Selection.GetPropertyValue(Inline.FontSizeProperty);
 			if (temp is double size)
+			{
 				SelectedFontSize = size;
+			}
 		}
 
 		private void CmbFontSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			Rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, SelectedFontSize);
+			Rtb.FontSize = SelectedFontSize;
 		}
 
 		private void CmbFontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
