@@ -121,9 +121,18 @@ namespace SeeShellsV2.UI
             SetCurrentValue(SelectionEndProp, null);
         }
 
+        private void OnSizeChanged(object o, SizeChangedEventArgs sizeInfo)
+        {
+            double aspect1 = 204.619 / 750.04;
+            double aspect2 = sizeInfo.NewSize.Width / Math.Max(1, (o as Grid).RowDefinitions[1].ActualHeight);
+
+            if (aspect2 > aspect1) HeatMapPlot.SetCurrentValue(WidthProperty, (o as Grid).RowDefinitions[1].ActualHeight * aspect1);
+            else HeatMapPlot.SetCurrentValue(HeightProperty, sizeInfo.NewSize.Width / aspect1);
+        }
+
         private void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args) => ResetHeatMap();
         private void Clear_MenuItem_Click(object sender, RoutedEventArgs e) => ClearSelected();
-        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ClearSelected();
+        private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) => ClearSelected();
         private void Left_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year - 1);
         private void Right_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year + 1);
         private void OnMouseMove(object sender, MouseEventArgs e)
@@ -131,7 +140,9 @@ namespace SeeShellsV2.UI
             DateTime date;
             double i, j;
 
-            if (Mouse.LeftButton == MouseButtonState.Released)
+            HeatMapPlot.HideTracker();
+
+            if (Mouse.RightButton == MouseButtonState.Released)
             {
                 _last_selected = null;
                 return;
@@ -141,6 +152,8 @@ namespace SeeShellsV2.UI
 
             if (!HeatMapPlot.ActualModel.PlotArea.Contains(args.Position))
                 return;
+
+            HeatMapPlot.ShowTracker(HeatMapSeries.InternalSeries.GetNearestPoint(args.Position, true));
 
             if (Orientation == Orientation.Vertical)
             {
@@ -259,6 +272,9 @@ namespace SeeShellsV2.UI
                     // TODO figure out the shapes when horizontal (not necessary unless we want to change the display to horizontal)
                 }
             }
+
+            RangeClear.Visibility = (SelectionBegin != null && SelectionEnd != null) ? Visibility.Visible : Visibility.Collapsed;
+            RangeDisplay.Text = (SelectionBegin != null && SelectionEnd != null) ? SelectionBegin?.ToShortDateString() + " - " + SelectionEnd?.AddDays(-1).ToShortDateString() : string.Empty;
 
             if (SelectionBegin is DateTime start && SelectionEnd is DateTime end)
             {

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeeShellsV2.UI"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:xcad="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
         Title="SeeShells" Icon="../Images/SeeShells.png"
@@ -12,16 +13,17 @@
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <Menu Background="Transparent">
-                <MenuItem Header="File" Background="Transparent">
-                    <MenuItem Header="Import">
-                        <!--<MenuItem Header="From CSV" Click="Import_CSV_Click"/>-->
-                        <MenuItem Header="From Live Registry"  Click="Import_Live_Registry_Click"/>
-                        <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
-                    </MenuItem>
-                    <!--<MenuItem Header="Export">
-                        <MenuItem Header="To CSV" Click="Export_CSV_Click"/>
-                    </MenuItem>-->
+                <MenuItem Header="Import" Background="Transparent">
+                    <!--<MenuItem Header="From CSV" Click="Import_CSV_Click"/>-->
+                    <MenuItem Header="From Active Registry"  Click="Import_Live_Registry_Click"/>
+                    <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
                 </MenuItem>
+                <MenuItem Header="Export" Background="Transparent">
+                    <MenuItem Header="PDF Report" />
+                    <MenuItem Header="Shellbags as CSV" />
+                    <MenuItem Header="Events as CSV" />
+                </MenuItem>
+                <MenuItem Header="Reset" Background="Transparent" Click="ResetMenuItem_Click"/>
             </Menu>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
@@ -44,7 +46,8 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Grid>
-        <xcad:DockingManager AllowMixedOrientation="True"
+        <xcad:DockingManager x:Name="DockingManager"
+                             AllowMixedOrientation="True"
                              BorderBrush="Black"
                              BorderThickness="1">
             <xcad:DockingManager.DocumentHeaderTemplate>
@@ -110,8 +113,8 @@
 
         <DockPanel IsEnabled="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False">
             <StackPanel Visibility="{Binding StatusVisibility}" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Border Background="{StaticResource MahApps.Brushes.ThemeBackground}"
-                        BorderBrush="{StaticResource MahApps.Brushes.Gray2}"
+                <Border Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        BorderBrush="{DynamicResource MahApps.Brushes.Gray2}"
                         BorderThickness="1" Margin="5" Padding="5">
                     <TextBlock Text="{Binding Status}" />
                 </Border>

@@ -16,6 +16,7 @@
         </Style>
 
         <local:RadioButtonSelector x:Key="RadioSelector" />
+        <local:EventTableSelector x:Key="EventSelector" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -38,36 +39,57 @@
                 Grid.Column="0" Grid.ColumnSpan="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="9*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <RadioButton GroupName="color" IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=TypeName}">Type</RadioButton>
-                    <RadioButton GroupName="color" IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=User.Name}">User</RadioButton>
+                <StackPanel Orientation="Horizontal" Grid.Row="1"
+                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+                    <TextBlock Text="Color by:" VerticalAlignment="Center" Margin="10 0" FontWeight="DemiBold"/>
+                    <RadioButton GroupName="color" Margin="5 0"
+                                 IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=TypeName}">
+                        Action
+                    </RadioButton>
+                    <RadioButton GroupName="color" Margin="5 0"
+                                 IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=Place.Type}">
+                        Place
+                    </RadioButton>
+                    <RadioButton GroupName="color" Margin="5 0"
+                                 IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=User}">
+                        User
+                    </RadioButton>
+                    <RadioButton GroupName="color" Margin="5 0"
+                                 IsChecked="{Binding ColorProperty, Converter={StaticResource RadioSelector}, ConverterParameter=RegistryHive}">
+                        Registry Hive
+                    </RadioButton>
                 </StackPanel>
 
-                <local:TimeSeriesHistogram Grid.Row="1"
+                <TextBlock Text="?" Grid.Row="1" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.Gray6}"
+                           ToolTip="Use left click to select a category in the legend."
+                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0"/>
+
+                <local:TimeSeriesHistogram x:Name="Histogram"
+                                           Grid.Row="0"
                                            ColorProperty="{Binding ColorProperty}"
                                            YAxisTitle="User Action Frequency"
                                            MinimumDate="{Binding DateSelectionBegin}"
                                            MaximumDate="{Binding DateSelectionEnd}"
                                            ItemsSource="{Binding ShellEvents}" DateTimeProperty="TimeStamp"
-                                           TextColor="{StaticResource MahApps.Colors.ThemeForeground}"
-                                           PlotAreaBorderColor="{StaticResource MahApps.Colors.Gray9}"
-                                           TicklineColor="{StaticResource MahApps.Colors.Gray9}"/>
+                                           TextColor="{DynamicResource MahApps.Colors.ThemeForeground}"
+                                           PlotAreaBorderColor="{DynamicResource MahApps.Colors.Gray7}"
+                                           TicklineColor="{DynamicResource MahApps.Colors.Gray7}"/>
             </Grid>
         </Border>
 
         <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="0" Grid.RowSpan="3"
                 Grid.Column="2" Grid.ColumnSpan="1">
-            <local:CalendarHeatMap ColorAxisTitle="User Action Frequency"
+            <local:CalendarHeatMap x:Name="Heatmap"
+                                   ColorAxisTitle="User Action Frequency"
                                    ItemsSource="{Binding FilteredShellEvents}"
                                    SelectionBegin="{Binding DateSelectionBegin}"
                                    SelectionEnd="{Binding DateSelectionEnd}"
                                    TextColor="{DynamicResource MahApps.Colors.ThemeForeground}"
-                                   GridColor="{DynamicResource MahApps.Colors.Gray9}"
+                                   GridColor="{DynamicResource MahApps.Colors.Gray7}"
                                    SelectionColor="{DynamicResource MahApps.Colors.Accent}"
                                    DateTimeProperty="TimeStamp" Orientation="Vertical"/>
         </Border>
@@ -75,7 +97,24 @@
         <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="2" Grid.RowSpan="1"
                 Grid.Column="0" Grid.ColumnSpan="1">
-            <DataGrid ItemsSource="{Binding ShellEvents}" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid ItemsSource="{Binding ShellEvents}"
+                      SelectedCellsChanged="DataGrid_SelectedCellsChanged"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
+                        <Setter Property="IsEnabled">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource EventSelector}">
+                                    <Binding />
+                                    <Binding ElementName="Histogram" Path="ColorProperty" />
+                                    <Binding ElementName="Histogram" Path="Selected" />
+                                    <Binding ElementName="Histogram" Path="Selected.Count" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Event Time" Binding="{Binding TimeStamp}"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>

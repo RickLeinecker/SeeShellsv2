@@ -48,6 +48,7 @@
                             </StackPanel>
                             <TextBlock Text="A Shellbag Forensics Tool"
                                        HorizontalAlignment="Center"
+                                       Foreground="White"
                                        FontWeight="Light"
                                        FontSize="18"/>
                         </StackPanel>

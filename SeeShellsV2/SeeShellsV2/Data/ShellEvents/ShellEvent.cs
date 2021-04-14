@@ -16,6 +16,8 @@ namespace SeeShellsV2.Data
         public Place Place { get; init; }
         public IEnumerable<IShellItem> Evidence { get; init; }
 
+        public RegistryHive RegistryHive { get => Evidence.FirstOrDefault()?.RegistryHive ?? null; }
+
         public int CompareTo(IShellEvent other)
         {
             return (TimeStamp, User, Place, TypeName).CompareTo((other.TimeStamp, other.User, other.Place, other.TypeName));

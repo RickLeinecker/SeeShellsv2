@@ -64,5 +64,10 @@ namespace SeeShellsV2.Data
         {
             return (User, Path, Name).CompareTo((other.User, other.Path, other.Name));
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

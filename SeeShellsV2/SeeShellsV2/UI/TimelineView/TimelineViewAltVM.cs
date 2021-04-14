@@ -17,6 +17,8 @@ using SeeShellsV2.Utilities;
 using System.Globalization;
 using OxyPlot.Axes;
 using System.Threading;
+using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace SeeShellsV2.UI
 {
@@ -31,6 +33,8 @@ namespace SeeShellsV2.UI
 
         public DateTime? DateSelectionBegin { get => _selectionBegin; set { _selectionBegin = value; UpdateSelection(); } }
         public DateTime? DateSelectionEnd { get => _selectionEnd; set { _selectionEnd = value; UpdateSelection(); } }
+
+        private void OnHistSelectionChanged(object sender, NotifyCollectionChangedEventArgs e) => UpdateSelection();
 
         private string _colorProperty = "TypeName";
 
@@ -77,10 +81,10 @@ namespace SeeShellsV2.UI
             }, token);
         }
 
-        private bool CalendarHeatMapFilter(object o)
+        public bool CalendarHeatMapFilter(object o)
         {
-                return DateSelectionBegin == null || DateSelectionEnd == null ||
-                (o is IShellEvent se && se.TimeStamp >= DateSelectionBegin && se.TimeStamp <= DateSelectionEnd);
+            return DateSelectionBegin == null || DateSelectionEnd == null ||
+            (o is IShellEvent se && se.TimeStamp >= DateSelectionBegin && se.TimeStamp <= DateSelectionEnd);
         }
     }
 
@@ -97,6 +101,22 @@ namespace SeeShellsV2.UI
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return parameter;
+        }
+    }
+
+    internal class EventTableSelector : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length >= 3 && values[0] is object o && values[1] is string prop && values[2] is IEnumerable selected)
+                return !selected.OfType<object>().Any() || selected.OfType<object>().Contains(o.GetDeepPropertyValue(prop));
+
+            return true;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

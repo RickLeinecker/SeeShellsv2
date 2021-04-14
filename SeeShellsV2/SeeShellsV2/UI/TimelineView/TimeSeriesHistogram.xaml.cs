@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -35,13 +36,15 @@ namespace SeeShellsV2.UI
         public DateTime? MaximumDate { get => GetValue(MaximumDateProp) as DateTime?; set => SetValue(MaximumDateProp, value); }
 
         public string ColorProperty { get => GetValue(ColorPropertyProp) as string; set => SetValue(ColorPropertyProp, value); }
-        public string DateTimeProperty { get; set; }
+        public string DateTimeProperty { get => GetValue(DateTimePropertyProp) as string; set => SetValue(DateTimePropertyProp, value); }
 
-        public Color PlotAreaBorderColor { get; set; }
-        public Color TextColor { get; set; }
-        public Color TicklineColor { get; set; }
+        public Color PlotAreaBorderColor { get => (Color) GetValue(PlotAreaBorderColorProp); set => SetValue(PlotAreaBorderColorProp, value); }
+        public Color TextColor { get => (Color) GetValue(TextColorProp); set => SetValue(TextColorProp, value); }
+        public Color TicklineColor { get => (Color)GetValue(TicklineColorProp); set => SetValue(TicklineColorProp, value); }
 
         public string YAxisTitle { get; set; }
+
+        public ICollectionView Selected { get => CollectionViewSource.GetDefaultView(_selected); }
 
         private ICollectionView Items { get; set; }
 
@@ -49,11 +52,12 @@ namespace SeeShellsV2.UI
         private readonly DateTimeAxis _dateAxis = new DateTimeAxis { Position = AxisPosition.Bottom };
         private readonly LinearAxis _freqAxis = new LinearAxis { Position = AxisPosition.Left, IsZoomEnabled = false, IsPanEnabled = false };
 
+        private readonly ObservableCollection<object> _selected = new ObservableCollection<object>();
+
         public TimeSeriesHistogram()
         {
             InitializeComponent();
 
-            // _histPlotModel.Series.Add(_histSeries);
             _histPlotModel.Axes.Add(_dateAxis);
             _histPlotModel.Axes.Add(_freqAxis);
 
@@ -76,7 +80,7 @@ namespace SeeShellsV2.UI
                     .Where(r => r.Element is Series)
                     .Select(r => (r, r.Element as Series))
                     .OrderBy(r => !r.Item2.IsSelected())
-                    .ThenBy(r => r.Item2.Tag)
+                    .ThenBy(r => (r.Item2.Tag as (object, int)?)?.Item2 ?? 0)
                     .Select(r => r.Item2.GetNearestPoint(e.Position, true))
                     .FirstOrDefault();
 
@@ -105,24 +109,22 @@ namespace SeeShellsV2.UI
                     var hst = _histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.RenderInLegend).ElementAt(index);
 
                     if (hst.IsSelected())
+                    {
                         hst.Unselect();
+                        _selected.Remove((hst.Tag as (object, int)?)?.Item1);
+                    }
                     else
+                    {
                         hst.Select();
+                        _selected.Add((hst.Tag as (object, int)?)?.Item1);
+                    }
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     return;
                 }
 
-                if (!_histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.IsSelected()).Any())
-                {
-                    _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor(255, s.ActualFillColor));
-                }
-                else
-                {
-                    _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor((s.IsSelected() ? 255 : 32), s.ActualFillColor));
-                }
-
+                UpdateColors();
                 HistogramPlot.InvalidatePlot();
             }
             else
@@ -153,9 +155,20 @@ namespace SeeShellsV2.UI
                 {
                     ResetHistSeries();
                     UpdateAxes();
+                    UpdateColors();
                     HistogramPlot.InvalidatePlot();
                 });
             }, token);
+        }
+
+        protected void UpdateColors()
+        {
+            HistogramPlot.InvalidatePlot();
+
+            if (!_histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.IsSelected()).Any())
+                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor(255, s.ActualFillColor));
+            else
+                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor((s.IsSelected() ? 255 : 32), s.ActualFillColor));
         }
 
         protected void UpdateAxes()
@@ -183,7 +196,7 @@ namespace SeeShellsV2.UI
 
             IOrderedEnumerable<(DateTime date, object item)> items = Items
                 .OfType<object>()
-                .Select(x => ((DateTime)x.GetType().GetProperty(DateTimeProperty).GetValue(x, null), x))
+                .Select(x => ((DateTime)x.GetDeepPropertyValue(DateTimeProperty), x))
                 .OrderBy(x => x.Item1);
 
             BinningOptions options = new BinningOptions(
@@ -234,7 +247,10 @@ namespace SeeShellsV2.UI
 
                 s.Title = group.Key?.ToString() ?? string.Empty;
                 s.ToolTip = s.Title;
-                s.Tag = dates.Count();
+                s.Tag = (group.Key, dates.Count());
+
+                if (_selected.Contains(group.Key))
+                    s.Select();
 
                 _histPlotModel.Series.Add(s);
             }
@@ -319,6 +335,23 @@ namespace SeeShellsV2.UI
                 )
             );
 
+        public static readonly DependencyProperty DateTimePropertyProp =
+            DependencyProperty.Register(
+                nameof(DateTimeProperty),
+                typeof(string),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    null,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
         public static readonly DependencyProperty ColorPropertyProp =
             DependencyProperty.Register(
                 nameof(ColorProperty),
@@ -326,6 +359,58 @@ namespace SeeShellsV2.UI
                 typeof(TimeSeriesHistogram),
                 new FrameworkPropertyMetadata(
                     null,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            t._selected.Clear();
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty TextColorProp =
+            DependencyProperty.Register(
+                nameof(TextColor),
+                typeof(Color),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    Colors.Black,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty PlotAreaBorderColorProp =
+            DependencyProperty.Register(
+                nameof(PlotAreaBorderColor),
+                typeof(Color),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    Colors.Black,
+                    (o, a) =>
+                    {
+                        if (o is TimeSeriesHistogram t)
+                        {
+                            t.Update();
+                        }
+                    }
+                )
+            );
+
+        public static readonly DependencyProperty TicklineColorProp =
+            DependencyProperty.Register(
+                nameof(TicklineColor),
+                typeof(Color),
+                typeof(TimeSeriesHistogram),
+                new FrameworkPropertyMetadata(
+                    Colors.Black,
                     (o, a) =>
                     {
                         if (o is TimeSeriesHistogram t)
