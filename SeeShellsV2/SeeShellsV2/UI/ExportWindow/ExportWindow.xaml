@@ -11,14 +11,22 @@
 	<Window.Resources>
 		<converters:ModuleViewConverter x:Key="ModuleViewConverter"/>
 	</Window.Resources>
-    <DockPanel>
-		<StackPanel DockPanel.Dock="Top" Margin="5,5,5,5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-			<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="Insert Module: "/>
-			<ComboBox Margin="2,2,2,2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="moduleSelector" SelectedIndex="0" ItemsSource="{Binding moduleSelector}" IsEditable="False"/>
-			<Button VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="Add_Module" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Click="Add_Module_Click"/>
-		</StackPanel>
-		<ScrollViewer>
-			<ItemsControl x:Name="Modules" DockPanel.Dock="Top" ItemsSource="{Binding moduleList}">
+	<ScrollViewer>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+			<StackPanel Grid.Row="0" Margin="5,5,5,5" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+				<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="Insert Module: "/>
+				<ComboBox Margin="2,2,2,2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="moduleSelector" SelectedIndex="0" ItemsSource="{Binding moduleSelector}" IsEditable="False"/>
+				<Button VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="Add_Module" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Click="Add_Module_Click"/>
+			</StackPanel>
+			<ItemsControl Grid.Row="1" x:Name="Modules" DockPanel.Dock="Top" ItemsSource="{Binding moduleList}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Grid>
@@ -48,9 +56,9 @@
 											<RowDefinition Height="*"/>
 											<RowDefinition Height="*"/>
 										</Grid.RowDefinitions>
-										<Button x:Name="Remove" Grid.Row="0" FontFamily="Segoe MDL2 Assets" Content="&#xE711;" Click="Remove_Click"/>
-										<Button x:Name="MoveUp" Grid.Row="1" FontFamily="Segoe MDL2 Assets" Content="&#xE010;" Click="MoveUp_Click"/>
-										<Button x:Name="MoveDown" Grid.Row="2" FontFamily="Segoe MDL2 Assets" Content="&#xE011;" Click="MoveDown_Click"/>
+										<Button x:Name="Remove" Grid.Row="0" BorderThickness="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE711;" Click="Remove_Click"/>
+										<Button x:Name="MoveUp" Grid.Row="1" BorderThickness="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE010;" Click="MoveUp_Click"/>
+										<Button x:Name="MoveDown" Grid.Row="2" BorderThickness="0" Background="Transparent" FontFamily="Segoe MDL2 Assets" Content="&#xE011;" Click="MoveDown_Click"/>
 									</Grid>
 								</Grid>
 							</Border>
@@ -58,11 +66,11 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
-		</ScrollViewer>
-		<StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button Click="Export_Click">
-                <TextBlock Text="{Binding Status}"/>
-            </Button>
-        </StackPanel>
-	</DockPanel>
+			<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+				<Button Click="Export_Click">
+					<TextBlock Text="{Binding Status}"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+	</ScrollViewer>
 </Window>

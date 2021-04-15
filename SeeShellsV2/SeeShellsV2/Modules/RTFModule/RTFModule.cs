@@ -50,9 +50,8 @@ namespace SeeShellsV2.Modules
 			return MemberwiseClone() as IPdfModule;
 		}
 
-		public void Render(PdfDocument doc)
+		public void Render(MigraDoc.DocumentObjectModel.Section section)
 		{
-			//PdfPage page = doc.AddPage();
 			//XGraphics gfx = XGraphics.FromPdfPage(page);
 			//// HACK²
 			//gfx.MUH = PdfFontEncoding.Unicode;
@@ -66,28 +65,29 @@ namespace SeeShellsV2.Modules
 			//Document docu = new Document();
 			//MigraDoc.DocumentObjectModel.Section sec = docu.AddSection();
 			//// Add a single paragraph with some text and format information.
-			//Paragraph para = sec.AddParagraph();
-			//para.Format.Alignment = ParagraphAlignment.Justify;
-			//para.Format.Font.Name = "Times New Roman";
-			//para.Format.Font.Size = 12;
-			//para.Format.Font.Color = Colors.DarkGray;
-			//para.Format.Font.Color = Colors.DarkGray;
-			//para.AddText("Duisism odigna acipsum delesenisl ");
-			//para.AddFormattedText("ullum in velenit", TextFormat.Bold);
-			//para.AddText(" ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
-			//  "auguercilit lor se dipisl duismod tatem zzrit at laore magna feummod oloborting ea con vel " +
-			//  "essit augiati onsequat luptat nos diatum vel ullum illummy nonsent nit ipis et nonsequis " +
-			//  "niation utpat. Odolobor augait et non etueril landre min ut ulla feugiam commodo lortie ex " +
-			//  "essent augait el ing eumsan hendre feugait prat augiatem amconul laoreet. ≤≥≈≠");
-			//para.Format.Borders.Distance = "5pt";
-			//para.Format.Borders.Color = Colors.Gold;
+			MigraDoc.DocumentObjectModel.Paragraph para = section.AddParagraph();
+			para.Format.Alignment = ParagraphAlignment.Justify;
+			para.Format.Font.Name = "Times New Roman";
+			para.Format.Font.Size = 12;
+			para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
+			para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
+			para.AddText("Duisism odigna acipsum delesenisl ");
+			para.AddFormattedText("ullum in velenit", TextFormat.Bold);
+			para.AddText(" ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
+			  "auguercilit lor se dipisl duismod tatem zzrit at laore magna feummod oloborting ea con vel " +
+			  "essit augiati onsequat luptat nos diatum vel ullum illummy nonsent nit ipis et nonsequis " +
+			  "niation utpat. Odolobor augait et non etueril landre min ut ulla feugiam commodo lortie ex " +
+			  "essent augait el ing eumsan hendre feugait prat augiatem amconul laoreet. ≤≥≈≠");
+			para.Format.Borders.Distance = "5pt";
+			para.Format.Borders.Color = MigraDoc.DocumentObjectModel.Colors.Gold;
 
 			//// Create a renderer and prepare (=layout) the document
 			//DocumentRenderer docRenderer = new DocumentRenderer(docu);
 			//docRenderer.PrepareDocument();
 
 			//// Render the paragraph. You can render tables or shapes the same way.
-			//docRenderer.RenderObject(gfx, XUnit.FromCentimeter(5), XUnit.FromCentimeter(10), "12cm", para);
+			//docRenderer.RenderObject(gfx, XUnit. , XUnit.FromCentimeter(10), "12cm", para);
+			//gfx.Dispose();
 		}
 
 		public FrameworkElement View()
@@ -111,7 +111,7 @@ namespace SeeShellsV2.Modules
                               ItemsSource=""{Binding FontSizes}""
                               Width=""50"" IsEditable=""False"" />
 				</ToolBar>
-				<RichTextBox Name=""RichTextBox"" Height=""50"" />
+				<RichTextBox Name=""RichTextBox"" Height=""100"" />
 			</StackPanel>";
 
 			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel

@@ -1,4 +1,4 @@
-﻿using PdfSharp.Pdf;
+﻿using MigraDoc.DocumentObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace SeeShellsV2.Modules
 	public interface IPdfModule
 	{
 		public string Name { get; }
-		public void Render(PdfDocument doc);
+		public void Render(Section section);
 		public FrameworkElement View();
 		public IPdfModule Clone();
 	}

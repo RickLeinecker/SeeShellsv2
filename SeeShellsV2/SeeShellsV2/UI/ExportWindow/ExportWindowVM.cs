@@ -46,7 +46,7 @@ namespace SeeShellsV2.UI
 		public async void Export_PDF(string filename)
 		{
 			Status = "Saving...";
-			await Task.Run(() => Exporter.Export(filename));
+			await Task.Run(() => Exporter.Export(filename, moduleList));
 			Status = "Saved";
 			await Task.Run(() => Thread.Sleep(5000));
 			Status = "Save";
