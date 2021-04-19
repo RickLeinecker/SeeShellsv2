@@ -11,6 +11,9 @@ using System.Collections;
 using SeeShellsV2.Modules;
 using System.Threading;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace SeeShellsV2.UI
 {
@@ -43,13 +46,14 @@ namespace SeeShellsV2.UI
 			Status = "Save";
 		}
 
-		public async void Export_PDF(string filename)
+		public void Export_PDF(string filename)
 		{
-			Status = "Saving...";
-			await Task.Run(() => Exporter.Export(filename, moduleList));
-			Status = "Saved";
-			await Task.Run(() => Thread.Sleep(5000));
-			Status = "Save";
+			Exporter.Export(filename, moduleList);
+			//Status = "Saving...";
+			//await Task.Run(() => Exporter.Export(filename, moduleList));
+			//Status = "Saved";
+			//await Task.Run(() => Thread.Sleep(5000));
+			//Status = "Save";
 		}
 
 		public void Remove(IPdfModule pdfModule)

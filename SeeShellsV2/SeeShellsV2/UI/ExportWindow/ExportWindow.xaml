@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:SeeShellsV2.UI"
         xmlns:data="clr-namespace:SeeShellsV2.Data"
 		mc:Ignorable="d"
-        Height="450" Width="800">
+        Height="600" Width="800">
 	<Window.Resources>
 		<converters:ModuleViewConverter x:Key="ModuleViewConverter"/>
 	</Window.Resources>

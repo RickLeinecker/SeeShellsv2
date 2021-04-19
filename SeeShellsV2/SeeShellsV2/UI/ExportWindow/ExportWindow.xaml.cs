@@ -46,13 +46,18 @@ namespace SeeShellsV2.UI
 
 		private void Export_Click(object sender, RoutedEventArgs e)
 		{
-            // do file save here in the view (presentation logic)
-            SaveFileDialog svg = new SaveFileDialog();
-            svg.Filter = "PDF Document (*.pdf)|*.pdf";
-            svg.DefaultExt = ".pdf";
-            svg.FileName = "SeeShellsReport";
-            if (svg.ShowDialog() == true)
-                ViewModel.Export_PDF(svg.FileName);
+			// do file save here in the view (presentation logic)
+			//SaveFileDialog svg = new SaveFileDialog();
+			//svg.Filter = "XPS Documents (.xps)|*.xps";
+			//svg.DefaultExt = ".xps";
+			//svg.FileName = "SeeShellsReport";
+			//if (svg.ShowDialog() == true)
+			//	ViewModel.Export_PDF(svg.FileName);
+			//svg.Filter = "PDF Document (*.pdf)|*.pdf";
+			//svg.DefaultExt = ".pdf";
+			//svg.FileName = "SeeShellsReport";
+			//if (svg.ShowDialog() == true)
+			ViewModel.Export_PDF("SeeShellsReport");
 		}
 
 		private void Remove_Click(object sender, RoutedEventArgs e)
