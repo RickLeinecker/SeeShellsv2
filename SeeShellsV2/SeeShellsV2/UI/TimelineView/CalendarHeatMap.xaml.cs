@@ -131,7 +131,7 @@ namespace SeeShellsV2.UI
                 if (Orientation == Orientation.Vertical)
                     Orientation = Orientation.Horizontal;
 
-                double aspect = 750.04 / 154.619;
+                double aspect = 750.04 / 204.619;
                 HeatMapPlot.SetCurrentValue(WidthProperty, double.NaN);
                 HeatMapPlot.SetCurrentValue(HeightProperty, sizeInfo.NewSize.Width / aspect);
             }
@@ -378,6 +378,9 @@ namespace SeeShellsV2.UI
 
             ColorAxis.Title = ColorAxisTitle;
 
+            ColorAxis.Position = (Orientation == Orientation.Horizontal) ?
+                OxyPlot.Axes.AxisPosition.Top : OxyPlot.Axes.AxisPosition.Right;
+
             DayAxis.TitleColor = TextColor;
             DayAxis.TextColor = TextColor;
             DayAxis.TicklineColor = Colors.Transparent;
@@ -393,7 +396,7 @@ namespace SeeShellsV2.UI
             WeekAxis.TicklineColor = Colors.Transparent;
 
             WeekAxis.Position = (Orientation == Orientation.Horizontal) ?
-                        OxyPlot.Axes.AxisPosition.Top : OxyPlot.Axes.AxisPosition.Right;
+                OxyPlot.Axes.AxisPosition.Top : OxyPlot.Axes.AxisPosition.Right;
 
             WeekAxis.Minimum = -0.5;
             WeekAxis.Maximum = 52.5;
