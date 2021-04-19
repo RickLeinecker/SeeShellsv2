@@ -15,8 +15,8 @@ namespace SeeShellsV2.Data
     {
         public string InternalDevicePath
         {
-            init => fields["InternalDevicePath"] = value;
-            get => fields.GetClassOrDefault("InternalDevicePath", string.Empty);
+            init => fields[nameof(InternalDevicePath)] = value;
+            get => fields.GetClassOrDefault(nameof(InternalDevicePath), string.Empty);
         }
     }
 }

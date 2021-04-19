@@ -1,20 +1,4 @@
-﻿#region copyright
-// SeeShells Copyright (c) 2019-2020 Aleksandar Stoyanov, Bridget Woodye, Klayton Killough, 
-// Richard Leinecker, Sara Frackiewicz, Yara As-Saidi
-// SeeShells is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-// 
-// SeeShells is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along with this program;
-// if not, see <https://www.gnu.org/licenses>
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,32 +47,32 @@ namespace SeeShellsV2.Data
 
         public uint FileSize
         {
-            init => fields["FileSize"] = value;
-            get => fields.GetStructOrDefault<uint>("FileSize", 0);
+            init => fields[nameof(FileSize)] = value;
+            get => fields.GetStructOrDefault<uint>(nameof(FileSize), 0);
         }
 
         public FileAttributeFlags FileAttributes
         {
-            init => fields["FileAttributes"] = (int) value;
-            get => (FileAttributeFlags) fields.GetStructOrDefault<int>("FileAttributes", 0);
+            init => fields[nameof(FileAttributes)] = (int) value;
+            get => (FileAttributeFlags) fields.GetStructOrDefault<int>(nameof(FileAttributes), 0);
         }
 
         public DateTime ModifiedDate
         {
-            init => fields["ModifiedDate"] = value;
-            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+            init => fields[nameof(ModifiedDate)] = value;
+            get => fields.GetStructOrDefault(nameof(ModifiedDate), DateTime.MinValue);
         }
 
         public DateTime AccessedDate
         {
-            init => fields["AccessedDate"] = value;
-            get => fields.GetStructOrDefault("AccessedDate", DateTime.MinValue);
+            init => fields[nameof(AccessedDate)] = value;
+            get => fields.GetStructOrDefault(nameof(AccessedDate), DateTime.MinValue);
         }
 
         public DateTime CreationDate
         {
-            init => fields["CreationDate"] = value;
-            get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
+            init => fields[nameof(CreationDate)] = value;
+            get => fields.GetStructOrDefault(nameof(CreationDate), DateTime.MinValue);
         }
     }
 }

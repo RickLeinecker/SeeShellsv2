@@ -1,20 +1,4 @@
-﻿#region copyright
-// SeeShells Copyright (c) 2019-2020 Aleksandar Stoyanov, Bridget Woodye, Klayton Killough, 
-// Richard Leinecker, Sara Frackiewicz, Yara As-Saidi
-// SeeShells is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-// 
-// SeeShells is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along with this program;
-// if not, see <https://www.gnu.org/licenses>
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
@@ -53,26 +37,26 @@ namespace SeeShellsV2.Data
 
         public NetworkFlagBits NetworkFlags
         {
-            init => fields["NetworkFlags"] = (int)value;
-            get => (NetworkFlagBits)fields.GetStructOrDefault<int>("NetworkFlags", 0);
+            init => fields[nameof(NetworkFlags)] = (int)value;
+            get => (NetworkFlagBits)fields.GetStructOrDefault<int>(nameof(NetworkFlags), 0);
         }
 
         public string NetworkLocation
         {
-            init => fields["NetworkLocation"] = value;
-            get => fields.GetClassOrDefault("NetworkLocation", string.Empty);
+            init => fields[nameof(NetworkLocation)] = value;
+            get => fields.GetClassOrDefault(nameof(NetworkLocation), string.Empty);
         }
 
         public string NetworkDescription
         {
-            init => fields["NetworkDescription"] = value;
-            get => fields.GetClassOrDefault("NetworkDescription", string.Empty);
+            init => fields[nameof(NetworkDescription)] = value;
+            get => fields.GetClassOrDefault(nameof(NetworkDescription), string.Empty);
         }
 
         public string NetworkComments
         {
-            init => fields["NetworkComments"] = value;
-            get => fields.GetClassOrDefault("NetworkComments", string.Empty);
+            init => fields[nameof(NetworkComments)] = value;
+            get => fields.GetClassOrDefault(nameof(NetworkComments), string.Empty);
         }
     }
 }
