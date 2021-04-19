@@ -98,6 +98,9 @@ namespace SeeShellsV2.UI
             set => SetValue(OrientationProp, value);
         }
 
+        public bool AllowInteraction { get => _allowInteraction; set => _allowInteraction = value; }
+
+        private bool _allowInteraction = true;
         private DateTime? _last_selected = null;
         private readonly string[] weekdays = new string[] { "S", "M", "T", "W", "T", "F", "S" };
         private readonly string[] months = new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
@@ -123,15 +126,29 @@ namespace SeeShellsV2.UI
 
         private void OnSizeChanged(object o, SizeChangedEventArgs sizeInfo)
         {
-            double aspect1 = 204.619 / 750.04;
-            double aspect2 = sizeInfo.NewSize.Width / Math.Max(1, (o as Grid).RowDefinitions[1].ActualHeight);
+            if (sizeInfo.NewSize.Width >= Math.Max(1, (o as Grid).RowDefinitions[1].ActualHeight))
+            {
+                if (Orientation == Orientation.Vertical)
+                    Orientation = Orientation.Horizontal;
 
-            if (aspect2 > aspect1) HeatMapPlot.SetCurrentValue(WidthProperty, (o as Grid).RowDefinitions[1].ActualHeight * aspect1);
-            else HeatMapPlot.SetCurrentValue(HeightProperty, sizeInfo.NewSize.Width / aspect1);
+                double aspect = 750.04 / 154.619;
+                HeatMapPlot.SetCurrentValue(WidthProperty, double.NaN);
+                HeatMapPlot.SetCurrentValue(HeightProperty, sizeInfo.NewSize.Width / aspect);
+            }
+            else
+            {
+                if (Orientation == Orientation.Horizontal)
+                    Orientation = Orientation.Vertical;
+
+                double aspect = 750.04 / 204.619;
+                HeatMapPlot.SetCurrentValue(WidthProperty, (o as Grid).RowDefinitions[1].ActualHeight / aspect);
+                HeatMapPlot.SetCurrentValue(HeightProperty, double.NaN);
+            }
         }
 
         private void OnItemsChange(object sender, NotifyCollectionChangedEventArgs args) => ResetHeatMap();
         private void Clear_MenuItem_Click(object sender, RoutedEventArgs e) => ClearSelected();
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => e.Handled = !AllowInteraction;
         private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e) => ClearSelected();
         private void Left_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year - 1);
         private void Right_Button_Click(object sender, RoutedEventArgs e) => SetCurrentValue(YearProp, Year + 1);
@@ -141,6 +158,12 @@ namespace SeeShellsV2.UI
             double i, j;
 
             HeatMapPlot.HideTracker();
+
+            if (!AllowInteraction)
+            {
+                e.Handled = true;
+                return;
+            }
 
             if (Mouse.RightButton == MouseButtonState.Released)
             {
@@ -269,7 +292,25 @@ namespace SeeShellsV2.UI
                 }
                 else
                 {
-                    // TODO figure out the shapes when horizontal (not necessary unless we want to change the display to horizontal)
+                    HeatMapPlot.Annotations.Add(new PolygonAnnotation
+                    {
+                        Points = new List<OxyPlot.DataPoint>
+                        {
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1 + 7) / 7 - 0.5, 6.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5, 6 - (((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5, 6 - (((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5, -0.5),
+
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1 - 7) / 7 + ((i == 1) ?  -0.5 : 0.5), -0.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) / 7 - 0.5, 6 - (((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) / 7 + 0.5, 6 - (((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1 + 7) / 7 - 0.5, 6.5),
+                        },
+                        LineStyle = OxyPlot.LineStyle.Solid,
+                        Stroke = TextColor,
+                        Fill = Colors.Transparent,
+                        StrokeThickness = 1
+                    });
                 }
             }
 
@@ -302,7 +343,22 @@ namespace SeeShellsV2.UI
                 }
                 else
                 {
-                    // TODO figure out the shapes when horizontal (not necessary unless we want to change the display to horizontal)
+                    HeatMapPlot.Annotations.Add(new PolygonAnnotation
+                    {
+                        Points = new List<OxyPlot.DataPoint>
+                        {
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1 + 7) / 7 - 0.5, 6.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 + 0.5, 6 - (((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5, 6 - (((int)begin.DayOfWeek + p1 - 1) % 7 + 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p1 - 1) / 7 - 0.5, -0.5),
+
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1 - 7) / 7 + (((p0 + (int)begin.DayOfWeek) <= 6) ?  -0.5 : 0.5), -0.5),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) / 7 - 0.5, 6 - (((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1) / 7 + 0.5, 6 - (((int)begin.DayOfWeek + p0 - 1) % 7 - 0.5)),
+                            new OxyPlot.DataPoint(((int)begin.DayOfWeek + p0 - 1 + 7) / 7 - 0.5, 6.5),
+                        },
+                        Fill = SelectionColor
+                    });
                 }
             }
         }
@@ -626,7 +682,7 @@ namespace SeeShellsV2.UI
                     .ToList();
 
                 int offset = (int) (c.Orientation == Orientation.Horizontal ?
-                    (6 - result.DataPoint.X) + 7 * result.DataPoint.Y : result.DataPoint.X + 7 * (52 - result.DataPoint.Y));
+                    (6 - result.DataPoint.Y) + 7 * result.DataPoint.X : result.DataPoint.X + 7 * (52 - result.DataPoint.Y));
 
                 DateTime date = new DateTime(c.Year, 1, 1);
                 date = date.AddDays(offset - (int) date.DayOfWeek);

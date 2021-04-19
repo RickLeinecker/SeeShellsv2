@@ -91,7 +91,7 @@
                                    TextColor="{DynamicResource MahApps.Colors.ThemeForeground}"
                                    GridColor="{DynamicResource MahApps.Colors.Gray7}"
                                    SelectionColor="{DynamicResource MahApps.Colors.Accent}"
-                                   DateTimeProperty="TimeStamp" Orientation="Vertical"/>
+                                   DateTimeProperty="TimeStamp" Orientation="Horizontal"/>
         </Border>
 
         <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"

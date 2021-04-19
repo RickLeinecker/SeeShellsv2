@@ -31,7 +31,9 @@
                 <Button Margin="15 0" Click="Right_Button_Click">&gt;</Button>
             </StackPanel>
             <oxy:Plot Name="HeatMapPlot" Grid.Row="1" Background="Transparent"
-                      PreviewMouseMove="OnMouseMove" PreviewMouseRightButtonDown="OnMouseRightButtonDown">
+                      PreviewMouseMove="OnMouseMove"
+                      PreviewMouseLeftButtonDown="OnMouseLeftButtonDown"
+                      PreviewMouseRightButtonDown="OnMouseRightButtonDown">
                 <oxy:Plot.DefaultTrackerTemplate>
                     <ControlTemplate>
                         <Canvas>
@@ -40,7 +42,7 @@
                                     Padding="5" Margin="0"
                                     Background="Black"
                                     BorderBrush="Black" >
-                                <TextBlock>
+                                <TextBlock Foreground="White">
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource TrackerText}">
                                             <Binding />

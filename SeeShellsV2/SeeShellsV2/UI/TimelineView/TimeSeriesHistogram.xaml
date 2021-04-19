@@ -23,7 +23,7 @@
                                 Padding="5" Margin="0"
                                 Background="Black"
                                 BorderBrush="Black" >
-                            <TextBlock>
+                            <TextBlock Foreground="White">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource TimeSeriesText}">
                                         <Binding />
