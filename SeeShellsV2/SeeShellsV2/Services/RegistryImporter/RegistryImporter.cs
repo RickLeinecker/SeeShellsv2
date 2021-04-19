@@ -153,7 +153,7 @@ namespace SeeShellsV2.Services
 
                             shellItem = new UnknownShellItem()
                             {
-                                Place = new Place()
+                                Place = new UnknownPlace()
                                 {
                                     Name = "??",
                                     PathName = parentShellItem != null ? Path.Combine(parentShellItem.Place.PathName ?? string.Empty, parentShellItem.Place.Name) : null,

@@ -49,7 +49,7 @@ namespace SeeShellsV2.Data
                 offset += 2 * (storageid.Length + 1);
                 string filesystemname = BlockHelper.UnpackWString(value, offset);
 
-                Place p = new Place()
+                Place p = new SystemFolder()
                 {
                     Name = storagename,
                     PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,

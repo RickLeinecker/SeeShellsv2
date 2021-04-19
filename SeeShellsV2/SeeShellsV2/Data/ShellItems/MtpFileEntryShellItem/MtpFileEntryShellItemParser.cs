@@ -60,7 +60,7 @@ namespace SeeShellsV2.Data
 
                 string folderid = BlockHelper.UnpackWString(value, offset);
 
-                Place p = new Place()
+                Place p = new Folder()
                 {
                     Name = foldername,
                     PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,

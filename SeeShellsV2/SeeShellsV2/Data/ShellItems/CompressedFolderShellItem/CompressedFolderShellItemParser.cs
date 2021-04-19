@@ -50,7 +50,7 @@ namespace SeeShellsV2.Data
                 string pathname = BlockHelper.UnpackWString(value, offset);
                 offset += 2 * (pathname.Length + 1); // path name string size
 
-                Place p = new Place()
+                Place p = new CompressedFolder()
                 {
                     Name = filename,
                     PathName = parent != null ? Path.Join(parent.Place?.PathName ?? string.Empty, parent.Place?.Name ?? string.Empty) : null,
