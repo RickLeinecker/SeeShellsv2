@@ -21,6 +21,9 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// An extension block commonly found on file-entry shellbags
+    /// </summary>
     public class ExtensionBlockBEEF0004 : ExtensionBlock
     {
         public DateTime CreationDate

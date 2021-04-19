@@ -19,6 +19,9 @@ using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// An extension block commonly found on shellbags
+    /// </summary> 
     public interface IExtensionBlock
     {
         /// <summary>

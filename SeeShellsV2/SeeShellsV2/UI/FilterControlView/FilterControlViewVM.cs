@@ -14,10 +14,10 @@ namespace SeeShellsV2.UI
     public class FilterControlViewVM : ViewModel, IFilterControlViewVM
     {
         [Dependency]
-        public IDataRepository<User> UserCollection { get; set; }
+        public IUserCollection UserCollection { get; set; }
 
         [Dependency]
-        public IDataRepository<RegistryHive> RegistryHiveCollection { get; set; }
+        public IRegistryHiveCollection RegistryHiveCollection { get; set; }
 
         private IShellEventCollection ShellEvents { get; set; }
 

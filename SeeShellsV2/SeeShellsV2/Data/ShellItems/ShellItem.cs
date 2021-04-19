@@ -116,15 +116,9 @@ namespace SeeShellsV2.Data
             get => extensionBlocks;
         }
 
-        public ISet<IShellTag> Tags
-        {
-            get => tags;
-        }
-
         protected IList<IShellItem> children = new List<IShellItem>();
         protected Dictionary<string, object> fields = new Dictionary<string, object>();
         protected IReadOnlyCollection<IExtensionBlock> extensionBlocks = new List<IExtensionBlock>();
-        protected SortedSet<IShellTag> tags = new SortedSet<IShellTag>();
 
         public int CompareTo(IShellItem other)
         {

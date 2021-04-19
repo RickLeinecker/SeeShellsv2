@@ -85,7 +85,7 @@
                                 <local:TimelineView />
                             </xcad:LayoutDocument>-->
                             <xcad:LayoutDocument ContentId="timelineview" Title="Events" CanClose="False" ToolTip="A timeline of user activity">
-                                <local:TimelineViewAlt />
+                                <local:TimelineView />
                             </xcad:LayoutDocument>
                             <xcad:LayoutDocument ContentId="tableview" Title="Shellbags" CanClose="False" ToolTip="A list of shellbags found in the loaded registry hives">
                                 <local:ShellItemTableView />

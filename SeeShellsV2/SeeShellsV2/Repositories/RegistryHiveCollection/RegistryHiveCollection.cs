@@ -9,7 +9,7 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Repositories
 {
-    public class RegistryHiveCollection : ObservableSortedList<RegistryHive>, IDataRepository<RegistryHive>
+    public class RegistryHiveCollection : ObservableSortedList<RegistryHive>, IRegistryHiveCollection
     {
     }
 }

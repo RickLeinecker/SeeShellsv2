@@ -41,8 +41,8 @@ namespace SeeShellsV2.Services
     public class RegistryImporter : IRegistryImporter
     {
         private IConfig Config { get; set; }
-        private IDataRepository<User> Users { get; set; }
-        private IDataRepository<RegistryHive> RegistryHives { get; set; }
+        private IUserCollection Users { get; set; }
+        private IRegistryHiveCollection RegistryHives { get; set; }
         private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
@@ -51,8 +51,8 @@ namespace SeeShellsV2.Services
 
         public RegistryImporter(
             [Dependency] IConfig config,
-            [Dependency] IDataRepository<User> users,
-            [Dependency] IDataRepository<RegistryHive> registryHives,
+            [Dependency] IUserCollection users,
+            [Dependency] IRegistryHiveCollection registryHives,
             [Dependency] IShellItemCollection shellItems,
             [Dependency] IShellItemFactory shellFactory
         )

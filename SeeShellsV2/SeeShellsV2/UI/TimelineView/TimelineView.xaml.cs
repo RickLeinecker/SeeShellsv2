@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,72 +14,39 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using OxyPlot;
+using OxyPlot.Series;
 using Unity;
+
 using SeeShellsV2.Data;
+using System.Collections.Specialized;
 using SeeShellsV2.Repositories;
-using System.Globalization;
-using System.Diagnostics;
-using System.Threading;
 
 namespace SeeShellsV2.UI
 {
-	public interface ITimelineViewVM : IViewModel
-	{
-		ISelected Selected { get; }
-		IShellEventCollection ShellEvents { get; }
 
-		void GenerateRandomShellEvents();
-	}
+    public interface ITimelineViewVM : IViewModel
+    {
+        ICollectionView ShellEvents { get; }
+        ISelected Selected { get; }
+    }
 
-	/// <summary>
-	/// Interaction logic for TimelineView.xaml
-	/// </summary>
-	public partial class TimelineView : UserControl
-	{
-		[Dependency]
-		public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
+    /// <summary>
+    /// Interaction logic for TimelineView.xaml
+    /// </summary>
+    public partial class TimelineView : UserControl
+    {
+        [Dependency]
+        public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
 
-		public TimelineView()
-		{
-			InitializeComponent();
-		}
-
-		bool initialized = false;
-		private void GenerateTimeline(object sender, RoutedEventArgs e)
-		{
-			if (!initialized)
-			{
-				initialized = true;
-				ViewModel.GenerateRandomShellEvents();
-			}
-		}
-
-		private Border eventMaybeSelected = null;
-		private readonly Stopwatch sw = new Stopwatch();
-
-		private void Border_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			sw.Reset();
-			sw.Start();
-			eventMaybeSelected = sender as Border;
-
-			Task.Run(() =>
-			{
-				Thread.Sleep(500);
-				if (sw.IsRunning)
-					sw.Stop();
-			});
-		}
-
-		private void Border_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public TimelineView()
         {
-			if (sw.IsRunning && sender is Border b && b == eventMaybeSelected)
-			{
-				sw.Stop();
+            InitializeComponent();
+        }
 
-				if (sw.ElapsedMilliseconds < 300)
-					ViewModel.Selected.Current = (sender as FrameworkElement).DataContext;
-			}
-		}
+        private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            ViewModel.Selected.Current = e.AddedCells.Count > 0 ? e.AddedCells[0].Item : null;
+        }
     }
 }

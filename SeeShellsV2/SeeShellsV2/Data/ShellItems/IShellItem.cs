@@ -97,10 +97,5 @@ namespace SeeShellsV2.Data
         /// List of <see cref="IExtensionBlock"/> instances associated with the shell item
         /// </summary>
         IReadOnlyCollection<IExtensionBlock> ExtensionBlocks { init; get; }
-
-        /// <summary>
-        /// Set of tags associated with the shell item
-        /// </summary>
-        ISet<IShellTag> Tags { get; }
     }
 }

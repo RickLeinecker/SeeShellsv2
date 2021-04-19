@@ -9,6 +9,6 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Repositories
 {
-    public class PlaceCollection : ObservableSortedList<Place>, IDataRepository<Place>
+    public class UserCollection : ObservableSortedList<User>, IUserCollection
     { }
 }
