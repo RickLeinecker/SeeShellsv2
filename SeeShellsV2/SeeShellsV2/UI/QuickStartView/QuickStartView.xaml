@@ -34,16 +34,23 @@
                                 </ImageBrush.ImageSource>
                             </ImageBrush>
                         </Border.Background>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel VerticalAlignment="Top" Margin="0 35">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image Source="../Images/SeeShells.png"
                                    Width="60"
                                    VerticalAlignment="Center"/>
-                            <TextBlock Text="SEESHELLS"
-                                       FontWeight="Light"
+                                <TextBlock Text="SEESHELLS"
+                                           FontWeight="Light"
+                                           Foreground="White"
+                                           FontSize="50"
+                                           Margin="10 0 0 0"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="A Shellbag Forensics Tool"
+                                       HorizontalAlignment="Center"
                                        Foreground="White"
-                                       FontSize="50"
-                                       Margin="10 0 0 0"
-                                       VerticalAlignment="Center"/>
+                                       FontWeight="Light"
+                                       FontSize="18"/>
                         </StackPanel>
                     </Border>
 

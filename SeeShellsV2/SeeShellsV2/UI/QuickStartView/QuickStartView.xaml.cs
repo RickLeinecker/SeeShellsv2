@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,8 +47,8 @@ namespace SeeShellsV2.UI
                 switch (menuItem.Name)
                 {
                     case "ImportActiveRegistry":
-                        ViewModel.ImportFromRegistry();
-                        Visibility = Visibility.Hidden;
+                        if (ViewModel.ImportFromRegistry())
+                            Visibility = Visibility.Hidden;
                         break;
                     case "ImportRegistryFile":
                         OpenFileDialog openFileDialog = new OpenFileDialog { ValidateNames = false, ReadOnlyChecked = true };

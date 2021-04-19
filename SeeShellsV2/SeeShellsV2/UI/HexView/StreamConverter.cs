@@ -44,7 +44,7 @@ namespace SeeShellsV2.UI
             }
 
 
-            else return new MemoryStream(0);
+            return new MemoryStream(Array.Empty<byte>());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

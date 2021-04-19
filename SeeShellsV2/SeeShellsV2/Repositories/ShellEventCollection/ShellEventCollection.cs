@@ -24,6 +24,8 @@ namespace SeeShellsV2.Repositories
                     if (!e.Accepted) break;
                 }
             };
+
+            Filter += (object o, FilterEventArgs args) => args.Accepted = !(args.Item is IIntermediateShellEvent e) || !e.Consumed;
         }
 
         private readonly CollectionViewSource collectionViewSource = new CollectionViewSource();

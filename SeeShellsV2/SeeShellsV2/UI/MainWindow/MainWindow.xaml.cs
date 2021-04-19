@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
@@ -14,11 +15,16 @@ namespace SeeShellsV2.UI
 {
     public interface IMainWindowVM : IViewModel
     {
-        public void ImportFromCSV(string path);
-        public void ImportFromRegistry(string hiveLocation = null);
+        //public void ImportFromCSV(string path);
+        void ExportToCSV(string path);
+        bool ImportFromRegistry(string hiveLocation = null);
+        void RestartApplication(bool runAsAdmin = false);
         string WebsiteUrl { get; }
         string GithubUrl { get; }
-	}
+
+        Visibility StatusVisibility { get; }
+        string Status { get; }
+    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -33,25 +39,24 @@ namespace SeeShellsV2.UI
         }
 
         [Dependency]
-        public IWindowFactory windowFactory { private get; set; }
+        public IWindowFactory WindowFactory { private get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-
-        private void Import_CSV_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-                ViewModel.ImportFromCSV(openFileDialog.FileName);
-        }
+        //private void Import_CSV_Click(object sender, RoutedEventArgs e)
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "CSV file (*.csv)|*.csv|All files (*.*)|*.*";
+        //    if (openFileDialog.ShowDialog() == true)
+        //        ViewModel.ImportFromCSV(openFileDialog.FileName);
+        //}
 
         private void Export_Window_Click(object sender, RoutedEventArgs e)
         {
-            IWindow win = windowFactory.Create("export");
+            IWindow win = WindowFactory.Create("export");
             win.Show();
         }
 
@@ -73,6 +78,23 @@ namespace SeeShellsV2.UI
             OpenFileDialog openFileDialog = new OpenFileDialog { ValidateNames = false, ReadOnlyChecked = true };
             if (openFileDialog.ShowDialog() == true)
                 ViewModel.ImportFromRegistry(openFileDialog.FileName);
+        }
+
+        private void ResetMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            bool isElevated;
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+
+            MessageBoxResult result = MessageBox.Show(
+                    "Are you sure you want to reset the application (progress will be lost)?",
+                    "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+                ViewModel.RestartApplication(isElevated);
         }
 
         private void ToggleSwitch_Toggled(object sender, RoutedEventArgs e)

@@ -99,7 +99,7 @@ namespace SeeShellsV2.UI
 
         void FilterRegistryHive(object o, FilterEventArgs e)
         {
-            if (User == null)
+            if (RegistryHive == null)
                 e.Accepted = true;
             else
                 e.Accepted = e.Item is IShellEvent se && se.Evidence.Any() && se.Evidence.First().RegistryHive == RegistryHive;

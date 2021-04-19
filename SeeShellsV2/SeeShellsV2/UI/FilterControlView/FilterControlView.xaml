@@ -16,7 +16,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock FontWeight="Bold" Text="User" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox SelectedValue="{Binding User}" Grid.Column="1" ItemsSource="{Binding UserCollection}">
+            <ComboBox SelectedValue="{Binding User}" Grid.Column="1" ItemsSource="{Binding UserCollection}" mah:TextBoxHelper.ClearTextButton="True">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -31,7 +31,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock FontWeight="Bold" Text="Registry Hive" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox SelectedValue="{Binding RegistryHive}" Grid.Column="1" ItemsSource="{Binding RegistryHiveCollection}">
+            <ComboBox SelectedValue="{Binding RegistryHive}" Grid.Column="1" ItemsSource="{Binding RegistryHiveCollection}" mah:TextBoxHelper.ClearTextButton="True">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
@@ -46,7 +46,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock FontWeight="Bold" Text="Begin Date" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <mah:DateTimePicker SelectedDateTime="{Binding Begin}" Grid.Column="1"/>
+            <mah:DateTimePicker SelectedDateTime="{Binding Begin}" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True"/>
         </Grid>
         <Grid Margin="4">
             <Grid.ColumnDefinitions>
@@ -55,7 +55,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock FontWeight="Bold" Text="End Date" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <mah:DateTimePicker SelectedDateTime="{Binding End}" Grid.Column="1"/>
+            <mah:DateTimePicker SelectedDateTime="{Binding End}" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True"/>
         </Grid>
     </StackPanel>
 </UserControl>

@@ -23,5 +23,10 @@ namespace SeeShellsV2.Data
         {
             return SID.CompareTo(other.SID);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
