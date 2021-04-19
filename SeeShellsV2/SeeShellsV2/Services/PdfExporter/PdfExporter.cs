@@ -1,10 +1,4 @@
 ﻿using Microsoft.Win32;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.Rendering;
-using PdfSharp.Drawing;
-using PdfSharp.Xps;
-using PdfSharp;
-using SeeShellsV2.Modules;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,7 +51,6 @@ namespace SeeShellsV2.Services
 				fd.ColumnWidth = pd.PrintableAreaWidth;
 				foreach (IPdfModule module in moduleList)
 				{
-					Debug.WriteLine(module.GetType());
 					BlockUIContainer bc = new BlockUIContainer();
 					if (module.GetType().Name == "RTFModule")
 					{
@@ -70,10 +63,10 @@ namespace SeeShellsV2.Services
 					else 
 					{
 						bc.Child = module.Render();
-						Size sz = new Size(bc.Child.DesiredSize.Width, bc.Child.DesiredSize.Height);
-						bc.Child.Measure(sz);
-						bc.Child.Arrange(new Rect(new Point(), sz));
-						bc.Child.UpdateLayout();
+						//Size sz = new Size(pd.PrintableAreaWidth, pd.PrintableAreaHeight);
+						//bc.Child.Measure(sz);
+						//bc.Child.Arrange(new Rect(new Point(), sz));
+						//bc.Child.UpdateLayout();
 						fd.Blocks.Add(bc);
 					}
 				}

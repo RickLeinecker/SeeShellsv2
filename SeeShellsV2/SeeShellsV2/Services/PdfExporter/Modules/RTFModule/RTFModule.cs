@@ -1,8 +1,4 @@
-﻿using MigraDoc.DocumentObjectModel;
-using MigraDoc.Rendering;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,31 +15,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 
-namespace SeeShellsV2.Modules
+namespace SeeShellsV2.Services
 {
 	public class RTFModule : IPdfModule
 	{
-		public string Name => "RTFModule";
-
-		public FontFamily SelectedFontFamily { get; set; }
-		public double SelectedFontSize { get; set; }
-
-		public bool IsBold { get; set; }
-		public bool IsItalic { get; set; }
-		public bool IsUnderline { get; set; }
-
-		public IEnumerable<FontFamily> FontFamilies => Fonts.SystemFontFamilies.OrderBy(f => f.Source);
-		public IEnumerable<double> FontSizes => new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
-
+		public string Name => "TextBox";
 		private FrameworkElement Rtb { get; set; }
 
-		public RTFModule()
-		{
-			// default font properties
-			SelectedFontFamily = new FontFamily("Arial");
-			SelectedFontSize = 12;
-			IsBold = IsItalic = IsUnderline = false;
-		}
+		public RTFModule() {}
 
 		public IPdfModule Clone()
 		{
@@ -60,7 +39,6 @@ namespace SeeShellsV2.Modules
 			StringReader sr = new StringReader(s);
 			XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
 			FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
-			RichTextBox j = e.FindName("RichTextBox") as RichTextBox;
 			return e.FindName("RichTextBox") as UIElement;
 		}
 

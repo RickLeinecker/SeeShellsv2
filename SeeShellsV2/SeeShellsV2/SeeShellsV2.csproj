@@ -39,4 +39,8 @@
     <Resource Include="UI\Images\SeeShells.png" />
   </ItemGroup>
 
+  <ItemGroup>
+	<Folder Include="Services\PdfExporter\Modules\ShellEventModule\" />
+  </ItemGroup>
+
 </Project>

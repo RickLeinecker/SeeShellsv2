@@ -16,8 +16,8 @@ using Unity;
 using SeeShellsV2.Repositories;
 using System.Collections;
 using Microsoft.Win32;
-using SeeShellsV2.Modules;
 using System.Collections.ObjectModel;
+using SeeShellsV2.Services;
 
 namespace SeeShellsV2.UI
 {

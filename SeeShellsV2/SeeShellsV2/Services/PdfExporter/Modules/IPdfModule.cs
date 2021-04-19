@@ -1,12 +1,11 @@
-﻿using MigraDoc.DocumentObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace SeeShellsV2.Modules
+namespace SeeShellsV2.Services
 {
 	public interface IPdfModule
 	{

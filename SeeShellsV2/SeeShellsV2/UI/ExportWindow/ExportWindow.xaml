@@ -46,7 +46,7 @@
 									<Grid.RowDefinitions>
 										<RowDefinition Height="*"/>
 									</Grid.RowDefinitions>
-									<ContentPresenter Grid.Column="0"  Content="{Binding Converter={StaticResource ModuleViewConverter}}"/>
+										<ContentPresenter Grid.Column="0" Content="{Binding Converter={StaticResource ModuleViewConverter}}"/>
 									<Grid Grid.Column="1">
 										<Grid.ColumnDefinitions>
 											<ColumnDefinition Width="*"/>

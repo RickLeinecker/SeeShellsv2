@@ -8,7 +8,6 @@ using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.Services;
 using System.Collections;
-using SeeShellsV2.Modules;
 using System.Threading;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
@@ -37,8 +36,8 @@ namespace SeeShellsV2.UI
 		public ExportWindowVM([Dependency] PdfExporter Export) 
 		{
 			moduleList = new ObservableCollection<IPdfModule>();
-			moduleList.Add(Export.moduleNames["RTFModule"].Clone());
-			moduleList.Add(Export.moduleNames["RTFModule"].Clone());
+			moduleList.Add(Export.moduleNames["TextBox"].Clone());
+			moduleList.Add(Export.moduleNames["HeatMap"].Clone());
 
 			moduleSelector = new ObservableCollection<string>(Export.moduleNames.Keys);
 			moduleSelector.Insert(0, "Select Module");

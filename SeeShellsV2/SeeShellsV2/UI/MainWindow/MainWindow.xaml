@@ -19,7 +19,7 @@
                     <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
                 </MenuItem>
                 <MenuItem Header="Export" Background="Transparent">
-                    <MenuItem Header="PDF Report" />
+                    <MenuItem Header="PDF Report" Click="Export_Window_Click"/>
                     <MenuItem Header="Shellbags as CSV" />
                     <MenuItem Header="Events as CSV" />
                 </MenuItem>
