@@ -8,6 +8,7 @@ using Unity;
 using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using System.Windows.Data;
+using System.Globalization;
 
 namespace SeeShellsV2.UI
 {
@@ -19,7 +20,7 @@ namespace SeeShellsV2.UI
         [Dependency]
         public IRegistryHiveCollection RegistryHiveCollection { get; set; }
 
-        private IShellEventCollection ShellEvents { get; set; }
+        public IShellEventCollection ShellEvents { get; private set; }
 
         public User User
         {
@@ -31,6 +32,8 @@ namespace SeeShellsV2.UI
 
                 if (old != user)
                     ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
             }
         }
 
@@ -44,6 +47,23 @@ namespace SeeShellsV2.UI
 
                 if (old != registryHive)
                     ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
+            }
+        }
+
+        public Type Type
+        {
+            get => type;
+            set
+            {
+                Type old = type;
+                type = value;
+
+                if (old != type)
+                    ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
             }
         }
 
@@ -57,6 +77,8 @@ namespace SeeShellsV2.UI
 
                 if (old != begin)
                     ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
             }
         }
 
@@ -70,9 +92,12 @@ namespace SeeShellsV2.UI
 
                 if (old != end)
                     ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
             }
         }
 
+        private Type type = null;
         private User user = null;
         private RegistryHive registryHive = null;
         private DateTime? begin = null;
@@ -81,12 +106,19 @@ namespace SeeShellsV2.UI
         public FilterControlViewVM([Dependency] IShellEventCollection shellEvents)
         {
             ShellEvents = shellEvents;
+            ShellEvents.Filter += new FilterEventHandler(FilterType);
             ShellEvents.Filter += new FilterEventHandler(FilterUser);
             ShellEvents.Filter += new FilterEventHandler(FilterRegistryHive);
             ShellEvents.Filter += new FilterEventHandler(FilterBeginDate);
             ShellEvents.Filter += new FilterEventHandler(FilterEndDate);
-            Begin = null;
-            End = null;
+        }
+
+        void FilterType(object o, FilterEventArgs e)
+        {
+            if (Type == null)
+                e.Accepted = true;
+            else
+                e.Accepted = e.Item.GetType() == Type;
         }
 
         void FilterUser(object o, FilterEventArgs e)
@@ -119,6 +151,24 @@ namespace SeeShellsV2.UI
                 e.Accepted = true;
             else
                 e.Accepted = e.Item is IShellEvent se && se.TimeStamp <= End;
+        }
+    }
+
+    internal class EventTypeConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] is IShellEventCollection shellEvents && values[1] is int count)
+            {
+                return shellEvents.Select(e => e.GetType()).Distinct();
+            }
+
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

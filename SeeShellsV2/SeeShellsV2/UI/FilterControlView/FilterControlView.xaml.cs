@@ -21,6 +21,7 @@ namespace SeeShellsV2.UI
 {
     public interface IFilterControlViewVM : IViewModel
     {
+        IShellEventCollection ShellEvents { get; }
         IUserCollection UserCollection { get; }
         IRegistryHiveCollection RegistryHiveCollection { get; }
         User User { get; set; }
