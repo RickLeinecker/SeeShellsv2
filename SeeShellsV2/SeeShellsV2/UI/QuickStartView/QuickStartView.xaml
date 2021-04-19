@@ -46,7 +46,8 @@
                                            Margin="10 0 0 0"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
-                            <TextBlock Text="A Shellbag Forensics Tool"
+                            <TextBlock Name="Subtitle"
+                                       Text="A Shellbag Forensics Tool"
                                        HorizontalAlignment="Center"
                                        Foreground="White"
                                        FontWeight="Light"
