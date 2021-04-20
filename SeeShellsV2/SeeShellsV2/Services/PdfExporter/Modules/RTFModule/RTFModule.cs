@@ -51,9 +51,9 @@ namespace SeeShellsV2.Services
 					<Button Command=""ApplicationCommands.Cut"" ToolTip=""Cut"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8C6;""/>
 					<Button Command = ""ApplicationCommands.Copy"" ToolTip = ""Copy"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8C8;""/>
 					<Button Command = ""ApplicationCommands.Paste"" ToolTip = ""Paste"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE77F;""/>
-					<Button Command = ""EditingCommands.ToggleBold"" ToolTip = ""Bold"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DD;""/>
-					<Button Command = ""EditingCommands.ToggleItalic"" ToolTip = ""Italic""  FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DB;""/>
-					<Button Command = ""EditingCommands.ToggleUnderline"" ToolTip = ""Underline"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DC;""/>
+					<ToggleButton Command = ""EditingCommands.ToggleBold"" ToolTip = ""Bold"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DD;""/>
+					<ToggleButton Command = ""EditingCommands.ToggleItalic"" ToolTip = ""Italic""  FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DB;""/>
+					<ToggleButton Command = ""EditingCommands.ToggleUnderline"" ToolTip = ""Underline"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DC;""/>
 					<Button Command = ""EditingCommands.IncreaseFontSize"" ToolTip = ""Grow Font"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E8;""/>
 					<Button Command = ""EditingCommands.DecreaseFontSize"" ToolTip = ""Shrink Font"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E7;""/>
 					<Button Command = ""EditingCommands.ToggleBullets"" ToolTip = ""Bullets"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8FD;""/>
@@ -67,7 +67,7 @@ namespace SeeShellsV2.Services
 						</Grid>
 					</Button>			   
 				</ToolBar>
-				<RichTextBox Name=""RichTextBox"" BorderBrush=""Transparent"" CaretBrush=""Black"" Foreground=""Black"" Background=""White"" AcceptsTab=""True"" Height=""Auto"" Width=""Auto""/>
+				<RichTextBox Name=""RichTextBox"" BorderBrush=""Transparent"" CaretBrush=""Black"" Foreground=""Black"" Background=""White"" AcceptsTab=""True"" />
 			</StackPanel>";
 
 			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel

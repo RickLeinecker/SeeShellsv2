@@ -29,7 +29,7 @@
 			<ItemsControl Grid.Row="1" x:Name="Modules" DockPanel.Dock="Top" ItemsSource="{Binding moduleList}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<Grid>
+						<Grid Margin="10,10,10,10" Width="7.5in" Height="Auto">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 							</Grid.ColumnDefinitions>

@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
+using System.Windows.Media;
 using System.Xml;
 using Unity;
 
@@ -25,9 +26,6 @@ namespace SeeShellsV2.Services
 		public string Name => "HeatMap";
 
 		public FrameworkElement HeatMap { get; set; }
-
-		//[Dependency]
-		//public ITimelineViewAltVM vm {get; set;}
 
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
@@ -52,17 +50,26 @@ namespace SeeShellsV2.Services
 			if (HeatMap == null)
 				return null;
 			var plot = (HeatMap as CalendarHeatMap).HeatMapPlot;
-			plot.Title = (HeatMap as CalendarHeatMap).Year.ToString();
 			var s = plot.ToBitmap();
 			Image image = new Image();
 			image.Source = s;
 			image.Width = s.Width;
 			image.Height = s.Height;
+
+			StackPanel sp = new StackPanel();
+			TextBlock t = new TextBlock();
+			t.Text = (HeatMap as CalendarHeatMap).Year.ToString();
+			t.FontSize = plot.TitleFontSize;
+			t.FontWeight = plot.TitleFontWeight;
+			t.FontFamily = plot.FontFamily;
+			t.HorizontalAlignment = HorizontalAlignment.Center;
+			sp.Children.Add(t);
+			sp.Children.Add(image);
 			//StringReader sr = new StringReader(s);
 			//XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
 			//FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
 
-			return image;
+			return sp;
 		}
 
 		public FrameworkElement View()
@@ -71,13 +78,14 @@ namespace SeeShellsV2.Services
 			// the view we will display for the user to configure this object
 			string view = @"
 			<Grid>
-			<local:CalendarHeatMap x:Name = ""Heatmap""  Height=""800"" Width=""1000""
+			<local:CalendarHeatMap x:Name = ""Heatmap""
 									Background=""White""
 								   ColorAxisTitle = ""User Action Frequency""
 								   ItemsSource = ""{Binding FilteredShellEvents}""
 								   SelectionBegin = ""{Binding DateSelectionBegin}""
 								   SelectionEnd = ""{Binding DateSelectionEnd}""
-								   DateTimeProperty = ""TimeStamp"" Orientation = ""Vertical"" />
+									SelectionColor=""{ DynamicResource MahApps.Colors.Accent}""
+								   DateTimeProperty = ""TimeStamp"" Orientation = ""Horizontal"" />
 			</Grid>";
 
 

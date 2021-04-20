@@ -36,8 +36,8 @@ namespace SeeShellsV2.UI
 		public ExportWindowVM([Dependency] PdfExporter Export) 
 		{
 			moduleList = new ObservableCollection<IPdfModule>();
-			moduleList.Add(Export.moduleNames["TextBox"].Clone());
-			moduleList.Add(Export.moduleNames["HeatMap"].Clone());
+			moduleList.Add(Export.moduleNames["Overview"].Clone());
+			//moduleList.Add(Export.moduleNames["HeatMap"].Clone());
 
 			moduleSelector = new ObservableCollection<string>(Export.moduleNames.Keys);
 			moduleSelector.Insert(0, "Select Module");
@@ -45,14 +45,13 @@ namespace SeeShellsV2.UI
 			Status = "Save";
 		}
 
-		public void Export_PDF(string filename)
+		public async void Export_PDF(string filename)
 		{
+			Status = "Saving...";
 			Exporter.Export(filename, moduleList);
-			//Status = "Saving...";
-			//await Task.Run(() => Exporter.Export(filename, moduleList));
-			//Status = "Saved";
-			//await Task.Run(() => Thread.Sleep(5000));
-			//Status = "Save";
+			Status = "Saved";
+			await Task.Run(() => Thread.Sleep(5000));
+			Status = "Save";
 		}
 
 		public void Remove(IPdfModule pdfModule)

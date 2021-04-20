@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using Unity;
 
@@ -26,14 +27,24 @@ namespace SeeShellsV2.Services
 
 		public UIElement Render()
 		{
-			throw new NotImplementedException();
+			if (TimeHisto == null)
+				return null;
+
+			var plot = (TimeHisto as TimeSeriesHistogram).HistogramPlot;
+			var s = plot.ToBitmap();
+			Image image = new Image();
+			image.Source = s;
+			image.Width = s.Width;
+			image.Height = s.Height;
+
+			return image;
 		}
 
 		public FrameworkElement View()
 		{
 			string view = @"
 			<Grid>
-			<local:TimeSeriesHistogram x:Name=""Histogram"" Height=""400"" Width=""500"" Background=""White""
+			<local:TimeSeriesHistogram x:Name=""Histogram"" Background=""White"" Height=""500""
 										   ColorProperty = ""{Binding ColorProperty, Mode=OneWay}""
 										   YAxisTitle = ""User Action Frequency""
 										   MinimumDate = ""{Binding DateSelectionBegin}""
