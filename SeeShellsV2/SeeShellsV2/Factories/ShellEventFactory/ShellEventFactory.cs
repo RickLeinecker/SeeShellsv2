@@ -48,6 +48,7 @@ namespace SeeShellsV2.Factories
                 .Where(p => typeof(IShellEventGenerator).IsAssignableFrom(p))
                 .Where(q => q.IsClass)
                 .Select(r => (IShellEventGenerator) container.Resolve(r))
+                .OrderBy(g => g.Priority)
                 .ToList();
         }
 

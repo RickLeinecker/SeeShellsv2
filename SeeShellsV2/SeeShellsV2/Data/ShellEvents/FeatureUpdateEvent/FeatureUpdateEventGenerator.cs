@@ -8,6 +8,8 @@ namespace SeeShellsV2.Data
 {
     public class FeatureUpdateEventGenerator : IShellEventGenerator
     {
+        public int Priority => 0;
+
         public bool CanGenerate(IEnumerable<IShellEvent> sequence)
         {
             // check if the sequence of events contains any large

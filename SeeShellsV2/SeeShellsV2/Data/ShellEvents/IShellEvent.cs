@@ -20,6 +20,11 @@ namespace SeeShellsV2.Data
         string TypeName { get; }
 
         /// <summary>
+        /// A long description of the event, including details on why the event was generated.
+        /// </summary>
+        string LongDescription { get; }
+
+        /// <summary>
         /// A short description of the event
         /// </summary>
         string Description { get; }

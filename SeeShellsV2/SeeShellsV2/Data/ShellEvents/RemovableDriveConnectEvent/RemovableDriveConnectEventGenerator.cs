@@ -8,11 +8,13 @@ namespace SeeShellsV2.Data
 {
     public class RemovableDriveConnectEventGenerator : IShellEventGenerator
     {
+        public int Priority => 1;
+
         public bool CanGenerate(IEnumerable<IShellEvent> sequence)
         {
             return sequence
                 .OfType<ItemLastRegistryWriteEvent>()
-                .Where(e => e.Place is RemovableDrive)
+                .Where(e => e.Place is RemovableDrive && !e.Consumed)
                 .Any();
         }
 
@@ -20,7 +22,7 @@ namespace SeeShellsV2.Data
         {
             return sequence
                 .OfType<ItemLastRegistryWriteEvent>()
-                .Where(e => e.Place is RemovableDrive)
+                .Where(e => e.Place is RemovableDrive && !e.Consumed)
                 .Select(e => new RemovableDriveConnectEvent
                 {
                     TypeName = "Removable Storage Device Connect",

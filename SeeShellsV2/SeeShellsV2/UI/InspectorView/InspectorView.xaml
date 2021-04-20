@@ -11,6 +11,7 @@
         <local:CamelCaseConverter x:Key="CamelCaseConverter"/>
         <local:UpperCaseConverter x:Key="UpperCaseConverter"/>
 
+        <!-- User -->
         <DataTemplate DataType="{x:Type data:User}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -92,6 +93,7 @@
             </StackPanel>
         </DataTemplate>
 
+        <!-- RegistryCollection -->
         <DataTemplate DataType="{x:Type local:RegistryCollection}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -123,6 +125,7 @@
             </StackPanel>
         </DataTemplate>
 
+        <!-- Place -->
         <DataTemplate DataType="{x:Type data:Place}">
             <VirtualizingStackPanel
                 Margin="10"
@@ -166,11 +169,11 @@
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
-                                        <!--<Style.Triggers>
+                                        <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
                                             </Trigger>
-                                        </Style.Triggers>-->
+                                        </Style.Triggers>
                                     </Style>
                                 </Border.Style>
                                 <ContentControl Content="{Binding}"/>
@@ -306,6 +309,9 @@
                 </VirtualizingStackPanel.Resources>
                 <TextBlock Text="{Binding TypeName}" FontWeight="Black"/>
                 <Grid Margin="4">
+                    <TextBlock Text="{Binding LongDescription}" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
@@ -363,11 +369,11 @@
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
-                                        <!--<Style.Triggers>
+                                        <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
                                             </Trigger>
-                                        </Style.Triggers>-->
+                                        </Style.Triggers>
                                     </Style>
                                 </Border.Style>
                                 <ContentControl Content="{Binding}"/>
@@ -386,6 +392,6 @@
         </DataTemplate>
     </UserControl.Resources>
     <ScrollViewer Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-        <ContentControl Content="{ Binding Selected.Current }"/>
+        <ContentControl Content="{ Binding Selected.CurrentInspector }"/>
     </ScrollViewer>
 </UserControl>
