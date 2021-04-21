@@ -42,16 +42,16 @@ namespace SeeShellsV2.UI
 			moduleSelector = new ObservableCollection<string>(Export.moduleNames.Keys);
 			moduleSelector.Insert(0, "Select Module");
 
-			Status = "Save";
+			Status = "Print";
 		}
 
 		public async void Export_PDF(string filename)
 		{
-			Status = "Saving...";
+			Status = "Printing...";
 			Exporter.Export(filename, moduleList);
-			Status = "Saved";
+			Status = "Done.";
 			await Task.Run(() => Thread.Sleep(5000));
-			Status = "Save";
+			Status = "Print";
 		}
 
 		public void Remove(IPdfModule pdfModule)

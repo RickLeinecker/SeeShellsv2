@@ -44,8 +44,8 @@ namespace SeeShellsV2.Services
 
 		public OverviewModule([Dependency] IShellEventCollection shellEvents, [Dependency] IShellItemCollection shellItems)
 		{
-			if (shellEvents.Count == 0)
-				return;
+			//if (shellEvents.Count == 0)
+			//	return;
 				
 			ShellEvents = shellEvents;
 
@@ -54,7 +54,6 @@ namespace SeeShellsV2.Services
 			OxyPlot.Series.PieSeries seriesP1 = new OxyPlot.Series.PieSeries {FontSize=12, ExplodedDistance = 0.1, StrokeThickness = 2.0, InsideLabelPosition = 0.6, AngleSpan = 360, StartAngle = 0, InnerDiameter = 0.4};
 
 			int OtherCount = 0;
-
 
 			foreach (string type in shellEvents.FilteredView.OfType<IShellEvent>().Select(e => e.GetType()).Distinct().Select(t => t.Name))
 			{
@@ -65,15 +64,16 @@ namespace SeeShellsV2.Services
 			}
 			seriesP1.Slices.Add(new PieSlice("Other", OtherCount) { IsExploded = true });
 
-
-			BeginDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).First().TimeStamp.Date.ToString("MM-dd-yyyy");
-			EndDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).Last().TimeStamp.Date.ToString("MM-dd-yyyy");
+			if (shellEvents.FilteredView.OfType<IShellEvent>().Any())
+			{
+				BeginDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).First().TimeStamp.Date.ToString("MM-dd-yyyy");
+				EndDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).Last().TimeStamp.Date.ToString("MM-dd-yyyy");
+			}
 
 			ShellbagsCount = shellItems.Count;
 			EventsCount = shellEvents.FilteredView.OfType<IShellEvent>().Count();
 
 			PieModel.Series.Add(seriesP1);
-
 		}
 
 		public IPdfModule Clone()

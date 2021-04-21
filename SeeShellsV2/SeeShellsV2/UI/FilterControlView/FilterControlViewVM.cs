@@ -143,7 +143,7 @@ namespace SeeShellsV2.UI
             if (Path == null)
                 e.Accepted = true;
             else
-                e.Accepted = e.Item is IShellEvent se && se.Place != null && ((se.Place.PathName ?? string.Empty) + (se.Place.Name ?? string.Empty)).StartsWith(Path);
+                e.Accepted = e.Item is IShellEvent se && se.Place != null && ((se.Place.PathName ?? string.Empty) + (se.Place.Name ?? string.Empty)).ToLower().StartsWith(Path.ToLower());
         }
 
         void FilterUser(object o, FilterEventArgs e)

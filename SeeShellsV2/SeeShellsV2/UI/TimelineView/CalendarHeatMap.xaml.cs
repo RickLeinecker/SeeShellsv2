@@ -456,25 +456,31 @@ namespace SeeShellsV2.UI
                         new double[53, 7] : new double[7, 53];
 
                     DateTime begin = new DateTime(year, 1, 1);
-
-                    foreach (var item in bins)
+                    try
                     {
-                        int x = ((int)begin.DayOfWeek + item.Key - 1) / 7;
-                        int y = ((int)begin.DayOfWeek + item.Key - 1) % 7;
-
-                        if (orientation == Orientation.Horizontal)
-                            data[x, 6 - y] = item.Item2;
-                        else
-                            data[y, 52 - x] = item.Item2;
-                    }
-
-                    lock (_resetLock)
-                    {
-                        Dispatcher.Invoke(() =>
+                        foreach (var item in bins)
                         {
-                            HeatMapSeries.Data = data;
-                            InvalidateMeasure();
-                        });
+                            int x = ((int)begin.DayOfWeek + item.Key - 1) / 7;
+                            int y = ((int)begin.DayOfWeek + item.Key - 1) % 7;
+
+                            if (orientation == Orientation.Horizontal)
+                                data[x, 6 - y] = item.Item2;
+                            else
+                                data[y, 52 - x] = item.Item2;
+                        }
+
+                        lock (_resetLock)
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                HeatMapSeries.Data = data;
+                                InvalidateMeasure();
+                            });
+                        }
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // collection was updated, so abort this update and wait for the next
                     }
                 }
             }, token);

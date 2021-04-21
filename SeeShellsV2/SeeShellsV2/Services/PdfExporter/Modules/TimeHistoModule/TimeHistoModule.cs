@@ -18,7 +18,7 @@ namespace SeeShellsV2.Services
 		public FrameworkElement TimeHisto { get; set; }
 
 		[Dependency]
-		public ITimelineViewAltVM vm { get; set; }
+		public ITimelineViewVM vm { get; set; }
 
 		public IPdfModule Clone()
 		{

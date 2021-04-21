@@ -191,6 +191,8 @@ namespace SeeShellsV2.UI
 
         protected void ResetHistSeries()
         {
+            _histPlotModel.Series.Clear();
+
             if (Items == null || !Items.OfType<object>().Any())
                 return;
 
@@ -224,8 +226,6 @@ namespace SeeShellsV2.UI
                 groups = items
                     .GroupBy(x => x.item.GetDeepPropertyValue(ColorProperty))
                     .OrderByDescending(x => x.Count());
-
-            _histPlotModel.Series.Clear();
 
             foreach (var group in groups)
             {
