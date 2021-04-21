@@ -15,8 +15,8 @@ namespace SeeShellsV2.Data
     {
         public DateTime ModifiedDate
         {
-            init => fields["ModifiedDate"] = value;
-            get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
+            init => fields[nameof(ModifiedDate)] = value;
+            get => fields.GetStructOrDefault(nameof(ModifiedDate), DateTime.MinValue);
         }
     }
 }

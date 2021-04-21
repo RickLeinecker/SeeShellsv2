@@ -38,8 +38,8 @@ namespace SeeShellsV2
             container.RegisterType<IShellEventFactory, ShellEventFactory>();
 
             // Register Repository Types
-            container.RegisterSingleton<IDataRepository<User>, UserCollection>();
-            container.RegisterSingleton<IDataRepository<RegistryHive>, RegistryHiveCollection>();
+            container.RegisterSingleton<IUserCollection, UserCollection>();
+            container.RegisterSingleton<IRegistryHiveCollection, RegistryHiveCollection>();
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
             container.RegisterSingleton<IShellEventCollection, ShellEventCollection>();
             container.RegisterSingleton<ISelected, Selected>();
@@ -58,14 +58,12 @@ namespace SeeShellsV2
             container.RegisterType<IMainWindowVM, MainWindowVM>();
             container.RegisterType<IExportWindowVM, ExportWindowVM>();
             container.RegisterType<IShellItemTableViewVM, ShellItemTableViewVM>();
-            container.RegisterType<IShellEventTableViewVM, ShellEventTableViewVM>();
             container.RegisterType<IInspectorViewVM, InspectorViewVM>();
             container.RegisterType<ITimelineViewVM, TimelineViewVM>();
             container.RegisterType<IRegistryViewVM, RegistryViewVM>();
             container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
             container.RegisterType<IHexViewVM, HexViewVM>();
-            container.RegisterSingleton<ITimelineViewAltVM, TimelineViewAltVM>();
 
             // Create and run app with main window
             App app = container.Resolve<App>();

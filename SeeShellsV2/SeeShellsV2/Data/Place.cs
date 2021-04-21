@@ -27,6 +27,10 @@ namespace SeeShellsV2.Data
         }
     }
 
+    public class UnknownPlace : Place { public override string Type => "Unknown"; }
+    public class Folder : Place { public override string Type => "Folder"; }
+    public class CompressedFolder : Place { public override string Type => "Compressed Folder"; }
+    public class SystemFolder : Place { public override string Type => "System Folder"; }
     public class Drive : Place { public override string Type => "Drive"; }
     public class RemovableDrive : Place { public override string Type => "Removable Drive"; }
     public class RemovableDevice : Place { public override string Type => "Removable Device"; }

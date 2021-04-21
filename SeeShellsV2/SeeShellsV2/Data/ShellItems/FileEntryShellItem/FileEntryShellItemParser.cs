@@ -73,7 +73,7 @@ namespace SeeShellsV2.Data
                 if (BlockHelper.UnpackDWord(value, extensionOffset + 4) == 0xBEEF0004)
                     extensionBlock = new ExtensionBlockBEEF0004(value, extensionOffset);
 
-                Place p = new Place()
+                Place p = new Folder()
                 {
                     Name = extensionBlock?.LongName ?? filePrimaryName,
                     PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,

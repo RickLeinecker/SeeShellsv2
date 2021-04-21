@@ -15,14 +15,14 @@ namespace SeeShellsV2.Data
     {
         public string StorageId
         {
-            init => fields["StorageId"] = value;
-            get => fields.GetClassOrDefault("StorageId", string.Empty);
+            init => fields[nameof(StorageId)] = value;
+            get => fields.GetClassOrDefault(nameof(StorageId), string.Empty);
         }
 
         public string FileSystemName
         {
-            init => fields["FileSystemName"] = value;
-            get => fields.GetClassOrDefault("FileSystemName", string.Empty);
+            init => fields[nameof(FileSystemName)] = value;
+            get => fields.GetClassOrDefault(nameof(FileSystemName), string.Empty);
         }
     }
 }

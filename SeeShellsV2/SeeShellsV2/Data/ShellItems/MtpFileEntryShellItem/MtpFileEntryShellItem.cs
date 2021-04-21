@@ -15,20 +15,8 @@ namespace SeeShellsV2.Data
     {
         public string FolderId
         {
-            init => fields["FolderId"] = value;
-            get => fields.GetClassOrDefault("FolderId", string.Empty);
+            init => fields[nameof(FolderId)] = value;
+            get => fields.GetClassOrDefault(nameof(FolderId), string.Empty);
         }
-
-        //public DateTime ModifiedDate
-        //{
-        //    init => fields["ModifiedDate"] = value;
-        //    get => fields.GetStructOrDefault("ModifiedDate", DateTime.MinValue);
-        //}
-
-        //public DateTime CreationDate
-        //{
-        //    init => fields["CreationDate"] = value;
-        //    get => fields.GetStructOrDefault("CreationDate", DateTime.MinValue);
-        //}
     }
 }

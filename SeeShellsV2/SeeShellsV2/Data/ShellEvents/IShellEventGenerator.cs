@@ -9,6 +9,14 @@ namespace SeeShellsV2.Data
     public interface IShellEventGenerator
     {
         /// <summary>
+        /// The priority of this generator.
+        /// The <see cref="Factories.IShellEventFactory"/> will attempt
+        /// to generate shell events using generators with higher priorities first.
+        /// Intermediate shell event generators will always be used first.
+        /// </summary>
+        public int Priority { get; }
+
+        /// <summary>
         /// Check if this ShellEventGenerator can generate any additional events
         /// from the given <see cref="IShellEvent"/> sequence
         /// </summary>

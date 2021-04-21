@@ -12,12 +12,17 @@ namespace SeeShellsV2.Data
     /// <summary>
     /// Represents a suspected action performed by a user
     /// </summary>
-    public interface IShellEvent : IComparable<IShellEvent>, ITimelineEvent
+    public interface IShellEvent : IComparable<IShellEvent>
     {
         /// <summary>
         /// The type of event that occured (File Create, File Download, etc.)
         /// </summary>
         string TypeName { get; }
+
+        /// <summary>
+        /// A long description of the event, including details on why the event was generated.
+        /// </summary>
+        string LongDescription { get; }
 
         /// <summary>
         /// A short description of the event
@@ -27,7 +32,7 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// The time that the event occured
         /// </summary>
-        // DateTime TimeStamp { get; }
+        DateTime TimeStamp { get; }
 
         /// <summary>
         /// The user that performed the action

@@ -46,7 +46,8 @@
                                            Margin="10 0 0 0"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
-                            <TextBlock Text="A Shellbag Forensics Tool"
+                            <TextBlock Name="Subtitle"
+                                       Text="A Shellbag Forensics Tool"
                                        HorizontalAlignment="Center"
                                        Foreground="White"
                                        FontWeight="Light"
@@ -73,7 +74,7 @@
                             </mah:MetroHeader.Header>
                             <StackPanel>
                                 <Separator/>
-                                <MenuItem Name="ImportActiveRegistry" Click="MenuItem_Click">
+                                <MenuItem Name="ImportActiveRegistry" Click="MenuItem_Click" ToolTip="Import shellbags from the active registry on this system. Requires administrator access.">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconVaadinIcons Kind="FileAdd"/>
                                     </MenuItem.Icon>
@@ -81,7 +82,7 @@
                                         <TextBlock>From Active Registry</TextBlock>
                                     </MenuItem.Header>
                                 </MenuItem>
-                                <MenuItem Name="ImportRegistryFile" Click="MenuItem_Click">
+                                <MenuItem Name="ImportRegistryFile" Click="MenuItem_Click" ToolTip="Import shellbags an offline registry hive (UsrClass.dat).">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconVaadinIcons Kind="FileAdd"/>
                                     </MenuItem.Icon>
@@ -105,7 +106,7 @@
                             </mah:MetroHeader.Header>
                             <StackPanel>
                                 <Separator/>
-                                <MenuItem Name="GotoWebsite" Click="MenuItem_Click">
+                                <MenuItem Name="GotoWebsite" Click="MenuItem_Click" ToolTip="Open the SeeShells Website in a new browser window.">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconCodicons Kind="Globe"/>
                                     </MenuItem.Icon>
@@ -113,7 +114,7 @@
                                         <TextBlock>SeeShells Website</TextBlock>
                                     </MenuItem.Header>
                                 </MenuItem>
-                                <MenuItem Name="GotoGithub" Click="MenuItem_Click">
+                                <MenuItem Name="GotoGithub" Click="MenuItem_Click" ToolTip="Open the SeeShells Github repository in a new browser window.">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconForkAwesome Kind="Github"/>
                                     </MenuItem.Icon>

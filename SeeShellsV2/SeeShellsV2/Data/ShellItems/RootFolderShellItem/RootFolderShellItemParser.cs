@@ -139,7 +139,7 @@ namespace SeeShellsV2.Data
                     PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
                 }
                 :
-                new Place()
+                new SystemFolder()
                 {
                     Name = rootfoldername,
                     PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,

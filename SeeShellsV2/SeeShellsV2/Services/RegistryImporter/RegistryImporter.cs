@@ -1,20 +1,4 @@
-﻿#region copyright
-// SeeShells Copyright (c) 2019-2020 Aleksandar Stoyanov, Bridget Woodye, Klayton Killough, 
-// Richard Leinecker, Sara Frackiewicz, Yara As-Saidi
-// SeeShells is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-// 
-// SeeShells is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along with this program;
-// if not, see <https://www.gnu.org/licenses>
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,8 +25,8 @@ namespace SeeShellsV2.Services
     public class RegistryImporter : IRegistryImporter
     {
         private IConfig Config { get; set; }
-        private IDataRepository<User> Users { get; set; }
-        private IDataRepository<RegistryHive> RegistryHives { get; set; }
+        private IUserCollection Users { get; set; }
+        private IRegistryHiveCollection RegistryHives { get; set; }
         private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
@@ -51,8 +35,8 @@ namespace SeeShellsV2.Services
 
         public RegistryImporter(
             [Dependency] IConfig config,
-            [Dependency] IDataRepository<User> users,
-            [Dependency] IDataRepository<RegistryHive> registryHives,
+            [Dependency] IUserCollection users,
+            [Dependency] IRegistryHiveCollection registryHives,
             [Dependency] IShellItemCollection shellItems,
             [Dependency] IShellItemFactory shellFactory
         )
@@ -153,7 +137,7 @@ namespace SeeShellsV2.Services
 
                             shellItem = new UnknownShellItem()
                             {
-                                Place = new Place()
+                                Place = new UnknownPlace()
                                 {
                                     Name = "??",
                                     PathName = parentShellItem != null ? Path.Combine(parentShellItem.Place.PathName ?? string.Empty, parentShellItem.Place.Name) : null,
@@ -292,10 +276,6 @@ namespace SeeShellsV2.Services
                             }
                         }
                     }
-                    else
-                    {
-                        return retval;
-                    }
                 }
 
                 //most occurred value is probably the username.
@@ -321,30 +301,53 @@ namespace SeeShellsV2.Services
             string retval = string.Empty;
             try
             {
-                if (hive.HiveType != OfflineRegistryType.NtUser)
-                    return retval;
+                //if (hive.HiveType != OfflineRegistryType.NtUser)
+                //    return retval;
 
                 //todo refactor Parser.GetUsernameLocations() into key-value pairs for lookup, we have to hardcode key-values otherwise.
                 //todo we know of the Desktop value inside the "Shell Folders" location, so naively try this until a better way is found
                 Dictionary<string, int> likelyUsernames = new Dictionary<string, int>();
                 foreach (string usernameLocation in Config.UsernameLocations)
                 {
+                    if (hive.GetKey(usernameLocation) == null)
+                        continue;
+
+                    Func<string, string> extractUsername = (string path) =>
+                    {
+                        if (!Path.IsPathFullyQualified(path))
+                            return null;
+
+                        //break string up into it's path
+                        string[] pathParts = path.Split('\\');
+                        if (pathParts.Length > 2 && pathParts[1] == "Users")
+                        {
+                            return pathParts[2]; //usually in the form of C:\Users\username
+                        }
+
+                        return null;
+                    };
+
                     //based on the values in '...\Explorer\Shell Folders' the [2] value in the string may not always be the username, but it does appear the most.
                     foreach (OfflineKeyValue value in hive.GetKey(usernameLocation).Values)
                     {
-                        //break string up into it's path
-                        string[] pathParts = value.ValueData.Split('\\');
-                        if (pathParts.Length > 2)
+                        var username = extractUsername(value.ValueData);
+
+                        if (username != null)
                         {
-                            string username = pathParts[2]; //usually in the form of C:\Users\username
                             if (!likelyUsernames.ContainsKey(username))
-                            {
                                 likelyUsernames[username] = 1;
-                            }
                             else
-                            {
                                 likelyUsernames[username]++;
-                            }
+                        }
+
+                        username = extractUsername(value.ValueName);
+
+                        if (username != null)
+                        {
+                            if (!likelyUsernames.ContainsKey(username))
+                                likelyUsernames[username] = 1;
+                            else
+                                likelyUsernames[username]++;
                         }
                     }
                 }

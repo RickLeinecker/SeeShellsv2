@@ -9,6 +9,8 @@ namespace SeeShellsV2.Data
 {
     public class FIleDownloadEventGenerator : IShellEventGenerator
     {
+        public int Priority => 1;
+
         public bool CanGenerate(IEnumerable<IShellEvent> sequence)
         {
             return GetMatches(sequence).Any();

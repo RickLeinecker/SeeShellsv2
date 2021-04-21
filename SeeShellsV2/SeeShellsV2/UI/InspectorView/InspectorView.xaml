@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="SeeShellsV2.UI.InspectorView"
+             x:Name="Inspector"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,7 +11,9 @@
     <UserControl.Resources>
         <local:CamelCaseConverter x:Key="CamelCaseConverter"/>
         <local:UpperCaseConverter x:Key="UpperCaseConverter"/>
+        <local:SelectedItemConverter x:Key="SelectedItemConverter"/>
 
+        <!-- User -->
         <DataTemplate DataType="{x:Type data:User}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -18,9 +21,12 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
-                        USER INFORMATION
+                <TextBlock FontWeight="Black" FontSize="14">
+                        USER
                 </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="Information about a system user, extracted from one or more registry hives." Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -59,9 +65,12 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
-                        REGISTRY INFORMATION
+                <TextBlock FontWeight="Black" FontSize="14">
+                        REGISTRY HIVE
                 </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="A registry hive belonging to a specific user." Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -92,6 +101,7 @@
             </StackPanel>
         </DataTemplate>
 
+        <!-- RegistryCollection -->
         <DataTemplate DataType="{x:Type local:RegistryCollection}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -99,9 +109,12 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
+                <TextBlock FontWeight="Black" FontSize="14">
                         REGISTRY COLLECTION
                 </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="A collection of items that have been extracted from a registry hive." Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -123,6 +136,7 @@
             </StackPanel>
         </DataTemplate>
 
+        <!-- Place -->
         <DataTemplate DataType="{x:Type data:Place}">
             <VirtualizingStackPanel
                 Margin="10"
@@ -133,7 +147,10 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </VirtualizingStackPanel.Resources>
-                <TextBlock Text="{Binding Type, Converter={StaticResource UpperCaseConverter}}" FontWeight="Black" />
+                <TextBlock Text="{Binding Type, Converter={StaticResource UpperCaseConverter}}" FontWeight="Black" FontSize="14" />
+                <Grid Margin="4">
+                    <TextBlock Text="Information about a file system location that has been accessed by a user." Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -142,6 +159,15 @@
 
                     <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
                     <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Type" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Type}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
@@ -165,12 +191,22 @@
                                     MouseLeftButtonDown="Item_MouseLeftButtonDown">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
-                                        <!--<Style.Triggers>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                                        <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
                                             </Trigger>
-                                        </Style.Triggers>-->
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource SelectedItemConverter}">
+                                                        <Binding />
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected"/>
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected.CurrentData"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
                                     </Style>
                                 </Border.Style>
                                 <ContentControl Content="{Binding}"/>
@@ -196,9 +232,12 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
+                <TextBlock FontWeight="Black" FontSize="14">
                     SHELLBAG INFORMATION
                 </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="Data fields extracted from a shellbag in the user's registry hive." Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -304,7 +343,10 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </VirtualizingStackPanel.Resources>
-                <TextBlock Text="{Binding TypeName}" FontWeight="Black"/>
+                <TextBlock Text="{Binding TypeName}" FontWeight="Black" FontSize="14"/>
+                <Grid Margin="4">
+                    <TextBlock Text="{Binding LongDescription}" Margin="10"/>
+                </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
@@ -362,12 +404,22 @@
                                     Background="Transparent">
                                 <Border.Style>
                                     <Style TargetType="Border">
-                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.TextBox.Border}"/>
-                                        <!--<Style.Triggers>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                                        <Style.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
                                             </Trigger>
-                                        </Style.Triggers>-->
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource SelectedItemConverter}">
+                                                        <Binding />
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected"/>
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected.CurrentData"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
                                     </Style>
                                 </Border.Style>
                                 <ContentControl Content="{Binding}"/>
@@ -385,7 +437,21 @@
             </VirtualizingStackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <ScrollViewer Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-        <ContentControl Content="{ Binding Selected.Current }"/>
-    </ScrollViewer>
+    <Grid>
+        <ScrollViewer Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+            <ContentControl Content="{ Binding Selected.CurrentInspector }"/>
+        </ScrollViewer>
+        <TextBlock TextWrapping="Wrap" Margin="20 10" Text="Select an item in the Event Timeline or the Registry View to view its properties.">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Selected.CurrentInspector}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
 </UserControl>

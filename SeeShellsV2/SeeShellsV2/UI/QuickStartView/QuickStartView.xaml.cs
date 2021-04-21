@@ -32,6 +32,11 @@ namespace SeeShellsV2.UI
         public QuickStartView()
         {
             InitializeComponent();
+
+            Random rand = new Random();
+
+            if (rand.Next(100) == 42)
+                Subtitle.Text = "Another Day in Paradise.";
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

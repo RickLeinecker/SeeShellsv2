@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
+using Unity;
+using WpfHexaEditor.Core;
 
 namespace SeeShellsV2.UI
 {
@@ -27,6 +30,13 @@ namespace SeeShellsV2.UI
     /// </summary>
     public partial class HexView : UserControl
     {
+        [Dependency]
+        public IHexViewVM ViewModel
+        {
+            get => DataContext as IHexViewVM;
+            set => DataContext = value;
+        }
+
         public HexView()
         {
             InitializeComponent();

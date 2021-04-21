@@ -21,12 +21,15 @@ namespace SeeShellsV2.UI
 {
     public interface IFilterControlViewVM : IViewModel
     {
-        IDataRepository<User> UserCollection { get; }
-        IDataRepository<RegistryHive> RegistryHiveCollection { get; }
+        IShellEventCollection ShellEvents { get; }
+        IUserCollection UserCollection { get; }
+        IRegistryHiveCollection RegistryHiveCollection { get; }
         User User { get; set; }
         RegistryHive RegistryHive { get; set; }
         DateTime? Begin { get;  set; }
         DateTime? End { get; set; }
+        string Path { get; set; }
+        Type Type { get; set; }
     }
 
     /// <summary>

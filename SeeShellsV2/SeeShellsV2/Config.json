@@ -1,6 +1,7 @@
 ﻿{
   "KnownUsernameLocations": [
-    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
+    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
   ],
   "KnownUserRegistryFileLocations": [
     "ntuser.dat",

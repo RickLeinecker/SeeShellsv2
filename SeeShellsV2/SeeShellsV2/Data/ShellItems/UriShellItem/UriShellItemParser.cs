@@ -125,7 +125,7 @@ namespace SeeShellsV2.Data
                     }
                 }
 
-                Place p = new Place()
+                Place p = new NetworkLocation()
                 {
                     Name = ftphostname ?? uri ?? string.Empty,
                     PathName = null,

@@ -17,7 +17,7 @@ namespace SeeShellsV2.UI
         public IShellItemCollection ShellItems { get; set; }
 
         [Dependency]
-        public IDataRepository<User> Users { get; set; }
+        public IUserCollection Users { get; set; }
 
         [Dependency]
         public ISelected Selected { get; set; }

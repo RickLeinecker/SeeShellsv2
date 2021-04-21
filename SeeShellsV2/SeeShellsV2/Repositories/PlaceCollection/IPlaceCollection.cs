@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using SeeShellsV2.Data;
-using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Repositories
 {
-    public class UserCollection : ObservableSortedList<User>, IDataRepository<User>
-    { }
+    public interface IPlaceCollection : IDataRepository<Place>
+    {
+    }
 }
