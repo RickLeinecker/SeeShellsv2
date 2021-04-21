@@ -22,7 +22,7 @@ namespace SeeShellsV2.Services
 		public string Name => "Captioned HeatMap";
 
 		public FrameworkElement HeatMap { get; set; }
-		public FrameworkElement Rtb { get; set; }
+		public FrameworkElement TextBox { get; set; }
 
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
@@ -42,14 +42,21 @@ namespace SeeShellsV2.Services
 
 		public UIElement Render()
 		{
-			if (Rtb == null || HeatMap == null)
+			if (TextBox == null || HeatMap == null)
 				return null;
 
-			string s = XamlWriter.Save(Rtb);
-			StringReader sr = new StringReader(s);
-			XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
-			FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
-			var rtb = e.FindName("RichTextBox") as RichTextBox;
+			//string s = XamlWriter.Save(Rtb);
+			//StringReader sr = new StringReader(s);
+			//XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
+			//FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
+			//var rtb = e.FindName("RichTextBox") as RichTextBox;
+
+			TextBlock caption = new TextBlock();
+			caption.TextWrapping = TextWrapping.Wrap;
+			caption.TextAlignment = TextAlignment.Left;
+			caption.Width = 500;
+			caption.Height = 800;
+			caption.Text = (TextBox as TextBox).Text;
 
 			var plot = (HeatMap as CalendarHeatMap).HeatMapPlot;
 			var bmp = plot.ToBitmap();
@@ -69,54 +76,43 @@ namespace SeeShellsV2.Services
 			sp.Children.Add(t);
 			sp.Children.Add(image);
 
-			BlockUIContainer bc = new BlockUIContainer();
-			bc.Child = sp;
+			StackPanel captioned = new StackPanel();
+			captioned.Orientation = Orientation.Horizontal;
+			captioned.Children.Add(sp);
+			captioned.Children.Add(caption);
+			
 
-			Figure fig = new Figure();
-			fig.HorizontalAnchor = FigureHorizontalAnchor.PageLeft;
-			//FigureLength fl = new FigureLength(0.3, FigureUnitType.Column);
-			//fig.Width = fl;
-			fig.Blocks.Add(bc);
-
-			Paragraph p = new Paragraph();
-			p.Inlines.Add(fig);
-
-			//Floater fig = new Floater();
-			//fig.HorizontalAlignment = HorizontalAlignment.Left;
-			//fig.Width = image.Width;
+			//Figure fig = new Figure();
+			//fig.HorizontalAnchor = FigureHorizontalAnchor.PageLeft;
+			////FigureLength fl = new FigureLength(0.3, FigureUnitType.Column);
+			////fig.Width = fl;
 			//fig.Blocks.Add(bc);
 
-			List<Block> rtbBlocks = new List<Block>(rtb.Document.Blocks);
+			//Paragraph p = new Paragraph();
+			//p.Inlines.Add(fig);
 
-			foreach (Block block in rtbBlocks)
-			{
-				Debug.WriteLine(block.GetType().Name);
-			}
+			////Floater fig = new Floater();
+			////fig.HorizontalAlignment = HorizontalAlignment.Left;
+			////fig.Width = image.Width;
+			////fig.Blocks.Add(bc);
 
-			foreach (Block block in rtbBlocks)
-			{
-				List<Inline> inlines = new List<Inline>((block as Paragraph).Inlines);
-				p.Inlines.AddRange(inlines);
-			}
+			//List<Block> rtbBlocks = new List<Block>(rtb.Document.Blocks);
 
-			FlowDocument fd = new FlowDocument(p);
-			RichTextBox r = new RichTextBox(fd);
-			//StackPanel captioned = new StackPanel();
-			//Grid captioned = new Grid();
-			//captioned.ColumnDefinitions.Add(new ColumnDefinition());
-			//captioned.ColumnDefinitions.Add(new ColumnDefinition());
-			//captioned.RowDefinitions.Add(new RowDefinition());
-			//RowDefinition r = new RowDefinition();
-			//r.Height = GridLength.Auto;
-			//captioned.RowDefinitions.Add(r);
-			//Grid.SetColumn(sp, 0);
-			//Grid.SetRow(sp, 0);
-			//Grid.SetColumn(rtb, 1);
-			//Grid.SetRowSpan(rtb, 2);
-			//captioned.Children.Add(sp);
-			//captioned.Children.Add(rtb);
+			//foreach (Block block in rtbBlocks)
+			//{
+			//	Debug.WriteLine(block.GetType().Name);
+			//}
 
-			return r as UIElement;
+			//foreach (Block block in rtbBlocks)
+			//{
+			//	List<Inline> inlines = new List<Inline>((block as Paragraph).Inlines);
+			//	p.Inlines.AddRange(inlines);
+			//}
+
+			//FlowDocument fd = new FlowDocument(p);
+			//RichTextBox r = new RichTextBox(fd);
+
+			return captioned as UIElement;
 		}
 
 		public FrameworkElement View()
@@ -124,7 +120,7 @@ namespace SeeShellsV2.Services
 
 			// the view we will display for the user to configure this object
 			string view = @"
-			<StackPanel Orientation=""Horizontal"" MinHeight=""700"">
+			<StackPanel Orientation=""Horizontal"" MinHeight=""800"">
 				<local:CalendarHeatMap x:Name=""Heatmap""
 					Background=""White""
 					ColorAxisTitle =""User Action Frequency""
@@ -137,24 +133,16 @@ namespace SeeShellsV2.Services
 				<ToolBar>
 					<Button Command=""ApplicationCommands.Cut"" ToolTip=""Cut"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8C6;""/>
 					<Button Command=""ApplicationCommands.Copy"" ToolTip= ""Copy"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8C8;""/>
-					<Button Command=""ApplicationCommands.Paste"" ToolTip= ""Paste"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE77F;""/>
-					<ToggleButton Command= ""EditingCommands.ToggleBold"" ToolTip= ""Bold"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DD;""/>
-					<ToggleButton Command= ""EditingCommands.ToggleItalic"" ToolTip= ""Italic""  FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DB;""/>
-					<ToggleButton Command= ""EditingCommands.ToggleUnderline"" ToolTip= ""Underline"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8DC;""/>
-					<Button Command= ""EditingCommands.IncreaseFontSize"" ToolTip= ""Grow Font"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E8;""/>
-					<Button Command= ""EditingCommands.DecreaseFontSize"" ToolTip= ""Shrink Font"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E7;""/>
-					<Button Command= ""EditingCommands.ToggleBullets"" ToolTip= ""Bullets"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8FD;""/>
-					<Button Command= ""EditingCommands.AlignLeft"" ToolTip= ""Align Left"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E4;"" />
-					<Button Command= ""EditingCommands.AlignCenter"" ToolTip= ""Align Center"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E3;""/>
-					<Button Command= ""EditingCommands.AlignRight"" ToolTip= ""Align Right"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE8E2;""/>
-					<Button Command= ""EditingCommands.AlignJustify"" ToolTip= ""Align Justify"">
-						<Grid>
-							<TextBlock FontFamily=""Segoe MDL2 Assets"" Text=""&#xE8E4;"" VerticalAlignment=""Center"" TextAlignment=""Center""/>
-							<TextBlock FontFamily=""Segoe MDL2 Assets"" Text=""&#xE8E2;"" VerticalAlignment=""Center"" TextAlignment=""Center""/>
-						</Grid>
-					</Button>			   
+					<Button Command=""ApplicationCommands.Paste"" ToolTip= ""Paste"" FontFamily=""Segoe MDL2 Assets"" Content=""&#xE77F;""/>	   
 				</ToolBar>
-				<RichTextBox Name=""RichTextBox"" BorderBrush=""Transparent"" CaretBrush=""Black"" Foreground=""Black"" Background=""White"" AcceptsTab=""True"" Height=""700"" MaxHeight=""700""/>
+				<TextBox Name=""TextBox"" 
+					TextAlignment=""Left""
+					TextWrapping=""Wrap"" 
+					BorderBrush=""Transparent"" CaretBrush=""Black"" 
+					Foreground=""Black"" Background=""White"" 
+					AcceptsTab=""True"" AcceptsReturn=""True""
+					Height=""575"" Width=""450"" 
+					MaxHeight=""575"" MaxLength=""2692""/>
 				</StackPanel>
 			</StackPanel>";
 
@@ -184,13 +172,13 @@ namespace SeeShellsV2.Services
 			//// want to use these elements *directly* to do work inside this class.
 			//// **any data access that can be done with xaml bindings should be done with xaml bindings**
 			var hm = e.FindName("Heatmap") as CalendarHeatMap;
-			var rtb = e.FindName("RichTextBox") as RichTextBox;
+			var tb = e.FindName("TextBox") as TextBox;
 
 			//// hook up event listeners
 
 			//// save RTB element for later
 			HeatMap = hm;
-			Rtb = rtb;
+			TextBox = tb;
 
 			return e;
 		}

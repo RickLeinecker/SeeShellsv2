@@ -36,9 +36,9 @@ namespace SeeShellsV2.UI
 		public ExportWindowVM([Dependency] PdfExporter Export) 
 		{
 			moduleList = new ObservableCollection<IPdfModule>();
+			moduleList.Add(Export.moduleNames["Header"].Clone());
 			moduleList.Add(Export.moduleNames["Overview"].Clone());
-			//moduleList.Add(Export.moduleNames["HeatMap"].Clone());
-
+			moduleList.Add(Export.moduleNames["HeatMap and Histogram"].Clone());
 			moduleSelector = new ObservableCollection<string>(Export.moduleNames.Keys);
 			moduleSelector.Insert(0, "Select Module");
 

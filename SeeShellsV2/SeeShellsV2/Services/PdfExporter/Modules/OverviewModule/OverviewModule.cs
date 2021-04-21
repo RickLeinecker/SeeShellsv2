@@ -1,54 +1,76 @@
 ﻿using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Wpf;
+using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Xml;
 using Unity;
 
 namespace SeeShellsV2.Services
 {
 	class OverviewModule : IPdfModule
 	{
-		// Events type donut chart
-		// Shellbag count
-		// Shellbag Event count
-		// Events Span
-		// Begin
-		//	 -
-		//	End
 		public string Name => "Overview";
 
 		public PlotView PiePlot { get; set; }
+		public FrameworkElement SBCount { get; set; }
+		public FrameworkElement SECount { get; set; }
+		public FrameworkElement ESpan { get; set; }
+
 
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
 
+		public int ShellbagsCount{ get; set; }
+		public int EventsCount { get; set; }
+		public string BeginDate { get; set; }
+		public string EndDate { get; set; }
+
+
 		public PlotModel PieModel { get; set; }
 		public ICollectionView FilteredShellEvents => ShellEvents.FilteredView;
 
-		public OverviewModule([Dependency] IShellEventCollection shellEvents)
+		public OverviewModule([Dependency] IShellEventCollection shellEvents, [Dependency] IShellItemCollection shellItems)
 		{
+			if (shellEvents.Count == 0)
+				return;
+				
 			ShellEvents = shellEvents;
 
-			PieModel = new PlotModel { Title = "Pie Sample1" };
+			PieModel = new PlotModel { Title = "ShellEvents" };
 
-			OxyPlot.Series.PieSeries seriesP1 = new OxyPlot.Series.PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0, InnerDiameter = 0.4 };
-			
+			OxyPlot.Series.PieSeries seriesP1 = new OxyPlot.Series.PieSeries {FontSize=12, ExplodedDistance = 0.1, StrokeThickness = 2.0, InsideLabelPosition = 0.6, AngleSpan = 360, StartAngle = 0, InnerDiameter = 0.4};
 
-			seriesP1.Slices.Add(new PieSlice("Africa", 1030) { IsExploded = false, Fill = OxyColors.PaleVioletRed });
-			seriesP1.Slices.Add(new PieSlice("Americas", 929) { IsExploded = true });
-			seriesP1.Slices.Add(new PieSlice("Asia", 4157) { IsExploded = true });
-			seriesP1.Slices.Add(new PieSlice("Europe", 739) { IsExploded = true });
-			seriesP1.Slices.Add(new PieSlice("Oceania", 35) { IsExploded = true });
+			int OtherCount = 0;
+
+
+			foreach (string type in shellEvents.FilteredView.OfType<IShellEvent>().Select(e => e.GetType()).Distinct().Select(t => t.Name))
+			{
+				if (((double)shellEvents.FilteredView.OfType<IShellEvent>().Where(e => (e.GetType().Name == type) == true).Count() / shellEvents.FilteredView.OfType<IShellEvent>().Count()) * 100 > 5)
+					seriesP1.Slices.Add(new PieSlice(type.Replace("Event",""), shellEvents.FilteredView.OfType<IShellEvent>().Where(e => (e.GetType().Name == type) == true).Count()) { IsExploded=true });
+				else
+					OtherCount += shellEvents.FilteredView.OfType<IShellEvent>().Where(e => (e.GetType().Name == type) == true).Count();
+			}
+			seriesP1.Slices.Add(new PieSlice("Other", OtherCount) { IsExploded = true });
+
+
+			BeginDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).First().TimeStamp.Date.ToString("MM-dd-yyyy");
+			EndDate = shellEvents.FilteredView.OfType<IShellEvent>().OrderBy(e => e.TimeStamp).Last().TimeStamp.Date.ToString("MM-dd-yyyy");
+
+			ShellbagsCount = shellItems.Count;
+			EventsCount = shellEvents.FilteredView.OfType<IShellEvent>().Count();
 
 			PieModel.Series.Add(seriesP1);
 
@@ -61,7 +83,7 @@ namespace SeeShellsV2.Services
 
 		public System.Windows.UIElement Render()
 		{
-			if (PiePlot == null)
+			if (PiePlot == null || SBCount == null || SECount == null || ESpan == null)
 				return null;
 			var plot = PiePlot;
 			var s = plot.ToBitmap();
@@ -70,32 +92,104 @@ namespace SeeShellsV2.Services
 			image.Width = s.Width;
 			image.Height = s.Height;
 
-			StackPanel sp = new StackPanel();
+			string bagcount = XamlWriter.Save(SBCount);
+			StringReader bc = new StringReader(bagcount);
+			XmlReader readerbc = XmlTextReader.Create(bc, new XmlReaderSettings());
+			FrameworkElement bcount = (FrameworkElement)XamlReader.Load(readerbc);
+			StackPanel sbc= bcount.FindName("ShellbagCount") as StackPanel;
 
-			return image;
+			string eventcount = XamlWriter.Save(SECount);
+			StringReader ec = new StringReader(eventcount);
+			XmlReader readerec = XmlTextReader.Create(ec, new XmlReaderSettings());
+			FrameworkElement ecount = (FrameworkElement)XamlReader.Load(readerec);
+			StackPanel sec = ecount.FindName("ShellEventCount") as StackPanel;
+
+			string espan = XamlWriter.Save(ESpan);
+			StringReader esp = new StringReader(espan);
+			XmlReader readeres = XmlTextReader.Create(esp, new XmlReaderSettings());
+			FrameworkElement evespan = (FrameworkElement)XamlReader.Load(readeres);
+			StackPanel es = evespan.FindName("EventSpan") as StackPanel;
+
+
+			Grid g = new Grid();
+			ColumnDefinition iCol = new ColumnDefinition();
+			iCol.Width = new GridLength(350);
+			g.ColumnDefinitions.Add(iCol);
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			g.ColumnDefinitions.Add(new ColumnDefinition());
+			RowDefinition iRow = new RowDefinition();
+			iRow.Height = new GridLength(325);
+			g.RowDefinitions.Add(iRow);
+
+			Grid.SetColumn(image, 0);
+			Grid.SetRow(image, 0);
+
+			Grid.SetColumn(sbc, 1);
+			Grid.SetRow(sbc, 0);
+
+			Grid.SetColumn(sec, 2);
+			Grid.SetRow(sec, 0);
+			Grid.SetColumn(es, 3);
+			Grid.SetRow(es, 0);
+
+			g.Children.Add(image);
+			g.Children.Add(sbc);
+			g.Children.Add(sec);
+			g.Children.Add(es);
+
+			return g;
 		}
 
 		public FrameworkElement View()
 		{
 
 			string view = @"
-				<StackPanel Orientation=""Horizontal"" Background=""White"">
-						<oxy:PlotView Name=""PieSeries"" Height=""300"" Width=""300"" Model=""{Binding PieModel}""/>
-						<StackPanel Grid.Column=""1"" >
-							<TextBlock Text=""Number of ShellBags"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
-							<TextBlock Text=""20"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
+				<Grid Background=""White"">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width=""335""/>
+						<ColumnDefinition Width="" * ""/>
+						<ColumnDefinition Width="" * ""/>
+						<ColumnDefinition Width="" * ""/>
+					</Grid.ColumnDefinitions >
+					<Grid.RowDefinitions >
+						<RowDefinition Height = ""300""/>
+					</Grid.RowDefinitions >
+						<oxy:PlotView Grid.Column=""0"" Name=""PieSeries"" Height=""300"" Width=""335"" Model=""{Binding PieModel}""/>
+						<StackPanel Name=""ShellbagCount"" Grid.Column=""1""  HorizontalAlignment=""Center"" VerticalAlignment=""Center"">
+							<TextBlock Text=""Number"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""of"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""Shellbags"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock HorizontalAlignment=""Center"" VerticalAlignment=""Center""/>
+							<TextBlock Text=""{Binding ShellbagsCount}"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""16"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
 						</StackPanel>
-						<StackPanel Grid.Column=""2"" >
-							<TextBlock Text=""Number of ShellEvents"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""/>
-							<TextBlock Text=""20"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
+						<StackPanel Name=""ShellEventCount"" Grid.Column=""2""  HorizontalAlignment=""Center"" VerticalAlignment=""Center"">
+							<TextBlock Text=""Number"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""of"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""ShellEvents"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock HorizontalAlignment=""Center"" VerticalAlignment=""Center""/>
+							<TextBlock Text=""{Binding EventsCount}"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" 
+											FontSize=""16"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
 						</StackPanel>
-						<StackPanel Grid.Column=""3"" >
-							<TextBlock Text=""Event Span"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
-							<TextBlock Text=""Begin"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
-							<TextBlock Text=""-"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""/>
-							<TextBlock Text=""End"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" />
+						<StackPanel Name=""EventSpan"" Grid.Column=""3""  HorizontalAlignment=""Center"" VerticalAlignment=""Center"">
+							<TextBlock Text=""Event Span"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" 
+											FontSize=""18"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock  HorizontalAlignment=""Center"" VerticalAlignment=""Center""/>
+							<TextBlock Text=""{Binding BeginDate}"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" 
+											FontSize=""16"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""-"" HorizontalAlignment=""Center"" VerticalAlignment=""Center""
+											FontSize=""16"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
+							<TextBlock Text=""{Binding EndDate}"" HorizontalAlignment=""Center"" VerticalAlignment=""Center"" 
+											FontSize=""16"" FontFamily=""Segoe UI"" FontWeight=""Bold""/>
 						</StackPanel>
-				</StackPanel>";
+				</Grid>";
 
 
 			//// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
@@ -119,7 +213,14 @@ namespace SeeShellsV2.Services
 			e.DataContext = this;
 
 			var ps = e.FindName("PieSeries") as PlotView;
+			var sbc = e.FindName("ShellbagCount") as FrameworkElement;
+			var sec = e.FindName("ShellEventCount") as FrameworkElement;
+			var es = e.FindName("EventSpan") as FrameworkElement;
+
 			PiePlot = ps;
+			SBCount = sbc;
+			SECount = sec;
+			ESpan = es;
 
 			return e;
 		}
