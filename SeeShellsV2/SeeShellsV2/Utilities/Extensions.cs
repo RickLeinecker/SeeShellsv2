@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SeeShellsV2
 {
@@ -72,6 +73,34 @@ namespace SeeShellsV2
                 else throw new ArgumentException("Properties path is not correct");
             }
             return instance;
+        }
+
+        /// <summary>
+        /// Iterate over WPF Visual Trees
+        /// </summary>
+        /// <param name="parent">the parent Visual</param>
+        /// <param name="recurse">enable to recursively iterate over the tree</param>
+        /// <returns>WPF Visual Tree enumerable</returns>
+        public static IEnumerable<DependencyObject> GetChildren(this DependencyObject parent, bool recurse = true)
+        {
+            if (parent != null)
+            {
+                foreach (var child in LogicalTreeHelper.GetChildren(parent))
+                {
+                    if (child is DependencyObject d)
+                    {
+                        yield return d;
+
+                        if (recurse)
+                        {
+                            foreach (var grandChild in d.GetChildren(true))
+                            {
+                                yield return grandChild;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

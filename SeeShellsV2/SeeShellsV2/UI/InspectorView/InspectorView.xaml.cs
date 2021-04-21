@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Unity;
 using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
+using System.Globalization;
 
 namespace SeeShellsV2.UI
 {
@@ -39,7 +40,23 @@ namespace SeeShellsV2.UI
 
         private void Item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ViewModel.Selected.CurrentData = (sender as FrameworkElement).DataContext;
+        }
+    }
 
+    internal class SelectedItemConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length >= 2 && values[0] is object o && values[1] is Selected s)
+                return o == s.CurrentData;
+
+            return false;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

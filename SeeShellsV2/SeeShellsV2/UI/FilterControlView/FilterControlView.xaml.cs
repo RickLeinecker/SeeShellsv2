@@ -28,6 +28,8 @@ namespace SeeShellsV2.UI
         RegistryHive RegistryHive { get; set; }
         DateTime? Begin { get;  set; }
         DateTime? End { get; set; }
+        string Path { get; set; }
+        Type Type { get; set; }
     }
 
     /// <summary>

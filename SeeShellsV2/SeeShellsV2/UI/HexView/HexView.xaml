@@ -26,6 +26,21 @@
         </Style>
         <local:StreamConverter x:Key="StreamConverter"/>
     </UserControl.Resources>
-    <hex:HexEditor Stream="{Binding Selected.Current, Converter={StaticResource StreamConverter}}"
-                   ReadOnlyMode="True" BorderThickness="0" Focusable="False"/>
+    <Grid>
+        <hex:HexEditor Name="HexEditor" Stream="{Binding Selected.CurrentData, Converter={StaticResource StreamConverter}}"
+                       ReadOnlyMode="True" BorderThickness="0" Focusable="False"/>
+
+        <TextBlock TextWrapping="Wrap" Margin="20 10" Text="Select a shellbag in the Shell Inspector or Registry View to view its raw byte value.">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Selected.CurrentData}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
 </UserControl>

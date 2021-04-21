@@ -276,10 +276,6 @@ namespace SeeShellsV2.Services
                             }
                         }
                     }
-                    else
-                    {
-                        return retval;
-                    }
                 }
 
                 //most occurred value is probably the username.
@@ -305,30 +301,53 @@ namespace SeeShellsV2.Services
             string retval = string.Empty;
             try
             {
-                if (hive.HiveType != OfflineRegistryType.NtUser)
-                    return retval;
+                //if (hive.HiveType != OfflineRegistryType.NtUser)
+                //    return retval;
 
                 //todo refactor Parser.GetUsernameLocations() into key-value pairs for lookup, we have to hardcode key-values otherwise.
                 //todo we know of the Desktop value inside the "Shell Folders" location, so naively try this until a better way is found
                 Dictionary<string, int> likelyUsernames = new Dictionary<string, int>();
                 foreach (string usernameLocation in Config.UsernameLocations)
                 {
+                    if (hive.GetKey(usernameLocation) == null)
+                        continue;
+
+                    Func<string, string> extractUsername = (string path) =>
+                    {
+                        if (!Path.IsPathFullyQualified(path))
+                            return null;
+
+                        //break string up into it's path
+                        string[] pathParts = path.Split('\\');
+                        if (pathParts.Length > 2 && pathParts[1] == "Users")
+                        {
+                            return pathParts[2]; //usually in the form of C:\Users\username
+                        }
+
+                        return null;
+                    };
+
                     //based on the values in '...\Explorer\Shell Folders' the [2] value in the string may not always be the username, but it does appear the most.
                     foreach (OfflineKeyValue value in hive.GetKey(usernameLocation).Values)
                     {
-                        //break string up into it's path
-                        string[] pathParts = value.ValueData.Split('\\');
-                        if (pathParts.Length > 2)
+                        var username = extractUsername(value.ValueData);
+
+                        if (username != null)
                         {
-                            string username = pathParts[2]; //usually in the form of C:\Users\username
                             if (!likelyUsernames.ContainsKey(username))
-                            {
                                 likelyUsernames[username] = 1;
-                            }
                             else
-                            {
                                 likelyUsernames[username]++;
-                            }
+                        }
+
+                        username = extractUsername(value.ValueName);
+
+                        if (username != null)
+                        {
+                            if (!likelyUsernames.ContainsKey(username))
+                                likelyUsernames[username] = 1;
+                            else
+                                likelyUsernames[username]++;
                         }
                     }
                 }

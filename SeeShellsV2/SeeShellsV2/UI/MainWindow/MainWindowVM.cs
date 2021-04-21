@@ -86,7 +86,7 @@ namespace SeeShellsV2.UI
             }
             else
             {
-                Selected.Current = root;
+                Selected.CurrentInspector = root;
                 // Selected.CurrentEnumerable = root.Items;
 
                 Status = "Generating User Action Events...";

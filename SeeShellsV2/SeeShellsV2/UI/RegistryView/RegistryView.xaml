@@ -55,7 +55,7 @@
 
         <HierarchicalDataTemplate DataType="{x:Type local:RegistryCollection}" ItemsSource="{Binding Items}">
             <StackPanel Orientation="Horizontal"
-                        Tag="{Binding Items}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
+                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
                         Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="{Binding Icon}"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
@@ -108,11 +108,25 @@
         </HierarchicalDataTemplate>
 
     </UserControl.Resources>
-    <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Users}">
-        <TreeView.ItemContainerStyle>
-            <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
-                <Setter Property="IsExpanded" Value="True"/>
-            </Style>
-        </TreeView.ItemContainerStyle>
-    </TreeView>
+    <Grid>
+        <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Users}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+        <TextBlock TextWrapping="Wrap" Margin="20 10" Text="Import a registry to view its shellbag contents.">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Users.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
 </UserControl>

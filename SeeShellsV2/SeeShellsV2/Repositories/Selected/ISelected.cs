@@ -11,6 +11,8 @@ namespace SeeShellsV2.Repositories
     /// </summary>
     public interface ISelected : INotifyPropertyChanged
     {
-        object Current { get; set; }
+        object CurrentInspector { get; set; }
+
+        object CurrentData { get; set; }
     }
 }

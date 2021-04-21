@@ -42,7 +42,14 @@ namespace SeeShellsV2.UI
 
         private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ViewModel.Selected.Current = (sender as FrameworkElement).DataContext;
+            ViewModel.Selected.CurrentInspector = (sender as FrameworkElement).Tag;
+
+            if (ViewModel.Selected.CurrentInspector is IShellItem)
+                ViewModel.Selected.CurrentData = ViewModel.Selected.CurrentInspector;
+            else if (ViewModel.Selected.CurrentInspector is Place p)
+                ViewModel.Selected.CurrentData = p.Items.FirstOrDefault();
+            else
+                ViewModel.Selected.CurrentData = null;
         }
     }
 

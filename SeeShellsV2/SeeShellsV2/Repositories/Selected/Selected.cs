@@ -12,16 +12,28 @@ namespace SeeShellsV2.Repositories
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public object Current
+        public object CurrentInspector
         {
-            get => _current;
+            get => _currentInspector;
             set
             {
-                _current = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Current"));
+                _currentInspector = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentInspector)));
             }
         }
 
-        private object _current;
+        private object _currentInspector;
+
+        public object CurrentData
+        {
+            get => _currentData;
+            set
+            {
+                _currentData = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentData)));
+            }
+        }
+
+        private object _currentData;
     }
 }

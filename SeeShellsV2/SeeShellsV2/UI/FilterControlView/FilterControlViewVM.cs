@@ -67,6 +67,21 @@ namespace SeeShellsV2.UI
             }
         }
 
+        public string Path
+        {
+            get => path;
+            set
+            {
+                string old = path;
+                path = value;
+
+                if (old != path)
+                    ShellEvents.FilteredView.Refresh();
+
+                NotifyPropertyChanged();
+            }
+        }
+
         public DateTime? Begin
         {
             get => begin;
@@ -102,11 +117,13 @@ namespace SeeShellsV2.UI
         private RegistryHive registryHive = null;
         private DateTime? begin = null;
         private DateTime? end = null;
+        private string path = null;
 
         public FilterControlViewVM([Dependency] IShellEventCollection shellEvents)
         {
             ShellEvents = shellEvents;
             ShellEvents.Filter += new FilterEventHandler(FilterType);
+            ShellEvents.Filter += new FilterEventHandler(FilterPath);
             ShellEvents.Filter += new FilterEventHandler(FilterUser);
             ShellEvents.Filter += new FilterEventHandler(FilterRegistryHive);
             ShellEvents.Filter += new FilterEventHandler(FilterBeginDate);
@@ -119,6 +136,14 @@ namespace SeeShellsV2.UI
                 e.Accepted = true;
             else
                 e.Accepted = e.Item.GetType() == Type;
+        }
+
+        void FilterPath(object o, FilterEventArgs e)
+        {
+            if (Path == null)
+                e.Accepted = true;
+            else
+                e.Accepted = e.Item is IShellEvent se && se.Place != null && ((se.Place.PathName ?? string.Empty) + (se.Place.Name ?? string.Empty)).StartsWith(Path);
         }
 
         void FilterUser(object o, FilterEventArgs e)

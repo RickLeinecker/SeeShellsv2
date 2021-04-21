@@ -39,6 +39,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
+            <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Path, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" mah:TextBoxHelper.ClearTextButton="True" />
+        </Grid>
+        <Grid Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
             <TextBlock FontWeight="Bold" Text="User" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <ComboBox SelectedValue="{Binding User}" Grid.Column="1" ItemsSource="{Binding UserCollection}" mah:TextBoxHelper.ClearTextButton="True">
                 <ComboBox.ItemTemplate>
