@@ -1,5 +1,5 @@
 # SeeShells: Windows Shellbag Timeline Display & Parser
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ShellBags/v2?include_prereleases)](https://github.com/ShellBags/v2/releases/tag/v2.0-beta.3)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ShellBags/v2?include_prereleases)](https://github.com/ShellBags/v2/releases/tag/v2.0-beta.4)
 [![GitHub All Releases](https://img.shields.io/github/downloads/ShellBags/v2/total)](https://github.com/ShellBags/v2/releases)
 [![SeeShells License](https://img.shields.io/github/license/RickLeinecker/SeeShells)](https://github.com/RickLeinecker/SeeShells/blob/master/LICENSE)
 
