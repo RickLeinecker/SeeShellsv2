@@ -50,9 +50,9 @@ namespace SeeShellsV2.Services
                             CanUserAddRows = ""False"" IsReadOnly = ""True"">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header = ""Event Time"" Binding = ""{Binding TimeStamp}"" />
-                            <DataGridTextColumn Header = ""Description"" Binding = ""{Binding Description}"" />
-                            <DataGridTextColumn Header = ""User"" Binding = ""{Binding User.Name}"" />
                             <DataGridTextColumn Header = ""Location Name"" Binding = ""{Binding Place.Name}"" />
+                            <DataGridTextColumn Header = ""Type"" Binding = ""{Binding TypeName}"" />
+                            <DataGridTextColumn Header = ""User"" Binding = ""{Binding User.Name}"" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>";
