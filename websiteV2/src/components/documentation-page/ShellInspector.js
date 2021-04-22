@@ -49,8 +49,9 @@ render() {
                     This information is extracted from an offset in the hex values, visible in the Hex Viewer.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    When shellbag events have occurred roughly within a minute of each other, multiple shellbags can appear 
-                    in this view and the user can scroll through each of them. This typically happens with Windows updates.
+                    It is possible for multiple shellbags to appear in the shell inspector. When viewing a shellbag event, all shellbags 
+                    related to that event will appear in this window, and the user can scroll through them. During a Windows Update, many 
+                    of these events will occur within a minute of each other, and will all appear in the inspector.
                 </Typography>
             </div>
             

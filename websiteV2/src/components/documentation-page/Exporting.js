@@ -43,7 +43,7 @@ class Exporting extends React.Component {
                 </Typography>
                 <img src={ReportMenu} alt="shellbag-export" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To export analyzed shellbags into a report format:
+                    <b>To export analyzed shellbags into a report format:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. From the global menu, select Export > As Report
@@ -54,38 +54,38 @@ class Exporting extends React.Component {
                 </Typography>
                 <img src={Modules} alt="shellbag-export" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Module Types:
+                    <b>Module Types:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Captioned HeatMap: inserts a heatmap with a text editor to the side. The user can then type in that text editor.
+                    <b>Captioned HeatMap:</b> inserts a heatmap with a text editor to the side. The user can then type in that text editor.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Captioned Histogram: inserts a histogram with a text editor to the side. The user can then type in that text editor.
+                    <b>Captioned Histogram:</b> inserts a histogram with a text editor to the side. The user can then type in that text editor.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Heatmap and Histogram: inserts a side-by-side image of a heatmap and a histogram.
+                    <b>Heatmap and Histogram:</b> inserts a side-by-side image of a heatmap and a histogram.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Header: inserts a textbox that includes a default header. The user can leave in the default text, add to it, or replace it with their own.
+                    <b>Header:</b> inserts a textbox that includes a default header. The user can leave in the default text, add to it, or replace it with their own.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Heatmap: inserts a heatmap.
+                    <b>Heatmap:</b> inserts a heatmap.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Overview: inserts a pie graph with shellbag event types as percentages, the number of shellbags, the number of shellbag events,
+                    <b>Overview:</b> inserts a pie graph with shellbag event types as percentages, the number of shellbags, the number of shellbag events,
                      and the timespan the shellbags are from.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    TextBox: inserts a blank textbox that the user can type in.
+                    <b>TextBox:</b> inserts a blank textbox that the user can type in.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    ShellEvent Table: inserts a shellbag event table filled with shellbags.
+                    <b>ShellEvent Table:</b> inserts a shellbag event table filled with shellbags.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Captioned HeatMap: inserts a heatmap with a text editor to the side. The user can then type in that text editor.
+                    <b>Captioned HeatMap:</b> inserts a heatmap with a text editor to the side. The user can then type in that text editor.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Timeline Histogram: inserts a timeline.
+                    <b>Timeline Histogram:</b> inserts a timeline.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     All of these views can be interacted with from this menu, to only show the specifics that the user wants to display. Events can be pre-filtered before

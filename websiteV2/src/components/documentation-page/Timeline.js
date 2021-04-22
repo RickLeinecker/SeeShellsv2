@@ -48,7 +48,7 @@ class Timeline extends React.Component {
                 </Typography>
                 <img src={TimelineColor} alt="timeline-color-options" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To navigate the timeline:
+                    <b>To navigate the timeline:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. To easily narrow down a section of time, hold down CTRL, right click on the timeline, and drag the mouse in either direction. 

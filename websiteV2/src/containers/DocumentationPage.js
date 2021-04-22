@@ -63,7 +63,20 @@ const styles = {
     },
     buttons: {
         color: 'white',
-    }
+    },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '150px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 };
 
 /*
@@ -136,11 +149,16 @@ class DocumentationPage extends React.Component {
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>How To Use</Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Select a subheading for step-by-step guides on how to use the SeeShells application.
+                                <b>Select a subheading for step-by-step guides</b> on how to use the SeeShells application.
                             </Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
-                                SeeShells is intended to be run on Windows machines. The application 
-                                must be run as administrator in order to have access to the registry.
+                                SeeShells is intended to be run on Windows machines. 
+                            </Typography>
+                            <Paper className={this.props.classes.video}>
+                                <ReactPlayer height='100%' width='100%' url="https://youtu.be/fzK-bUQrIxg?t=194"/>
+                            </Paper>
+                            <Typography variant="subtitle1" className={this.props.classes.text}>
+                                To view the full case study, please visit our <a href="#/about/case-studies">case study page</a>.
                             </Typography>
                         </Paper>
                     }

@@ -4,14 +4,12 @@ import { withRouter, HashRouter as Router } from 'react-router-dom';
 import AboutBar from '../components/AboutBar.js';
 import WindowsRegistry from '../components/about-page/WindowsRegistry.js';
 import Shellbags from '../components/about-page/Shellbags.js';
-import SeeShells from '../components/about-page/SeeShells.js';
 import Parsing from '../components/about-page/Parsing.js';
 import Analysis from '../components/about-page/Analysis.js';
-import Timeline from '../components/about-page/Timeline.js';
 import CaseStudies from '../components/about-page/CaseStudies.js';
 import { Paper, Typography, Collapse, Button } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ReactPlayer from "react-player";
+import Welcome from '../assets/seeshells-welcome.png';
 
 const styles = {
     content: {
@@ -35,19 +33,6 @@ const styles = {
     text: {
         textAlign: 'center',
         padding: '1%',
-    },
-    video: {
-        maxHeight: '360px',
-        maxWidth: '640px',
-        minHeight: '150px',
-        minWidth: '300px',
-        height: '50%',
-        width: '50%',
-        margin: '10px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        backgroundColor: '#424242',
     },
     sidebarContainer: {
         height: '100%',
@@ -139,26 +124,14 @@ class AboutPage extends React.Component {
                         <Paper className={this.props.classes.content}>
                             <Typography variant="title" className={this.props.classes.title}>About</Typography>
                             <Typography variant="subtitle1" className={this.props.classes.text}>
-                                SeeShells is an information extraction software. SeeShells is a standalone, 
-                                open source executable that can run both online and offline registry hives. 
-                                It extracts and parses through Windows Registry information. This data is then 
-                                converted into two forms. The first is a csv file that contains all the raw data 
-                                we obtain. The second is a human readable timeline. The timeline provides an 
-                                interactive, easier to read visualization of the data extracted from the windows registries. 
-                                This information is otherwise difficult and time consuming to comb through and understand. 
-                                The application is a great way to gain insight into what someone has done on their computer over time. 
-                                The program can be particularly useful for digital forensics investigators as the information 
-                                can be downloaded and used as evidence in a court of law. 
+                                SeeShells is a digital forensics tool that parses and analyzes shellbag data from the Windows 
+                                Registry, and displays the data in a graphical interface. The graphical interface can be 
+                                interacted with and filters can be applied to find shellbag data in a quick and easy-to-use manner.
                             </Typography>
+                            <img src={Welcome} alt="seeshells-welcome" />
                             <Typography variant="subtitle1" className={this.props.classes.text}>
-                                Windows uses the Shellbag keys to store user preferences for GUI folder display within Windows Explorer. 
-                                Everything from visible columns to display mode (icons, details, list, etc.) to sort order are tracked. 
-                                If you have ever made changes to a folder and returned to that folder to find your new preferences intact, 
-                                then you have seen Shellbags in action. 
+                                Select a subheading to learn more about the Windows Registry, shellbags, and SeeShells.
                             </Typography>
-                            <Paper className={this.props.classes.video}>
-                                <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                            </Paper>
                         </Paper>
                     }
                     {this.props.subpage === "registry" &&
@@ -171,11 +144,6 @@ class AboutPage extends React.Component {
                             <Shellbags/>
                         </Paper>
                     }
-                    {this.props.subpage === "seeshells" &&
-                        <Paper className={this.props.classes.content}>
-                            <SeeShells/>
-                        </Paper>
-                    }
                     {this.props.subpage === "parser" &&
                         <Paper className={this.props.classes.content}>
                             <Parsing/>
@@ -184,11 +152,6 @@ class AboutPage extends React.Component {
                     {this.props.subpage === "analysis" &&
                         <Paper className={this.props.classes.content}>
                             <Analysis/>
-                        </Paper>
-                    }
-                    {this.props.subpage === "timeline" &&
-                        <Paper className={this.props.classes.content}>
-                            <Timeline/>
                         </Paper>
                     }
                     {this.props.subpage === "case-studies" &&

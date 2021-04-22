@@ -36,13 +36,13 @@ class RegistryView extends React.Component {
             <div className={this.props.classes.content}>
                 <Typography variant="title" className={this.props.classes.title}>Registry View</Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    The registry view presents a recreation of the Windows Registry at the time harvested shellbags were created. 
+                    The registry view presents all of the data retrieved by SeeShells in a hierarchical view. 
                     This view allows the user to explore the file system for any folders of interest, and use that folder information
                     to narrow down their search for incriminating evidence.
                 </Typography>
                 <img src={RegistryImage} alt="registry" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To use the registry view:
+                    <b>To use the registry view:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Clicking the triangle next to a drive or folder name will open up the subtree of folders within it.

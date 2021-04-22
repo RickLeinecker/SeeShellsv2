@@ -171,7 +171,7 @@ class FrontPage extends React.Component {
                                 </Paper>
                                 <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Recreation</span> of the File Explorer to find folders of interest</Typography>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Hierarchical view</span> of shell items to find folders of interest</Typography>
                                 </Paper>
                             </Paper>
                         </Grow>

@@ -40,7 +40,7 @@ class Filtering extends React.Component {
                 </Typography>
                 <img src={EmptyFilter} alt="shellbag-filtering" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To use the filter controls:
+                    <b>To use the filter controls:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Select a user of interest.

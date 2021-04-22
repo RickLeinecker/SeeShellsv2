@@ -43,7 +43,7 @@ class OfflineParsing extends React.Component {
                 </Typography>
                 <img src={OfflineParse} alt="offline-parse" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To get an offline hive for SeeShells from a Windows machine:
+                    <b>To get an offline hive for SeeShells from a Windows machine:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Access the Windows File Explorer as an Admin user
@@ -62,7 +62,7 @@ class OfflineParsing extends React.Component {
                     pertaining to shellbags and will not be useful to a SeeShells user.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To load a registry hive into SeeShells:
+                    <b>To load a registry hive into SeeShells:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Run SeeShells

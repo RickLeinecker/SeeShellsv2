@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import HeatmapImg from '../../assets/heatmap.png';
 import HeatmapFilter from '../../assets/heatmap-highlight.png';
 import HeatmapTooltip from '../../assets/heatmap-tooltip.png';
+import HeatmapRotated from '../../assets/heatmap-rotated.png';
 
 const styles = {
     content: {
@@ -46,6 +47,10 @@ class Heatmap extends React.Component {
                     Left clicking on a day will bring up a tooltip that displays information on how many shellbags were taken from that day.
                 </Typography>
                 <img src={HeatmapTooltip} alt="heatmap" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    The window containing the heatmap can be resized, and if dragged out far enough, the heatmap will rotate onto its side.
+                </Typography>
+                <img src={HeatmapRotated} alt="heatmap" />
             </div>
         );
     }

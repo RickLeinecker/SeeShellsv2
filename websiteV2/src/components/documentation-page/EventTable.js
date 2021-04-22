@@ -39,7 +39,7 @@ class EventTable extends React.Component {
                 </Typography>
                 <img src={EventTableImg} alt="event-table" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To sort by a particular field:
+                    <b>To sort by a particular field:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Click the column header and the fields will sort in ascending order.

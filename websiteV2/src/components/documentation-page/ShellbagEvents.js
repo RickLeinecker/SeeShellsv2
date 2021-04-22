@@ -52,31 +52,31 @@ class ShellbagEvents extends React.Component {
                     locations associated with the action, and all parsed shellbag data that provide evidence for the action.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Shellbag Events include:
+                    <b>Shellbag Events include:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Creation: The time an item was created. 
+                    <b>Item Creation:</b> The time an item was created. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Last Access: The last time the user accessed the item. 
+                    <b>Item Last Access:</b> The last time the user accessed the item. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Last Modify: The last time the user modified the item. 
+                    <b>Item Last Modify:</b> The last time the user modified the item. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                     Item Last Registry Write: The last time there was a registry write in regards to a particular item. 
+                     <b>Item Last Registry Write:</b> The last time there was a registry write in regards to a particular item. 
                  </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Program Installation Event: A file system entry was found and interpreted as the installation of a program at a certain time.
+                    <b>Program Installation Event:</b> A file system entry was found and interpreted as the installation of a program at a certain time.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Feature Update Event: Many simultaneous registry writes occurred at the same time, suggesting a Windows Update was installed at a certain time.
+                    <b>Feature Update Event:</b> Many simultaneous registry writes occurred at the same time, suggesting a Windows Update was installed at a certain time.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    File Download Event: A file system entry was found and interpreted as the download of a file at a certain time.
+                    <b>File Download Event:</b> A file system entry was found and interpreted as the download of a file at a certain time.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Removable Storage Device Connect: A removable storage device was connected or disconnected at a certain time.
+                    <b>Removable Storage Device Connect:</b> A removable storage device was connected or disconnected at a certain time.
                 </Typography>
             </div>
         )

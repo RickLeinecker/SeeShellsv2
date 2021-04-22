@@ -41,7 +41,7 @@ render() {
                 </Typography>
                 <img src={OnlineParse} alt="online-parse" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To parse an active registry:
+                    <b>To parse an active registry:</b>
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Select the option that says "From Active Registry" from the start menu of the application.
