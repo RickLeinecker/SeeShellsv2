@@ -1,6 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, Paper } from '@material-ui/core';
+import { Typography, Paper, IconButton, Tooltip } from '@material-ui/core';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import Widgets from '@material-ui/icons/Widgets';
 import ReactPlayer from "react-player";
 
 const styles = {
@@ -53,6 +55,9 @@ const styles = {
         alignItems: 'center',
         backgroundColor: '#424242',
     },
+    button: {
+        color: '#33A1FD',
+    }
 }
 
 class CaseStudies extends React.Component {
@@ -64,27 +69,63 @@ class CaseStudies extends React.Component {
                 <Paper className={this.props.classes.caseStudies}>
                     <Paper className={this.props.classes.video}>
                         <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Tehsla IP Theft</Typography>
+                        <div className={this.props.classes.buttonContainer}>
+                            <Tooltip title="Case Study PDF">
+                                <a href="https://drive.google.com/file/d/12I4JLMh5s0AxGLfoolCt6zaRASO-14pe/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <PictureAsPdfIcon/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                            <Tooltip title="Case Study UsrClass.dat">
+                                <a href="https://drive.google.com/file/d/1PlNHog2XiECRZw8zZMNkPPHuIlB9i4HF/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <Widgets/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                        </div>
                     </Paper>
                     <Paper className={this.props.classes.video}>
                         <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Arasaka Phishing Incident</Typography>
+                        <div className={this.props.classes.buttonContainer}>
+                            <Tooltip title="Case Study PDF">
+                                <a href="https://drive.google.com/file/d/1RF2tL91YBeg78UbKvUdFgb2-eJHZY3g3/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <PictureAsPdfIcon/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                            <Tooltip title="Case Study UsrClass.dat">
+                                <a href="https://drive.google.com/file/d/1OZHhfAvACc93mWxJEcjyI7jwkAFo4Jv9/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <Widgets/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                        </div>
                     </Paper>
                     <Paper className={this.props.classes.video}>
                         <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                    </Paper>
-                    <Paper className={this.props.classes.video}>
-                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                    </Paper>
-                    <Paper className={this.props.classes.video}>
-                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
-                    </Paper>
-                    <Paper className={this.props.classes.video}>
-                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: title</Typography>
+                        <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Hooli Workstation Analysis</Typography>
+                        <div className={this.props.classes.buttonContainer}>
+                            <Tooltip title="Case Study PDF">
+                                <a href="https://drive.google.com/file/d/1mm3CeIlwpl4YVg7YiJMfB-KpE0XtlJ9C/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <PictureAsPdfIcon/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                            <Tooltip title="Case Study UsrClass.dat">
+                                <a href="https://drive.google.com/file/d/1XuevQkHZa86btb3ZJ63Sh7mdyGL8xq98/view?usp=sharing">
+                                    <IconButton className={this.props.classes.button}>
+                                        <Widgets/>
+                                    </IconButton>
+                                </a>
+                            </Tooltip>
+                        </div>
                     </Paper>
                 </Paper>
             </div>

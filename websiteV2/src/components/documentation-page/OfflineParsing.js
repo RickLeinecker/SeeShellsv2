@@ -58,8 +58,8 @@ class OfflineParsing extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     Currently, SeeShells only supports the parsing of .dat files. UsrClass.dat is the 
                     recommended file to be parsed in SeeShells since it contains information pertaining to 
-                    shellbags. Conversely, NTUSER.dat is a supported filetype, but contains no information 
-                    pertaining to shellbags and will not be usful to a SeeShells user.
+                    shellbags. Conversely, NTUSER.dat is a supported filetype, but usually contains no information 
+                    pertaining to shellbags and will not be useful to a SeeShells user.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     To load a registry hive into SeeShells:

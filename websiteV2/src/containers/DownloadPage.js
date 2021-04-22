@@ -96,7 +96,7 @@ class DownloadPage extends React.Component {
                         <Paper className={this.props.classes.contentContainer}>
                             <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
                             <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                            <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.3/SeeShellsV2.zip">SEESHELLS.EXE</Button>
+                            <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.4/SeeShellsV2.zip">SEESHELLS.EXE</Button>
                             <a href="https://github.com/ShellBags/v2" className={this.props.classes.githubContainer} >
                                 <img src={github} alt='Github Logo' className={this.props.classes.github}/>
                             </a>
