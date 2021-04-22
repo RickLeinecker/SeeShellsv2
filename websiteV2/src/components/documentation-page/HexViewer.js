@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import HexViewerImg from '../../assets/hex-viewer.png';
 import HexHighlight from '../../assets/hex-viewer-highlight.png';
 
@@ -27,6 +28,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class HexViewer extends React.Component {
@@ -44,6 +58,9 @@ class HexViewer extends React.Component {
                     Each hex value (or set of hex values) corresponds to a shellbag field. For instance, the first two values in the first row correspond to
                     the size of the shell, meanwhile the third value in the first row corresponds to the type field.
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=eO9PjSATDKA"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     Hex values can be highlighted to look at only a particular section of interest.
                 </Typography>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import EventTableImg from '../../assets/shellbag-event-table.png';
 import TableFilter from '../../assets/table-filter.png';
 
@@ -25,6 +26,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 
@@ -33,6 +47,9 @@ class EventTable extends React.Component {
     render() {
         return(
             <div className={this.props.classes.content}>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=O6HnfsjFQAg"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     The shellbag event table displays the interpreted shellbag events taken from the parsed shellbags. More information on shellbag
                     events can be found in the shellbag event tab from the menu.

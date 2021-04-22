@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import ReportMenu from '../../assets/report-menu.png';
 import Modules from '../../assets/modules.png';
 import ExportButton from '../../assets/export-button.png';
@@ -30,6 +31,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class Exporting extends React.Component {
@@ -53,6 +67,9 @@ class Exporting extends React.Component {
                     2. From the report menu, users can select what types of modules they want added to the report.
                 </Typography>
                 <img src={Modules} alt="shellbag-export" />
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=SD2aOUyG2Og"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     <b>Module Types:</b>
                 </Typography>

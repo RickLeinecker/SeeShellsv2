@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import EmptyFilter from '../../assets/empty-filter-controls.png';
 import FilterTime from '../../assets/filter-time-selection.png';
 
@@ -27,6 +28,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class Filtering extends React.Component {
@@ -42,6 +56,9 @@ class Filtering extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     <b>To use the filter controls:</b>
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=O6HnfsjFQAg"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Select a user of interest.
                 </Typography>

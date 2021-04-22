@@ -15,6 +15,7 @@ import HexViewer from '../components/documentation-page/HexViewer.js';
 import RegistryView from '../components/documentation-page/RegistryView.js';
 import Filtering from '../components/documentation-page/Filtering.js';
 import Exporting from '../components/documentation-page/Exporting.js';
+import Hints from '../components/documentation-page/Hints.js';
 
 import ReactPlayer from "react-player";
 
@@ -210,6 +211,11 @@ class DocumentationPage extends React.Component {
                     {this.props.subpage === "export" &&
                         <Paper className={this.props.classes.content}>
                             <Exporting/>
+                        </Paper>
+                    }
+                    {this.props.subpage === "hints" &&
+                        <Paper className={this.props.classes.content}>
+                            <Hints/>
                         </Paper>
                     }
                 </Paper>

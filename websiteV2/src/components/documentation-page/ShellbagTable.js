@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import ShellbagTableImg from '../../assets/shellbag-table.png';
 
 const styles = {
@@ -26,6 +27,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class ShellbagTable extends React.Component {
@@ -41,6 +55,9 @@ class ShellbagTable extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     <b>To sort by a particular field:</b>
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=zQKC2NBcYzc"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Click the column header and the fields will sort in ascending order.
                 </Typography>

@@ -88,7 +88,7 @@ class CaseStudies extends React.Component {
                         </div>
                     </Paper>
                     <Paper className={this.props.classes.video}>
-                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=n38WWu_T49Q"/>
                         <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Arasaka Phishing Incident</Typography>
                         <div className={this.props.classes.buttonContainer}>
                             <Tooltip title="Case Study PDF">

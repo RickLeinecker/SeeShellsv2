@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import OfflineParse from '../../assets/offline-parse.png';
 import ImportSelect from '../../assets/import-select.png';
 import RegistryHive from '../../assets/registry-hive.png';
@@ -29,6 +30,19 @@ const styles = {
     text: {
         textAlign: 'center',
         padding: '1%',
+    },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
     },
 }
 
@@ -70,11 +84,17 @@ class OfflineParsing extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     2. Under "Import Registry" on the Start Menu, select "From Registry File"
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=O6HnfsjFQAg"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     a. Alternatively, a user can navigate to the global menu in the upper left corner and select
                     File > Import > From Offline Registry
                 </Typography>
                 <img src={ImportSelect} alt="import-select" />
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=ngPgepgKYek"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     3. In the File Dialog, navigate to the UsrClass.dat file to be parsed
                 </Typography>

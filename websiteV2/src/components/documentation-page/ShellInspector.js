@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import ShellInspector from '../../assets/shell-inspector.png';
 
 const styles = {
@@ -26,6 +27,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class OnlineParsing extends React.Component {
@@ -45,6 +59,9 @@ render() {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     After selecting a shellbag from one of the other views, the user can use this display to look at the data fields.
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=y2vmbEk9Jxw"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     This information is extracted from an offset in the hex values, visible in the Hex Viewer.
                 </Typography>

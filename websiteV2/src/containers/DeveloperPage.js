@@ -73,7 +73,7 @@ class DeveloperPage extends React.Component {
                     <DeveloperProfile version={2} name="Kaylee Hoyt" role="V2 Team: Website Developer"/>
                     <DeveloperProfile version={2} name="Jake Meyer" role="V2 Team: WPF Timeline UI, Shellbag Export and Tagging"/>
                     <DeveloperProfile version={2} name="Spencer Ross" role="V2 Team: Team Manager, Application Testing and Backend Configuration"/>
-                    <DeveloperProfile version={2} name="Joshua Rueda" role="V2 Team: Video Producer"/>
+                    <DeveloperProfile version={2} name="Joshua Rueda" role="V2 Team: Video Producer, Case Study Writer"/>
                     <DeveloperProfile version={0} name="Rick Leinecker" role="Project Sponsor"/>
                 </Paper>
             </Paper>

@@ -122,6 +122,9 @@ function App(props) {
           <Route exact path="/documentation/export">
             <DocumentationPage subpage="export"/>
           </Route>
+          <Route exact path="/documentation/hints">
+            <DocumentationPage subpage="hints"/>
+          </Route>
 
           <Route exact path="/developers">
             <DeveloperPage/>

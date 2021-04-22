@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Paper } from '@material-ui/core';
+import ReactPlayer from "react-player";
 import OnlineParse from '../../assets/online-parse.png';
 import ImportSelect from '../../assets/import-select.png';
 import OnlineHive from '../../assets/live-registry-parse.png';
@@ -28,6 +29,19 @@ const styles = {
         textAlign: 'center',
         padding: '1%',
     },
+    video: {
+        maxHeight: '360px',
+        maxWidth: '640px',
+        minHeight: '360px',
+        minWidth: '300px',
+        height: '50%',
+        width: '50%',
+        margin: '10px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        backgroundColor: '#424242',
+    },
 }
 
 class OnlineParsing extends React.Component {
@@ -46,10 +60,16 @@ render() {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Select the option that says "From Active Registry" from the start menu of the application.
                 </Typography>
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=jxLqeHEcFWo"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     a. Alternatively, if SeeShells is already running, select Import > From Live Registry
                 </Typography>
                 <img src={ImportSelect} alt="import-select" />
+                <Paper className={this.props.classes.video}>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=9p-ahxUJ6wI"/>
+                </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     2. The shellbags from the live machine will populate the multiple views available in SeeShells and 
                     the user can explore the shellbags and the extrapolated shellbag events.
