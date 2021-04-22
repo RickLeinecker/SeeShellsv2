@@ -55,6 +55,10 @@ class Filtering extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     4. All views should update to only display shellbags within the selected criteria.
                 </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Users can pick specific event types to look for in their filter controls. 
+                    The user can filter by any of these fields independently, or narrow filters as much as they would like.
+                </Typography>
             </div>
         )
     }

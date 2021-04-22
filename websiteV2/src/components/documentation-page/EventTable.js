@@ -1,9 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import OnlineParse from '../../assets/online-parse.png';
-import ImportSelect from '../../assets/import-select.png';
-import OnlineHive from '../../assets/live-registry-parse.png';
+import EventTableImg from '../../assets/shellbag-event-table.png';
+import TableFilter from '../../assets/table-filter.png';
 
 const styles = {
     content: {
@@ -13,8 +12,6 @@ const styles = {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         alignItems: 'center',
-        overflow: 'auto',
-        borderRadius: '0',
     },
     title: {
         fontSize: '50px',
@@ -30,35 +27,36 @@ const styles = {
     },
 }
 
-class OnlineParsing extends React.Component {
-    
-render() {
+
+class EventTable extends React.Component {
+
+    render() {
         return(
             <div className={this.props.classes.content}>
-                <Typography variant="title" className={this.props.classes.title}>Online Parsing</Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Online Parsing refers to parsing shellbag data directly from the machine presently in use.
+                    The shellbag event table displays the interpreted shellbag events taken from the parsed shellbags. More information on shellbag
+                    events can be found in the shellbag event tab from the menu.
                 </Typography>
-                <img src={OnlineParse} alt="online-parse" />
+                <img src={EventTableImg} alt="event-table" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    To parse an active registry:
-                </Typography>
-                <Typography variant="subtitle1" className={this.props.classes.text}>
-                    1. Select the option that says "From Active Registry" from the start menu of the application.
+                    To sort by a particular field:
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    a. Alternatively, if SeeShells is already running, select Import > From Live Registry
+                    1. Click the column header and the fields will sort in ascending order.
                 </Typography>
-                <img src={ImportSelect} alt="import-select" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    2. The shellbags from the live machine will populate the multiple views available in SeeShells and 
-                    the user can explore the shellbags and the extrapolated shellbag events.
+                    2. Click the column header again and the fields will sort in descending order.
                 </Typography>
-                <img src={OnlineHive} alt="offline-hive" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    3. Click on a different column header to sort by a different field.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    When a user filters by shellbag event type on the timeline, the table will update to highlight only events of that type.
+                </Typography>
+                <img src={TableFilter} alt='table-filter'/>
             </div>
-            
-        )
+        );
     }
 }
 
-export default withStyles(styles)(OnlineParsing);
+export default withStyles(styles)(EventTable);

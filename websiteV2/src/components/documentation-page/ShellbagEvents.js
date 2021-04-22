@@ -55,25 +55,28 @@ class ShellbagEvents extends React.Component {
                     Shellbag Events include:
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Creation
+                    Item Creation: The time an item was created. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Last Access
+                    Item Last Access: The last time the user accessed the item. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Item Last Modify
+                    Item Last Modify: The last time the user modified the item. 
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                     Item Last Registry Write
+                     Item Last Registry Write: The last time there was a registry write in regards to a particular item. 
                  </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Program Installation Event
+                    Program Installation Event: A file system entry was found and interpreted as the installation of a program at a certain time.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    Feature Update Event
+                    Feature Update Event: Many simultaneous registry writes occurred at the same time, suggesting a Windows Update was installed at a certain time.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    File Download Event 
+                    File Download Event: A file system entry was found and interpreted as the download of a file at a certain time.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Removable Storage Device Connect: A removable storage device was connected or disconnected at a certain time.
                 </Typography>
             </div>
         )

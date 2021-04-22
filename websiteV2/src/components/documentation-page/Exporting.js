@@ -1,7 +1,11 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Placeholder from '../../assets/seeshellsLogo-small.png';
+import ReportMenu from '../../assets/report-menu.png';
+import Modules from '../../assets/modules.png';
+import ExportButton from '../../assets/export-button.png';
+import ModulesOptions from '../../assets/report-menu-arrow.png';
+import Print from '../../assets/print.png';
 
 const styles = {
     content: {
@@ -37,7 +41,71 @@ class Exporting extends React.Component {
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     The exporting feature allows users to export shellbags in a report format.
                 </Typography>
-                <img src={Placeholder} alt="shellbag-export" />
+                <img src={ReportMenu} alt="shellbag-export" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    To export analyzed shellbags into a report format:
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    1. From the global menu, select Export > As Report
+                </Typography>
+                <img src={ExportButton} alt="shellbag-export" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    2. From the report menu, users can select what types of modules they want added to the report.
+                </Typography>
+                <img src={Modules} alt="shellbag-export" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Module Types:
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Captioned HeatMap: inserts a heatmap with a text editor to the side. The user can then type in that text editor.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Captioned Histogram: inserts a histogram with a text editor to the side. The user can then type in that text editor.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Heatmap and Histogram: inserts a side-by-side image of a heatmap and a histogram.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Header: inserts a textbox that includes a default header. The user can leave in the default text, add to it, or replace it with their own.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Heatmap: inserts a heatmap.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Overview: inserts a pie graph with shellbag event types as percentages, the number of shellbags, the number of shellbag events,
+                     and the timespan the shellbags are from.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    TextBox: inserts a blank textbox that the user can type in.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    ShellEvent Table: inserts a shellbag event table filled with shellbags.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Captioned HeatMap: inserts a heatmap with a text editor to the side. The user can then type in that text editor.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    Timeline Histogram: inserts a timeline.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    All of these views can be interacted with from this menu, to only show the specifics that the user wants to display. Events can be pre-filtered before
+                     exporting as a report.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    3. Once all desired views are on the report mock-up, the user can change the order of the modules using the arrows next to each module.
+                </Typography>
+                <img src={ModulesOptions} alt="shellbag-export" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    4. Modules can be deleted by clicking on the X from the same menu.
+                </Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    5. When finished, select the print button at the bottom of the menu.
+                </Typography>
+                <img src={Print} alt="shellbag-export" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    6. The report can then be saved as a PDF or XPS, sent directly to printer, or sent to OneNote, where the user can add annotations using the Windows
+                     Print Dialog.
+                </Typography>
             </div>
         )
     }
