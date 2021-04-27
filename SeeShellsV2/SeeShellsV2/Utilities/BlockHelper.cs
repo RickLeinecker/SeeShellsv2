@@ -149,7 +149,7 @@ namespace SeeShellsV2.Utilities
         /// </summary>
         /// <param name="buf">byte array to unpack from</param>
         /// <param name="offset">offset of the first byte of the dos datetime</param>
-        /// <returns>unpacked date in local time</returns>
+        /// <returns>unpacked date in UTC</returns>
         public static DateTime UnpackDosDateTime(byte[] buf, int offset)
         {
             try
@@ -172,7 +172,7 @@ namespace SeeShellsV2.Utilities
                 int minute = (dostime & 0x7E0) >> 5;
                 int hour = (dostime & 0xF800) >> 11;
 
-                return new DateTime(year, month, day, hour, minute, sec, DateTimeKind.Local);
+                return new DateTime(year, month, day, hour, minute, sec, DateTimeKind.Utc);
             }
             catch (Exception ex)
             {
@@ -186,12 +186,12 @@ namespace SeeShellsV2.Utilities
         /// </summary>
         /// <param name="buf">byte array to unpack from</param>
         /// <param name="offset">offset of the first byte of the filetime</param>
-        /// <returns>unpacked date in local time</returns>
+        /// <returns>unpacked date in UTC</returns>
         public static DateTime UnpackFileTime(byte[] buf, int offset)
         {
             try
             {
-                return DateTime.FromFileTime(BitConverter.ToInt64(buf, offset));
+                return DateTime.FromFileTimeUtc(BitConverter.ToInt64(buf, offset));
             }
             catch (Exception ex)
             {

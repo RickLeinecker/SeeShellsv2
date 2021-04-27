@@ -78,7 +78,7 @@ namespace SeeShellsV2.Utilities
                 buf = Marshal.AllocHGlobal(cb);
                 Marshal.StructureToPtr(ft, buf, false);
                 Marshal.Copy(buf, longArray, 0, 1);
-                return DateTime.FromFileTime(longArray[0]);
+                return DateTime.FromFileTimeUtc(longArray[0]);
             }
             finally
             {
