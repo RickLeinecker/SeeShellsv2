@@ -65,7 +65,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Size == 0x62);
             Assert.IsTrue(item.UriFlags == (UriShellItem.UriFlagBits)0x03);
             Assert.IsTrue(item.Uri == "ftp");
-            Assert.IsTrue(item.ConnectedDate == new DateTime(636202939949621621, DateTimeKind.Utc).ToLocalTime());
+            Assert.IsTrue(item.ConnectedDate == new DateTime(636202939949621621, DateTimeKind.Utc));
             Assert.IsTrue(item.FTPHostname == "sonicfan1.tk");
             Assert.IsTrue(item.FTPUsername == "a8849466");
             Assert.IsTrue(item.FTPPassword == string.Empty);
@@ -122,7 +122,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Size == 0x52);
             Assert.IsTrue(item.UriFlags == (UriShellItem.UriFlagBits)0x03);
             Assert.IsTrue(item.Uri == "ftp");
-            Assert.IsTrue(item.ConnectedDate == new DateTime(636236802532428509, DateTimeKind.Utc).ToLocalTime());
+            Assert.IsTrue(item.ConnectedDate == new DateTime(636236802532428509, DateTimeKind.Utc));
             Assert.IsTrue(item.FTPHostname == "192.168.132.192");
             Assert.IsTrue(item.FTPUsername == string.Empty);
             Assert.IsTrue(item.FTPPassword == string.Empty);

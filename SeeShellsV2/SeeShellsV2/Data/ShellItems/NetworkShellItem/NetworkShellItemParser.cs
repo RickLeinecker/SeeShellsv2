@@ -84,17 +84,6 @@ namespace SeeShellsV2.Data
                     .SkipLast(1)
                     .Aggregate("\\", (string a, string b) => a + "\\" + b);
 
-                Place p = new NetworkLocation()
-                {
-                    Name = networklocation,
-                    PathName = string.Empty,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 NetworkShellItem item = new NetworkShellItem()
                 {
                     Size = size,
@@ -105,7 +94,11 @@ namespace SeeShellsV2.Data
                     NetworkLocation = networklocation,
                     NetworkDescription = networkdescription,
                     NetworkComments = networkcomments,
-                    Place = p,
+                    Place = new NetworkLocation()
+                    {
+                        Name = networklocation,
+                        PathName = string.Empty,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

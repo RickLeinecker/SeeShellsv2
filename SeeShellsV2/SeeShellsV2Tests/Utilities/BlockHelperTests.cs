@@ -175,7 +175,7 @@ namespace SeeShellsV2.Utilities.Tests
         public void UnpackFileTimeTest()
         {
             byte[] buf = new byte[] { 0x00, 0x75, 0xA1, 0x4A, 0xDE, 0x1C, 0x71, 0xD2, 0x01 };
-            Assert.IsTrue(BlockHelper.UnpackFileTime(buf, 1) == new DateTime(636202939949621621, DateTimeKind.Utc).ToLocalTime());
+            Assert.IsTrue(BlockHelper.UnpackFileTime(buf, 1) == new DateTime(636202939949621621, DateTimeKind.Utc));
         }
     }
 }

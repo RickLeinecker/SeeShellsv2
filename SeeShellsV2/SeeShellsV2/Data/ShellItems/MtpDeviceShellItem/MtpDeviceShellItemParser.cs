@@ -50,17 +50,6 @@ namespace SeeShellsV2.Data
                 offset += 2 * (devicename.Length + 1);
                 string devicepath = BlockHelper.UnpackWString(value, offset);
 
-                Place p = new RemovableDevice()
-                {
-                    Name = devicename,
-                    PathName = parent != null ? Path.Combine(parent.Place.PathName ?? string.Empty, parent.Place.Name) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 MtpDeviceShellItem item = new MtpDeviceShellItem()
                 {
                     Size = size,
@@ -68,7 +57,11 @@ namespace SeeShellsV2.Data
                     TypeName = typename,
                     SubtypeName = subtypename,
                     InternalDevicePath = devicepath,
-                    Place = p,
+                    Place = new RemovableDevice()
+                    {
+                        Name = devicename,
+                        PathName = parent != null ? Path.Combine(parent.Place.PathName ?? string.Empty, parent.Place.Name) : null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

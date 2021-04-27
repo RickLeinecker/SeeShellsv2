@@ -50,24 +50,17 @@ namespace SeeShellsV2.Data
                 string pathname = BlockHelper.UnpackWString(value, offset);
                 offset += 2 * (pathname.Length + 1); // path name string size
 
-                Place p = new CompressedFolder()
-                {
-                    Name = filename,
-                    PathName = parent != null ? Path.Join(parent.Place?.PathName ?? string.Empty, parent.Place?.Name ?? string.Empty) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 IShellItem retval = new CompressedFolderShellItem()
                 {
                     Size = size,
                     Type = type,
                     TypeName = typename,
                     ModifiedDate = modified,
-                    Place = p,
+                    Place = new CompressedFolder()
+                    {
+                        Name = filename,
+                        PathName = parent != null ? Path.Join(parent.Place?.PathName ?? string.Empty, parent.Place?.Name ?? string.Empty) : null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

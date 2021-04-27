@@ -26,7 +26,8 @@ namespace SeeShellsV2.Services.Tests
             IConfig config = new Config
             {
                 UsernameLocations = new List<string>() {
-                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
                 },
                 UserRegistryLocations = new List<string>() {
                     "ntuser.dat",
@@ -44,10 +45,17 @@ namespace SeeShellsV2.Services.Tests
                 KnownGuids = new Dictionary<string, string>()
             };
 
-            container.RegisterInstance<IConfig>(config);
+            Selected selected = new Selected();
+            ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterType<IShellItemCollection, ShellItemCollection>();
-            container.RegisterInstance<ISelected>(null);
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
+            container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
@@ -62,7 +70,8 @@ namespace SeeShellsV2.Services.Tests
             IConfig config = new Config
             {
                 UsernameLocations = new List<string>() {
-                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
                 },
                 UserRegistryLocations = new List<string>() {
                     "ntuser.dat",
@@ -80,12 +89,17 @@ namespace SeeShellsV2.Services.Tests
                 KnownGuids = new Dictionary<string, string>()
             };
 
-            container.RegisterInstance<IConfig>(config);
-            container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterInstance<ISelected>(null);
-
+            Selected selected = new Selected();
             ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+
+            container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
@@ -102,7 +116,8 @@ namespace SeeShellsV2.Services.Tests
             IConfig config = new Config
             {
                 UsernameLocations = new List<string>() {
-                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
                 },
                 UserRegistryLocations = new List<string>() {
                     "ntuser.dat",
@@ -120,18 +135,25 @@ namespace SeeShellsV2.Services.Tests
                 KnownGuids = new Dictionary<string, string>()
             };
 
-            container.RegisterInstance<IConfig>(config);
-            container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterInstance<ISelected>(null);
-
+            Selected selected = new Selected();
             ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+            
+            container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
             (_, IEnumerable<IShellItem> items) = regImporter.ImportRegistry(false, true, "Resources\\UsrClass.dat");
 
             Assert.IsTrue(shellItems.Count == items.Count());
+            Assert.IsTrue(registries.Count == 1);
+            Assert.IsTrue(registries.First().Places.Distinct().SequenceEqual(registries.First().Places));
         }
     }
 }

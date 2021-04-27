@@ -40,7 +40,30 @@ namespace SeeShellsV2.Factories
         {
             foreach (var parser in parsers)
                 if (parser.CanParse(hive, keyWrapper, value, parent))
-                    return parser.Parse(hive, keyWrapper, value, parent);
+                {
+                    var item = parser.Parse(hive, keyWrapper, value, parent);
+
+                    if (item == null)
+                        continue;
+
+                    // replace the Place object created by the parser with an existing copy
+                    // if the place has been observed before. This keeps place objects
+                    // unique so they can be used as keys to search for shell items
+                    if (hive != null && hive.Places.Contains(item.Place))
+                    {
+                        var place = hive.Places.First(place => place == item.Place);
+
+                        item.GetType()
+                            .GetField("fields", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .SetValue(item, place);
+                    }
+                    else if (hive != null)
+                    {
+                        hive.Places.Add(item.Place);
+                    }
+
+                    return item;
+                }
 
             return null;
         }

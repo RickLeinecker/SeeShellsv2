@@ -91,14 +91,12 @@ namespace SeeShellsV2.Data.Tests
 
             MtpFileEntryShellItem item = parser.Parse(null, null, buf) as MtpFileEntryShellItem;
 
-            Assert.IsTrue(item.Fields.Count == 14);
+            Assert.IsTrue(item.Fields.Count == 12);
 
             Assert.IsTrue(item.Fields.ContainsKey("Size"));
             Assert.IsTrue(item.Fields.ContainsKey("Signature"));
             Assert.IsTrue(item.Fields.ContainsKey("TypeName"));
             Assert.IsTrue(item.Fields.ContainsKey("SubtypeName"));
-            Assert.IsTrue(item.Fields.ContainsKey("ModifiedDate"));
-            Assert.IsTrue(item.Fields.ContainsKey("CreationDate"));
             Assert.IsTrue(item.Fields.ContainsKey("Place"));
             Assert.IsTrue(item.Fields.ContainsKey("FolderId"));
             Assert.IsTrue(item.Fields.ContainsKey("Description"));
@@ -107,8 +105,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Fields["Signature"] as uint? == item.Signature);
             Assert.IsTrue(item.Fields["TypeName"] as string == item.TypeName);
             Assert.IsTrue(item.Fields["SubtypeName"] as string == item.SubtypeName);
-            Assert.IsTrue(item.Fields["ModifiedDate"] as DateTime? == item.ModifiedDate);
-            Assert.IsTrue(item.Fields["CreationDate"] as DateTime? == item.CreationDate);
             Assert.IsTrue(item.Fields["Place"] as Place == item.Place);
             Assert.IsTrue(item.Fields["FolderId"] as string == item.FolderId);
             Assert.IsTrue(item.Fields["Description"] as string == item.Description);
@@ -117,8 +113,6 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Signature == 0x07192006);
             Assert.IsTrue(item.TypeName == "Media Transfer Protocol");
             Assert.IsTrue(item.SubtypeName == "File Entry");
-            Assert.IsTrue(item.ModifiedDate == new DateTime(635858328930000000, DateTimeKind.Utc).ToLocalTime());
-            Assert.IsTrue(item.CreationDate == new DateTime(635858328930000000, DateTimeKind.Utc).ToLocalTime());
             Assert.IsTrue(item.Place.Name == "DCIM");
             Assert.IsTrue(item.FolderId == "{00000001-0000-0000-0100-000000000000}");
             Assert.IsTrue(item.Description == "DCIM");

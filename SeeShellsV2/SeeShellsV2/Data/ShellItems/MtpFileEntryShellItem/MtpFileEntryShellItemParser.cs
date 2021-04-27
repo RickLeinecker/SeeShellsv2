@@ -45,9 +45,6 @@ namespace SeeShellsV2.Data
                 string typename = "Media Transfer Protocol";
                 string subtypename = "File Entry";
 
-                //DateTime modified = BlockHelper.UnpackFileTime(value, 0x1A);
-                //DateTime created = BlockHelper.UnpackFileTime(value, 0x22);
-
                 int offset = 0x4A;
                 string foldername = BlockHelper.UnpackWString(value, offset);
                 offset += 2 * (foldername.Length + 1);
@@ -60,26 +57,17 @@ namespace SeeShellsV2.Data
 
                 string folderid = BlockHelper.UnpackWString(value, offset);
 
-                Place p = new Folder()
-                {
-                    Name = foldername,
-                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 MtpFileEntryShellItem item = new MtpFileEntryShellItem()
                 {
                     Size = size,
                     Signature = signature,
                     TypeName = typename,
                     SubtypeName = subtypename,
-                    //ModifiedDate = modified,
-                    //CreationDate = created,
-                    Place = p,
+                    Place = new Folder()
+                    {
+                        Name = foldername,
+                        PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

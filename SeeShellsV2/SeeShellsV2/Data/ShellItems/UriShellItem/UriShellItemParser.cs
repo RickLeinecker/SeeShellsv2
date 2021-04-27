@@ -125,17 +125,6 @@ namespace SeeShellsV2.Data
                     }
                 }
 
-                Place p = new NetworkLocation()
-                {
-                    Name = ftphostname ?? uri ?? string.Empty,
-                    PathName = null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 UriShellItem item = new UriShellItem()
                 {
                     Size = size,
@@ -147,7 +136,11 @@ namespace SeeShellsV2.Data
                     FTPUsername = ftpusername,
                     FTPPassword = ftppassword,
                     Uri = uri,
-                    Place = p,
+                    Place = new NetworkLocation()
+                    {
+                        Name = ftphostname ?? uri ?? string.Empty,
+                        PathName = null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

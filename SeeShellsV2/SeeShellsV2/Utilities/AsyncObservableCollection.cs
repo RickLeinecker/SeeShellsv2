@@ -9,7 +9,7 @@ namespace SeeShellsV2.Utilities
 {
     public class AsyncObservableCollection<T> : ObservableCollection<T>
     {
-        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
 
         public AsyncObservableCollection()
         { }

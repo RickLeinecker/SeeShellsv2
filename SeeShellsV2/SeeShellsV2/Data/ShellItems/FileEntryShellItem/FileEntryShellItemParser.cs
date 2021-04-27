@@ -73,17 +73,6 @@ namespace SeeShellsV2.Data
                 if (BlockHelper.UnpackDWord(value, extensionOffset + 4) == 0xBEEF0004)
                     extensionBlock = new ExtensionBlockBEEF0004(value, extensionOffset);
 
-                Place p = new Folder()
-                {
-                    Name = extensionBlock?.LongName ?? filePrimaryName,
-                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 FileEntryShellItem item = new FileEntryShellItem()
                 {
                     Size = size,
@@ -95,7 +84,11 @@ namespace SeeShellsV2.Data
                     AccessedDate = extensionBlock?.AccessedDate ?? DateTime.MinValue,
                     CreationDate = extensionBlock?.CreationDate ?? DateTime.MinValue,
                     FileAttributes = (FileEntryShellItem.FileAttributeFlags)fileattributes,
-                    Place = p,
+                    Place = new Folder()
+                    {
+                        Name = extensionBlock?.LongName ?? filePrimaryName,
+                        PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

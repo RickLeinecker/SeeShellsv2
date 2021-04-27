@@ -49,17 +49,6 @@ namespace SeeShellsV2.Data
                 offset += 2 * (storageid.Length + 1);
                 string filesystemname = BlockHelper.UnpackWString(value, offset);
 
-                Place p = new SystemFolder()
-                {
-                    Name = storagename,
-                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 MtpVolumeShellItem item = new MtpVolumeShellItem()
                 {
                     Size = size,
@@ -68,7 +57,11 @@ namespace SeeShellsV2.Data
                     SubtypeName = subtypename,
                     StorageId = storageid,
                     FileSystemName = filesystemname,
-                    Place = p,
+                    Place = new SystemFolder()
+                    {
+                        Name = storagename,
+                        PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                    },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,

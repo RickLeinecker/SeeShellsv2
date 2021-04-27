@@ -51,7 +51,7 @@ namespace SeeShellsV2.Data.Tests
             Assert.IsTrue(item.Type == 0xC3);
             Assert.IsTrue(item.TypeName == "Network NetworkLocation");
             Assert.IsTrue(item.SubtypeName == "Share UNC Path");
-            Assert.IsTrue(item.Description == "Users");
+            Assert.IsTrue(item.Description == "\\\\192.168.80.129\\Users");
             Assert.IsTrue(item.Size == 0x31);
             Assert.IsTrue(item.NetworkFlags == (NetworkShellItem.NetworkFlagBits.Unknown1 | NetworkShellItem.NetworkFlagBits.HasDescription | NetworkShellItem.NetworkFlagBits.HasComments));
             Assert.IsTrue(item.NetworkLocation == "\\\\192.168.80.129\\Users");

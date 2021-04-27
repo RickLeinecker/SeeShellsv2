@@ -117,7 +117,7 @@ namespace SeeShellsV2.Utilities
             return GetEnumerator();
         }
 
-        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
+        private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
 
         protected void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {

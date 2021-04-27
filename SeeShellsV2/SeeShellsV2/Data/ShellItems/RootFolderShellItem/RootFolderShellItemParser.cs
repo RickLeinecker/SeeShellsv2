@@ -132,24 +132,6 @@ namespace SeeShellsV2.Data
                     }
                 }
 
-                Place p = subtypename == "Removable Drive" ?
-                new RemovableDrive()
-                {
-                    Name = rootfoldername,
-                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                }
-                :
-                new SystemFolder()
-                {
-                    Name = rootfoldername,
-                    PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
-                };
-
-                if (hive.Places.Contains(p))
-                    p = hive.Places.First(place => place == p);
-                else
-                    hive.Places.Add(p);
-
                 RootFolderShellItem item = new RootFolderShellItem()
                 {
                     Size = size,
@@ -160,7 +142,18 @@ namespace SeeShellsV2.Data
                     RootFolderGuid = rootfolderguid,
                     SortIndex = sortindex,
                     SortIndexDescription = sortindexdescription,
-                    Place = p,
+                    Place = subtypename == "Removable Drive" ?
+                        new RemovableDrive()
+                        {
+                            Name = rootfoldername,
+                            PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                        }
+                        :
+                        new SystemFolder()
+                        {
+                            Name = rootfoldername,
+                            PathName = parent != null ? Path.Join(parent.Place.PathName, parent.Place.Name) : null,
+                        },
                     RegistryHive = hive,
                     Value = value,
                     NodeSlot = keyWrapper?.NodeSlot,
