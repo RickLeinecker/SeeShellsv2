@@ -67,6 +67,10 @@ class CaseStudies extends React.Component {
             <div className={this.props.classes.content}>
                 <Typography variant="title" className={this.props.classes.title}>Case Studies</Typography>
                 <Paper className={this.props.classes.caseStudies}>
+                    <Typography variant="subtitle1" className={this.props.classes.text}>
+                        The following videos are a series of case studies. Provided below are PDF walkthroughs that supplement the videos, and UsrClass.dat 
+                        files used for each case study, that can be downloaded and imported into SeeShells.
+                    </Typography>
                     <Paper className={this.props.classes.video}>
                         <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=fzK-bUQrIxg"/>
                         <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Tehsla IP Theft</Typography>
@@ -108,7 +112,7 @@ class CaseStudies extends React.Component {
                         </div>
                     </Paper>
                     <Paper className={this.props.classes.video}>
-                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
+                        <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=dp1xxl1BGcE"/>
                         <Typography variant="title" className={this.props.classes.caseStudy}>Case Study: Hooli Workstation Analysis</Typography>
                         <div className={this.props.classes.buttonContainer}>
                             <Tooltip title="Case Study PDF">

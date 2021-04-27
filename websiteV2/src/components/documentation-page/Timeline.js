@@ -50,7 +50,7 @@ class Timeline extends React.Component {
         return(
             <div className={this.props.classes.content}>
                 <Paper className={this.props.classes.video}>
-                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=O6HnfsjFQAg"/>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=Cea0mb0ONsU"/>
                 </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     The timeline contains a color-coded overview of shellbag events. 

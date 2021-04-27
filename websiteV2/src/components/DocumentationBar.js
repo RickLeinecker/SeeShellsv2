@@ -84,6 +84,8 @@ class DocumentationBar extends React.Component {
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="registry">Registry View</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filters</Button>
                             <Button className={this.props.classes.buttons} onClick={this.handleClick} id="export">Exporting</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="themes">Themes</Button>
+                            <Button className={this.props.classes.buttons} onClick={this.handleClick} id="reset">Resetting</Button>
                         </ButtonGroup>
                     </Paper>
             </div>

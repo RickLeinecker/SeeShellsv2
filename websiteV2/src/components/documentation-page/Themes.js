@@ -2,8 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography, Paper } from '@material-ui/core';
 import ReactPlayer from "react-player";
-import EventTableImg from '../../assets/shellbag-event-table.png';
-import TableFilter from '../../assets/table-filter.png';
+import LightTheme from '../../assets/light-theme.png';
+import Toggle from '../../assets/toggle.png';
 
 const styles = {
     content: {
@@ -13,6 +13,8 @@ const styles = {
         justifyContent: 'flex-start',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: 'auto',
+        borderRadius: '0',
     },
     title: {
         fontSize: '50px',
@@ -41,39 +43,35 @@ const styles = {
     },
 }
 
-
-class EventTable extends React.Component {
+class Themes extends React.Component {
 
     render() {
-        return(
+        return (
             <div className={this.props.classes.content}>
+                <Typography variant="title" className={this.props.classes.title}>Themes</Typography>
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    SeeShells has both light and dark themes. It is set to dark by default.
+                </Typography>
+                <img src={LightTheme} alt="light-theme" />
+                <Typography variant="subtitle1" className={this.props.classes.text}>
+                    <b>To switch themes:</b>
+                </Typography>
                 <Paper className={this.props.classes.video}>
-                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=Yxewd4y6Y7Y"/>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=eABrO823f-g"/>
                 </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    The shellbag event table displays the interpreted shellbag events taken from the parsed shellbags. More information on shellbag
-                    events can be found in the shellbag event tab from the menu.
+                    1. Click on the toggle in the upper right of the SeeShells Window to switch to light theme.
                 </Typography>
-                <img src={EventTableImg} alt="event-table" />
+                <img src={Toggle} alt="seeshells-toggle" />
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    <b>To sort by a particular field:</b>
-                </Typography>
-                <Typography variant="subtitle1" className={this.props.classes.text}>
-                    1. Click the column header and the fields will sort in ascending order.
+                    2. Click on the toggle again to switch back to dark.
                 </Typography>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
-                    2. Click the column header again and the fields will sort in descending order.
+                    3. All views will update accordingly with the theme's color scheme.
                 </Typography>
-                <Typography variant="subtitle1" className={this.props.classes.text}>
-                    3. Click on a different column header to sort by a different field.
-                </Typography>
-                <Typography variant="subtitle1" className={this.props.classes.text}>
-                    When a user filters by shellbag event type on the timeline, the table will update to highlight only events of that type.
-                </Typography>
-                <img src={TableFilter} alt='table-filter'/>
             </div>
-        );
+        )
     }
 }
 
-export default withStyles(styles)(EventTable);
+export default withStyles(styles)(Themes);

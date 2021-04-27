@@ -57,7 +57,7 @@ class Filtering extends React.Component {
                     <b>To use the filter controls:</b>
                 </Typography>
                 <Paper className={this.props.classes.video}>
-                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=O6HnfsjFQAg"/>
+                    <ReactPlayer height='100%' width='100%' url="https://www.youtube.com/watch?v=uOEdzZNzh7g"/>
                 </Paper>
                 <Typography variant="subtitle1" className={this.props.classes.text}>
                     1. Select a user of interest.

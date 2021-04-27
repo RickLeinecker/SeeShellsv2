@@ -16,6 +16,8 @@ import RegistryView from '../components/documentation-page/RegistryView.js';
 import Filtering from '../components/documentation-page/Filtering.js';
 import Exporting from '../components/documentation-page/Exporting.js';
 import Hints from '../components/documentation-page/Hints.js';
+import Themes from '../components/documentation-page/Themes.js';
+import Reset from '../components/documentation-page/Reset.js';
 
 import ReactPlayer from "react-player";
 
@@ -216,6 +218,16 @@ class DocumentationPage extends React.Component {
                     {this.props.subpage === "hints" &&
                         <Paper className={this.props.classes.content}>
                             <Hints/>
+                        </Paper>
+                    }
+                    {this.props.subpage === "themes" &&
+                        <Paper className={this.props.classes.content}>
+                            <Themes/>
+                        </Paper>
+                    }
+                    {this.props.subpage === "reset" &&
+                        <Paper className={this.props.classes.content}>
+                            <Reset/>
                         </Paper>
                     }
                 </Paper>
