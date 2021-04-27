@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/v2/static/css/main.4b80fef8.chunk.css",
-    "main.js": "/v2/static/js/main.a16f8ce7.chunk.js",
-    "main.js.map": "/v2/static/js/main.a16f8ce7.chunk.js.map",
+    "main.js": "/v2/static/js/main.e74a823a.chunk.js",
+    "main.js.map": "/v2/static/js/main.e74a823a.chunk.js.map",
     "runtime-main.js": "/v2/static/js/runtime-main.f949391f.js",
     "runtime-main.js.map": "/v2/static/js/runtime-main.f949391f.js.map",
-    "static/js/2.a2ad3ddf.chunk.js": "/v2/static/js/2.a2ad3ddf.chunk.js",
-    "static/js/2.a2ad3ddf.chunk.js.map": "/v2/static/js/2.a2ad3ddf.chunk.js.map",
+    "static/js/2.2435d4e4.chunk.js": "/v2/static/js/2.2435d4e4.chunk.js",
+    "static/js/2.2435d4e4.chunk.js.map": "/v2/static/js/2.2435d4e4.chunk.js.map",
     "static/js/3.f6110945.chunk.js": "/v2/static/js/3.f6110945.chunk.js",
     "static/js/3.f6110945.chunk.js.map": "/v2/static/js/3.f6110945.chunk.js.map",
     "index.html": "/v2/index.html",
     "static/css/main.4b80fef8.chunk.css.map": "/v2/static/css/main.4b80fef8.chunk.css.map",
-    "static/js/2.a2ad3ddf.chunk.js.LICENSE.txt": "/v2/static/js/2.a2ad3ddf.chunk.js.LICENSE.txt",
+    "static/js/2.2435d4e4.chunk.js.LICENSE.txt": "/v2/static/js/2.2435d4e4.chunk.js.LICENSE.txt",
     "static/media/beach2.a20cd2e5.png": "/v2/static/media/beach2.a20cd2e5.png",
     "static/media/beach3.a9a49290.png": "/v2/static/media/beach3.a9a49290.png",
     "static/media/croppedLogo.b0e6b31e.png": "/v2/static/media/croppedLogo.b0e6b31e.png",
@@ -23,6 +23,7 @@
     "static/media/hex-viewer-highlight.20870c91.png": "/v2/static/media/hex-viewer-highlight.20870c91.png",
     "static/media/hex-viewer.096d7c49.png": "/v2/static/media/hex-viewer.096d7c49.png",
     "static/media/import-hive.adc8f14c.png": "/v2/static/media/import-hive.adc8f14c.png",
+    "static/media/light-theme.996330db.png": "/v2/static/media/light-theme.996330db.png",
     "static/media/live-registry-parse.60a88591.png": "/v2/static/media/live-registry-parse.60a88591.png",
     "static/media/live-registry.4a3993c6.png": "/v2/static/media/live-registry.4a3993c6.png",
     "static/media/offline-hive.d9d40d37.png": "/v2/static/media/offline-hive.d9d40d37.png",
@@ -43,8 +44,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.f949391f.js",
-    "static/js/2.a2ad3ddf.chunk.js",
+    "static/js/2.2435d4e4.chunk.js",
     "static/css/main.4b80fef8.chunk.css",
-    "static/js/main.a16f8ce7.chunk.js"
+    "static/js/main.e74a823a.chunk.js"
   ]
 }
