@@ -15,6 +15,7 @@ namespace SeeShellsV2.Factories
 
         public ShellEventFactory([Dependency] IUnityContainer container)
         {
+            // construct event generators
             CreateFullEventGenerators(container);
             CreateIntermediateEventGenerators(container);
         }
@@ -23,6 +24,7 @@ namespace SeeShellsV2.Factories
         {
             List<IIntermediateShellEvent> shellEvents = new List<IIntermediateShellEvent>();
 
+            // try to generate events for every type, in order of priority
             foreach (var generator in iGenerators)
                 if (generator.CanGenerate(item))
                     shellEvents.AddRange(generator.Generate(item));
@@ -34,6 +36,7 @@ namespace SeeShellsV2.Factories
         {
             List<IShellEvent> shellEvents = new List<IShellEvent>();
 
+            // try to generate events for every type, in order of priority
             foreach (var generator in fGenerators)
                 if (generator.CanGenerate(sequence))
                     shellEvents.AddRange(generator.Generate(sequence));
@@ -43,17 +46,23 @@ namespace SeeShellsV2.Factories
 
         private void CreateFullEventGenerators(IUnityContainer container)
         {
+            // get all implementations of IShellEventGenerator from the assembly,
+            // construct an instance of each one, and sort according to priority.
+            // generators will be used by the factory to construct events
             fGenerators = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(IShellEventGenerator).IsAssignableFrom(p))
                 .Where(q => q.IsClass)
                 .Select(r => (IShellEventGenerator) container.Resolve(r))
-                .OrderBy(g => g.Priority)
+                .OrderByDescending(g => g.Priority)
                 .ToList();
         }
 
         private void CreateIntermediateEventGenerators(IUnityContainer container)
         {
+            // get all implementations of IIntermediateShellEventGenerator from the assembly
+            // and construct an instance of each one.
+            // generators will be used by the factory to construct intermediate events
             iGenerators = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(IIntermediateShellEventGenerator).IsAssignableFrom(p))

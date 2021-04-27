@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// Used to identify shell items with a last connected timestamp
+    /// </summary>
     public interface IConnectedTimestamp : IShellItem
     {
         DateTime ConnectedDate { get; }

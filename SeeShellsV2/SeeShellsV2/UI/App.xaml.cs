@@ -28,6 +28,8 @@ namespace SeeShellsV2.UI
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // Construct the main window and resolve dependencies of all nested views
             WindowFactory.Create("main").Show();
         }
 

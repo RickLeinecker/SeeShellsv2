@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\User\.nuget\packages\wpfhexaeditor\2.1.6\contentFiles\any\net5.0-windows7.0\Resources\EBCDIC-NoSpecialChar.tbl" />
+    <Content Remove="C:\Users\User\.nuget\packages\wpfhexaeditor\2.1.6\contentFiles\any\net5.0-windows7.0\Resources\EBCDIC.tbl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Config.json" />
     <None Remove="UI\Images\beach2.png" />
     <None Remove="UI\Images\SeeShells.png" />

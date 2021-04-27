@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// An object that stores parsed shellbag information. Each ShellItem corresponds to one shellbag.
+    /// </summary>
     public interface IShellItem : IComparable<IShellItem>
     {
         /// <summary>

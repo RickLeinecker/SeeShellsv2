@@ -20,6 +20,8 @@ using SeeShellsV2.Repositories;
 using SeeShellsV2.Factories;
 using SeeShellsV2.Utilities;
 
+// This code was adapted from the SeeShells V1 project
+
 namespace SeeShellsV2.Services
 {
     public class RegistryImporter : IRegistryImporter
@@ -58,10 +60,6 @@ namespace SeeShellsV2.Services
 
             User user = null;
             RegistryHive hive = null;
-
-            //RegistryHive hive = useOfflineHive ?
-            //    new RegistryHive() { Name = Path.GetFileName(hiveLocation), Path = hiveLocation, User = new User { Name = "oops", SID = "" } } :
-            //    new RegistryHive() { Name = "Live Registry", Path = "N/A", User = new User { Name = "oops", SID = "" } };
 
             IEnumerable<RegistryKeyWrapper> registryEnumerator = useOfflineHive ?
                 GetOfflineRegistryKeyIterator(hiveLocation) :
@@ -135,6 +133,7 @@ namespace SeeShellsV2.Services
                         {
                             off += BlockHelper.UnpackWord(buffer, off);
 
+                            // construct a placeholder item if the shellbag cannot be identified
                             shellItem = new UnknownShellItem()
                             {
                                 Place = new UnknownPlace()
@@ -165,10 +164,6 @@ namespace SeeShellsV2.Services
                     }
                 }
             }
-
-            // add the root item to the collection in the caller's thread
-            //if (hive.Items.Count > 0)
-            //    RegistryHives.Add(hive);
 
             RegistryImportEnd?.Invoke(this, EventArgs.Empty);
             return (hive, parsedItems);
@@ -301,9 +296,6 @@ namespace SeeShellsV2.Services
             string retval = string.Empty;
             try
             {
-                //if (hive.HiveType != OfflineRegistryType.NtUser)
-                //    return retval;
-
                 //todo refactor Parser.GetUsernameLocations() into key-value pairs for lookup, we have to hardcode key-values otherwise.
                 //todo we know of the Desktop value inside the "Shell Folders" location, so naively try this until a better way is found
                 Dictionary<string, int> likelyUsernames = new Dictionary<string, int>();

@@ -7,8 +7,16 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Services
 {
+	/// <summary>
+	/// A service that handles PDF report generation
+	/// </summary>
 	public interface IPdfExporter
 	{
-		public void Export(string filename, ObservableCollection<IPdfModule> moduleList);
+		/// <summary>
+		/// Renders the given <see cref="IPdfModule"/> instances to a paginated report and then
+		/// sends the report to a Windows Print Dialog
+		/// </summary>
+		/// <param name="moduleList">A list of modules to print</param>
+		public void Export(IEnumerable<IPdfModule> moduleList);
 	}
 }

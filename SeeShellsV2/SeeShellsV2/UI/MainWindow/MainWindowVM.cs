@@ -16,7 +16,6 @@ namespace SeeShellsV2.UI
 {
     public class MainWindowVM : ViewModel, IMainWindowVM
     {
-        [Dependency] public ICsvImporter CsvImporter { get; set; }
         [Dependency] public IRegistryImporter RegImporter { get; set; }
         [Dependency] public IShellEventManager ShellEventManager { get; set; }
         [Dependency] public ISelected Selected { get; set; }
@@ -40,11 +39,6 @@ namespace SeeShellsV2.UI
             proc.Start();
             Application.Current.Shutdown();
         }
-
-        //public void ExportToCSV(string path)
-        //{
-
-        //}
 
         public bool ImportFromRegistry(string hiveLocation = null)
         {
@@ -87,7 +81,6 @@ namespace SeeShellsV2.UI
             else
             {
                 Selected.CurrentInspector = root;
-                // Selected.CurrentEnumerable = root.Items;
 
                 Status = "Generating User Action Events...";
                 await Task.Run(() => ShellEventManager.GenerateEvents(parsedItems));

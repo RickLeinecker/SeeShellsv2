@@ -11,12 +11,24 @@ namespace SeeShellsV2.Data
     /// </summary>
     public class Place : IComparable<Place>
     {
+        /// <summary>
+        /// Type name of this place. Should be overriden by derived classes
+        /// </summary>
         public virtual string Type => "Place";
 
+        /// <summary>
+        /// The full path string of the directory that contains this place. Append <see cref="Name"/> for the complete path.
+        /// </summary>
         public string PathName { get; init; }
 
+        /// <summary>
+        /// The name of the Place (this is usually a directory name)
+        /// </summary>
         public string Name { get; init; }
 
+        /// <summary>
+        /// ShellItems that contain settings for this place
+        /// </summary>
         public IList<IShellItem> Items => _items;
 
         private IList<IShellItem> _items = new List<IShellItem>();

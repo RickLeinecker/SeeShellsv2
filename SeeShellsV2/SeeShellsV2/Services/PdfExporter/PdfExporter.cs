@@ -27,6 +27,9 @@ namespace SeeShellsV2.Services
 		public Dictionary<string, IPdfModule> moduleNames;
 		public PdfExporter([Dependency] IUnityContainer container)
 		{
+			// construct an instance of each implementation of IPdfModule.
+			// these instances will be used as blind templates for constructing
+			// the report UI in the export window
 			modules = AppDomain.CurrentDomain.GetAssemblies()
 				.SelectMany(s => s.GetTypes())
 				.Where(p => typeof(IPdfModule).IsAssignableFrom(p))
@@ -40,7 +43,7 @@ namespace SeeShellsV2.Services
 			}
 		}
 
-		public void Export(string filename, ObservableCollection<IPdfModule> moduleList)
+		public void Export(IEnumerable<IPdfModule> moduleList)
 		{
 
 			PrintDialog pd = new PrintDialog();

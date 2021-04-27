@@ -11,6 +11,9 @@ using SeeShellsV2.Utilities;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// A wrapper around an extracted registry key. Inherited from the V1 team.
+    /// </summary>
     public class RegistryKeyWrapper
     {
         public byte[] Value { get; internal set; }

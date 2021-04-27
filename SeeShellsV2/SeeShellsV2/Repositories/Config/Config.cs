@@ -7,6 +7,10 @@ using Newtonsoft.Json;
 
 namespace SeeShellsV2.Repositories
 {
+    /// <summary>
+    /// An implementation of the IConfig interface, parsed from a JSON file. See Config.json in the root directory of this
+    /// solution to edit the configuration.
+    /// </summary>
     public class Config : IConfig
     {
         [JsonProperty(propertyName: "KnownUsernameLocations", Required = Required.Always)]

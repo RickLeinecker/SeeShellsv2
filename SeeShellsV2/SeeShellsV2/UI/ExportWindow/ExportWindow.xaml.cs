@@ -25,7 +25,7 @@ namespace SeeShellsV2.UI
     {
         ObservableCollection<IPdfModule> moduleList { get; }
         ObservableCollection<string> moduleSelector { get; }
-        public void Export_PDF(string filename);
+        public void Export_PDF();
 		void Remove(IPdfModule sender);
 		void MoveDown(IPdfModule pdfModule);
 		void MoveUp(IPdfModule pdfModule);
@@ -57,7 +57,7 @@ namespace SeeShellsV2.UI
 			//svg.DefaultExt = ".pdf";
 			//svg.FileName = "SeeShellsReport";
 			//if (svg.ShowDialog() == true)
-			ViewModel.Export_PDF("SeeShellsReport");
+			ViewModel.Export_PDF();
 		}
 
 		private void Remove_Click(object sender, RoutedEventArgs e)

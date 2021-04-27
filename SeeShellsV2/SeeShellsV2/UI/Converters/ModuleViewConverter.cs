@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace SeeShellsV2.UI.Converters
+namespace SeeShellsV2.UI
 {
 	class ModuleViewConverter : IValueConverter
 	{

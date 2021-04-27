@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// Represents a timestamp that was extracted from a shellbag
+    /// </summary>
     public interface IIntermediateShellEvent : IShellEvent
     {
         /// <summary>

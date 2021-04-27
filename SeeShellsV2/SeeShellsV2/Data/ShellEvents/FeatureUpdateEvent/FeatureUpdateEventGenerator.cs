@@ -8,7 +8,7 @@ namespace SeeShellsV2.Data
 {
     public class FeatureUpdateEventGenerator : IShellEventGenerator
     {
-        public int Priority => 0;
+        public int Priority => 2;
 
         public bool CanGenerate(IEnumerable<IShellEvent> sequence)
         {

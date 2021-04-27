@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// Used to identify shell items with a last modified timestamp
+    /// </summary>
     public interface IModifiedTimestamp : IShellItem
     {
         public DateTime ModifiedDate { get; }

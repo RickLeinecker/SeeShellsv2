@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// An object that is used to parse ShellItems from raw shellbag byte strings
+    /// </summary>
     public interface IShellItemParser
     {
         /// <summary>

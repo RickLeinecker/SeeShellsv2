@@ -36,7 +36,7 @@ namespace SeeShellsV2.Services
             IList<IIntermediateShellEvent> intermediateShellEvents = new List<IIntermediateShellEvent>();
             IList<IShellEvent> generatedEvents = new List<IShellEvent>();
 
-            // generate intermediate events
+            // extract timestamps and generate intermediate events
             foreach (var shellItem in shellItems)
             {
                 var i = ShellEventFactory.CreateIntermediateEvents(shellItem);

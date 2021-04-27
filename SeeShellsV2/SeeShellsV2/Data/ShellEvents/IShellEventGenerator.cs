@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// An object used to generate shell events from patterns in extracted timestamps
+    /// </summary>
     public interface IShellEventGenerator
     {
         /// <summary>

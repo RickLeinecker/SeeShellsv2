@@ -45,10 +45,10 @@ namespace SeeShellsV2.UI
 			Status = "Print";
 		}
 
-		public async void Export_PDF(string filename)
+		public async void Export_PDF()
 		{
 			Status = "Printing...";
-			Exporter.Export(filename, moduleList);
+			Exporter.Export(moduleList);
 			Status = "Done.";
 			await Task.Run(() => Thread.Sleep(5000));
 			Status = "Print";

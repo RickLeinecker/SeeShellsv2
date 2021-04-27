@@ -14,14 +14,11 @@
         <mah:WindowCommands>
             <Menu Background="Transparent">
                 <MenuItem Header="Import" Background="Transparent">
-                    <!--<MenuItem Header="From CSV" Click="Import_CSV_Click"/>-->
                     <MenuItem Header="From Active Registry"  Click="Import_Live_Registry_Click"/>
                     <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
                 </MenuItem>
                 <MenuItem Header="Export" Background="Transparent">
                     <MenuItem Header="As Report" Click="Export_Window_Click"/>
-                    <!--<MenuItem Header="Shellbags as CSV" />
-                    <MenuItem Header="Events as CSV" />-->
                 </MenuItem>
                 <MenuItem Header="Reset" Background="Transparent" Click="ResetMenuItem_Click"/>
             </Menu>
@@ -78,9 +75,6 @@
 
                     <xcad:LayoutDocumentPaneGroup >
                         <xcad:LayoutDocumentPane>
-                            <!--<xcad:LayoutDocument ContentId="timelineview" Title="Timeline 1" CanClose="False" >
-                                <local:TimelineView />
-                            </xcad:LayoutDocument>-->
                             <xcad:LayoutDocument ContentId="timelineview" Title="Events" CanClose="False" ToolTip="A timeline of user activity">
                                 <local:TimelineView />
                             </xcad:LayoutDocument>

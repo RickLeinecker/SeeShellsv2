@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SeeShellsV2.Data
 {
+    /// <summary>
+    /// Used to identify shell items with a created timestamp
+    /// </summary>
     public interface ICreationTimestamp : IShellItem
     {
         DateTime CreationDate { get; }

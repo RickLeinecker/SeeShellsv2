@@ -7,7 +7,7 @@ using SeeShellsV2.Data;
 namespace SeeShellsV2.Repositories
 {
     /// <summary>
-    /// Item selected by the user
+    /// A repository that stores selected objects. Selected objects can be set or displayed by any UI element.
     /// </summary>
     public interface ISelected : INotifyPropertyChanged
     {

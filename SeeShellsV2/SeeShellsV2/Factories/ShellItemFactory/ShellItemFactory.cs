@@ -18,6 +18,7 @@ namespace SeeShellsV2.Factories
 
         public ShellItemFactory([Dependency] IUnityContainer container)
         {
+            // construct an instance of each implementation of IShellItemParser and sort by priority
             parsers = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => typeof(IShellItemParser).IsAssignableFrom(p))
@@ -29,6 +30,7 @@ namespace SeeShellsV2.Factories
 
         public Type GetShellType(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null)
         {
+            // iterate over shellitem parsers and attempt to parse with each one, in order of priority.
             foreach (var parser in parsers)
                 if (parser.CanParse(hive, keyWrapper, value, parent))
                     return parser.ShellItemType;
@@ -38,6 +40,7 @@ namespace SeeShellsV2.Factories
 
         public IShellItem Create(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null)
         {
+            // iterate over shellitem parsers and attempt to parse with each one, in order of priority.
             foreach (var parser in parsers)
                 if (parser.CanParse(hive, keyWrapper, value, parent))
                 {

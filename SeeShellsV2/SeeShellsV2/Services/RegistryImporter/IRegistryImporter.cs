@@ -8,6 +8,9 @@ using SeeShellsV2.Data;
 
 namespace SeeShellsV2.Services
 {
+    /// <summary>
+    /// A service that imports registry hives as collections of <see cref="IShellItem"/> objects.
+    /// </summary>
     public interface IRegistryImporter
     {
         public event EventHandler RegistryImportBegin;

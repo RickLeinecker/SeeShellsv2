@@ -25,8 +25,11 @@ namespace SeeShellsV2
         [STAThread]
         public static void Main()
         {
+            // Construct the root container for this application. This container will be used
+            // to resolve the dependencies of all object instances throughout the lifetime of the application.
             IUnityContainer container = new UnityContainer();
 
+            // Read Config.JSON to get registry importer settings as an IConfig object.
             Assembly assembly = Assembly.GetExecutingAssembly();
             string internalResourcePath = assembly.GetManifestResourceNames().Single(str => str.EndsWith("Config.json"));
             using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(internalResourcePath)))
@@ -45,7 +48,6 @@ namespace SeeShellsV2
             container.RegisterSingleton<ISelected, Selected>();
 
             // Register Service Types
-            container.RegisterType<ICsvImporter, CsvImporter>();
             container.RegisterType<IPdfExporter, PdfExporter>();
             container.RegisterType<IRegistryImporter, RegistryImporter>();
             container.RegisterType<IShellEventManager, ShellEventManager>();
@@ -61,11 +63,10 @@ namespace SeeShellsV2
             container.RegisterType<IInspectorViewVM, InspectorViewVM>();
             container.RegisterType<ITimelineViewVM, TimelineViewVM>();
             container.RegisterType<IRegistryViewVM, RegistryViewVM>();
-            container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
             container.RegisterType<IHexViewVM, HexViewVM>();
 
-            // Create and run app with main window
+            // Create and run app with main window. The main window is contructed in SeeShellsV2.UI.App.OnStartup().
             App app = container.Resolve<App>();
             app.Run();
         }
