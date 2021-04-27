@@ -102,7 +102,7 @@ namespace SeeShellsV2.UI
 
             if (_histPlotModel.LegendArea.Contains(e.Position))
             {
-                int index = (int)((e.Position.Y - _histPlotModel.LegendArea.Top - _histPlotModel.LegendPadding) / _histPlotModel.LegendSymbolLength);
+                int index = (int)((e.Position.Y - _histPlotModel.LegendArea.Top - _histPlotModel.LegendPadding) / (_histPlotModel.LegendSymbolLength + 1));
 
                 try
                 {
