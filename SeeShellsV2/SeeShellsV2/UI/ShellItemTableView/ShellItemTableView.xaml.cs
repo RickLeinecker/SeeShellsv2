@@ -36,7 +36,18 @@ namespace SeeShellsV2.UI
         public IShellItemTableViewVM ViewModel
         {
             get => DataContext as IShellItemTableViewVM;
-            set => DataContext = value;
+            set
+            {
+                PropertyChangedEventHandler deselect = (o, a) => { if (o is ISelected selected && selected.CurrentInspector != ShellItemTable.SelectedItem) ShellItemTable.SelectedItem = null; };
+
+                if (DataContext is IShellItemTableViewVM vm1)
+                    vm1.Selected.PropertyChanged -= deselect;
+
+                DataContext = value;
+
+                if (DataContext is IShellItemTableViewVM vm2)
+                    vm2.Selected.PropertyChanged += deselect;
+            }
         }
 
         public ShellItemTableView()
@@ -46,7 +57,10 @@ namespace SeeShellsV2.UI
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ViewModel.Selected.CurrentInspector = e.AddedCells.Count > 0 ? e.AddedCells[0].Item : null;
+            if (e.AddedCells.Count == 0)
+                return;
+
+            ViewModel.Selected.CurrentInspector = e.AddedCells[0].Item;
         }
     }
 }

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DataGrid ItemsSource="{Binding ShellItems}" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+        <DataGrid Name="ShellItemTable" ItemsSource="{Binding ShellItems}" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding TypeName}"/>

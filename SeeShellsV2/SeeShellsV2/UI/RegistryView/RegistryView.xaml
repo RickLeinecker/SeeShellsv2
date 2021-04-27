@@ -12,9 +12,7 @@
         <local:RegistryCollectionsConverter x:Key="RegistryCollectionsConverter"/>
 
         <HierarchicalDataTemplate DataType="{x:Type data:User}" ItemsSource="{Binding RegistryHives}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="User"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
@@ -27,9 +25,7 @@
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:RegistryHive}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="Archive"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
@@ -54,54 +50,42 @@
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type local:RegistryCollection}" ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="{Binding Icon}"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:ShellItem}" ItemsSource="{Binding Children}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="FolderOpen"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Description}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:Drive}" ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="Harddrive"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:RemovableDevice}" ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="Mobile"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:RemovableDrive}" ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconFontAwesome Kind="UsbBrands"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
 
         <HierarchicalDataTemplate DataType="{x:Type data:NetworkLocation}" ItemsSource="{Binding Items}">
-            <StackPanel Orientation="Horizontal"
-                        Tag="{Binding}" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown"
-                        Background="Transparent">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
                 <iconPacks:PackIconVaadinIcons Kind="Cloud"/>
                 <TextBlock Margin="5 0 0 0" Text="{Binding Name}"/>
             </StackPanel>
@@ -109,7 +93,7 @@
 
     </UserControl.Resources>
     <Grid>
-        <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Users}">
+        <TreeView Name="RegTreeView" SelectedItemChanged="TreeView_SelectedItemChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Users}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem" BasedOn="{StaticResource MahApps.Styles.TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True"/>

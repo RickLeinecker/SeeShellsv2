@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.ComponentModel;
 
 namespace SeeShellsV2.UI
 {
@@ -34,15 +36,46 @@ namespace SeeShellsV2.UI
     public partial class RegistryView : UserControl
     {
         [Dependency]
-        public IRegistryViewVM ViewModel { set => DataContext = value; get => DataContext as IRegistryViewVM; }
+        public IRegistryViewVM ViewModel
+        {
+            get => DataContext as IRegistryViewVM;
+            set
+            {
+                PropertyChangedEventHandler deselect = (o, a) =>
+                {
+                    if (o is ISelected selected &&
+                        selected.CurrentInspector != RegTreeView.SelectedItem &&
+                        RegTreeView.SelectedItem != null)
+                    {
+                        var container = FindTreeViewSelectedItemContainer(RegTreeView, RegTreeView.SelectedItem);
+                        if (container != null)
+                        {
+                            container.IsSelected = false;
+                        }
+                    }
+                };
+
+                if (DataContext is IRegistryViewVM vm1)
+                    vm1.Selected.PropertyChanged -= deselect;
+
+                DataContext = value;
+
+                if (DataContext is IRegistryViewVM vm2)
+                    vm2.Selected.PropertyChanged += deselect;
+            }
+        }
+
         public RegistryView()
         {
             InitializeComponent();
         }
 
-        private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            ViewModel.Selected.CurrentInspector = (sender as FrameworkElement).Tag;
+            if (e.NewValue == null)
+                return;
+
+            ViewModel.Selected.CurrentInspector = e.NewValue;
 
             if (ViewModel.Selected.CurrentInspector is IShellItem)
                 ViewModel.Selected.CurrentData = ViewModel.Selected.CurrentInspector;
@@ -50,6 +83,27 @@ namespace SeeShellsV2.UI
                 ViewModel.Selected.CurrentData = p.Items.FirstOrDefault();
             else
                 ViewModel.Selected.CurrentData = null;
+        }
+
+        private static TreeViewItem FindTreeViewSelectedItemContainer(ItemsControl root, object selection)
+        {
+            if (root == null)
+                return null;
+
+            var item = root.ItemContainerGenerator.ContainerFromItem(selection) as TreeViewItem;
+            if (item == null)
+            {
+                foreach (var subItem in root.Items)
+                {
+                    item = FindTreeViewSelectedItemContainer((TreeViewItem)root.ItemContainerGenerator.ContainerFromItem(subItem), selection);
+                    if (item != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return item;
         }
     }
 

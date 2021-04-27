@@ -97,10 +97,12 @@
         <Border BorderThickness="1" BorderBrush="{DynamicResource MahApps.Brushes.Gray8}"
                 Grid.Row="2" Grid.RowSpan="1"
                 Grid.Column="0" Grid.ColumnSpan="1">
-            <DataGrid ItemsSource="{Binding ShellEvents}"
+            <DataGrid Name="ShellEventTable"
+                      ItemsSource="{Binding ShellEvents}"
                       SelectedCellsChanged="DataGrid_SelectedCellsChanged"
                       AutoGenerateColumns="False"
-                      CanUserAddRows="False" IsReadOnly="True">
+                      CanUserAddRows="False" IsReadOnly="True"
+                      SelectionMode="Single">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}"  BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
                         <Setter Property="IsEnabled">

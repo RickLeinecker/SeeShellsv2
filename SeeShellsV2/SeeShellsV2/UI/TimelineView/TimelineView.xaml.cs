@@ -37,7 +37,22 @@ namespace SeeShellsV2.UI
     public partial class TimelineView : UserControl
     {
         [Dependency]
-        public ITimelineViewVM ViewModel { get => DataContext as ITimelineViewVM; set => DataContext = value; }
+        public ITimelineViewVM ViewModel
+        {
+            get => DataContext as ITimelineViewVM;
+            set
+            {
+                PropertyChangedEventHandler deselect = (o, a) => { if (o is ISelected selected && selected.CurrentInspector != ShellEventTable.SelectedItem) ShellEventTable.SelectedItem = null; };
+
+                if (DataContext is ITimelineViewVM vm1)
+                    vm1.Selected.PropertyChanged -= deselect;
+
+                DataContext = value;
+
+                if (DataContext is ITimelineViewVM vm2)
+                    vm2.Selected.PropertyChanged += deselect;
+            }
+        }
 
         public TimelineView()
         {
@@ -46,7 +61,10 @@ namespace SeeShellsV2.UI
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ViewModel.Selected.CurrentInspector = e.AddedCells.Count > 0 ? e.AddedCells[0].Item : null;
+            if (e.AddedCells.Count == 0)
+                return;
+
+            ViewModel.Selected.CurrentInspector = e.AddedCells[0].Item;
 
             if (ViewModel.Selected.CurrentInspector is IShellEvent shellEvent && shellEvent.Evidence.Any())
                 ViewModel.Selected.CurrentData = shellEvent.Evidence.First();
