@@ -139,7 +139,7 @@ namespace SeeShellsV2.Data
             }
 
             //obtain the date the registry last wrote this key
-            LastRegistryWriteDate = registryKey.LastWriteTime.Value.LocalDateTime;
+            LastRegistryWriteDate = registryKey.LastWriteTime.Value.UtcDateTime;
         }
     }
 }

@@ -438,7 +438,11 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <ScrollViewer Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
             <ContentControl Content="{ Binding Selected.CurrentInspector }"/>
         </ScrollViewer>
         <TextBlock TextWrapping="Wrap" Margin="20 10" Text="Select an item in the Event Timeline or the Registry View to view its properties.">
@@ -453,5 +457,9 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+
+        <TextBlock Text="?" Grid.Row="1" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.Gray6}"
+                           ToolTip="Select an item in the Events tab, the Shellbags Tab, or the Registry Tab to view its properties.&#x0a;All timestamps displayed in SeeShells are UTC timestamps."
+                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="18 6"/>
     </Grid>
 </UserControl>
