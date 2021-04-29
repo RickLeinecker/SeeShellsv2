@@ -166,9 +166,9 @@ namespace SeeShellsV2.UI
             HistogramPlot.InvalidatePlot();
 
             if (!_histPlotModel.Series.OfType<HistogramSeries>().Where(s => s.IsSelected()).Any())
-                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor(255, s.ActualFillColor));
+                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor((byte)255, s.ActualFillColor));
             else
-                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor((s.IsSelected() ? 255 : 32), s.ActualFillColor));
+                _histPlotModel.Series.OfType<HistogramSeries>().ForEach(s => s.FillColor = OxyColor.FromAColor((byte)(s.IsSelected() ? 255 : 32), s.ActualFillColor));
         }
 
         protected void UpdateAxes()
