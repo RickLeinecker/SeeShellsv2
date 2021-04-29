@@ -77,13 +77,8 @@ class AboutBar extends React.Component {
                         <Button className={this.props.classes.buttons} onClick={this.handleClick} id="registry">Windows Registry</Button>
                         <Button className={this.props.classes.buttons} onClick={this.handleClick} id="shellbags">Shellbags</Button>
                     </ButtonGroup>
-                    <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="seeshells">SeeShells</Button>
-                    <ButtonGroup orientation="vertical">
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="parser">Parsing</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="analysis">Analysis</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="timeline">Timeline</Button>
-                        <Button className={this.props.classes.buttons} onClick={this.handleClick} id="filters">Filtering</Button>
-                    </ButtonGroup>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="parser">SeeShells Parsing</Button>
+                    <Button className={this.props.classes.buttons} onClick={this.handleClick} id="analysis">SeeShells Analysis</Button>
                     <Button className={this.props.classes.primaryButtons} onClick={this.handleClick} id="case-studies">Case Studies</Button>
                 </Paper>
             </div>

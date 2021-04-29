@@ -4,10 +4,7 @@ import pearl from '../assets/pearl.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter, HashRouter as Router } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Grow from '@material-ui/core/Grow';
+import { Button, Paper, Typography, Grow, Tooltip } from '@material-ui/core';
 
 const styles = {
     frontPage: {
@@ -65,7 +62,6 @@ const styles = {
     title: {
         color: '#082998',
         fontSize: 'calc(12px + 2.5vw)',
-        textDecoration: 'underline',
         fontWeight: 'bold',
     },
     featuresContainer: {
@@ -148,7 +144,9 @@ class FrontPage extends React.Component {
                         </Grow>
                     </Paper>
                     <Paper elevation={0} className={this.props.classes.featuresContainer}>
-                        <Typography variant="title" className={this.props.classes.title}>Why SeeShells?</Typography>
+                        <Tooltip title="We search seeshells on your C: shore!">
+                            <Typography variant="title" className={this.props.classes.title}>Why SeeShells?</Typography>
+                        </Tooltip>
                         <Grow in={true}>
                             <Paper elevation={0} className={this.props.classes.infoContainer}>
                                 <Paper elevation={0} className={this.props.classes.info}>
@@ -157,7 +155,7 @@ class FrontPage extends React.Component {
                                 </Paper>
                                 <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
-                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with suspicious behavior flagging</Typography>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Analysis of artifacts</span> with event-based pattern recognition</Typography>
                                 </Paper>
                                 <Paper elevation={0} className={this.props.classes.info}>
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
@@ -167,9 +165,17 @@ class FrontPage extends React.Component {
                                     <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
                                     <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Filtering</span> for specific activities and trends</Typography>
                                 </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Exportation</span> for convenient reporting</Typography>
+                                </Paper>
+                                <Paper elevation={0} className={this.props.classes.info}>
+                                    <img src={pearl} alt='pearl' className={this.props.classes.pearl}/>
+                                    <Typography className={this.props.classes.text}><span className={this.props.classes.descriptionAlt}>Hierarchical view</span> of shell items to find folders of interest</Typography>
+                                </Paper>
                             </Paper>
                         </Grow>
-                        <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">SEE ALL FEATURES</Button>
+                        <Button className={this.props.classes.featuresButton} onClick={this.handleClick} id="about">LEARN MORE</Button>
                     </Paper>
                 </Paper>
             </Router>

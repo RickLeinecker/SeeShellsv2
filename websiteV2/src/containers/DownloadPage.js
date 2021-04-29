@@ -1,14 +1,11 @@
 import React from 'react';
 import logo from '../assets/seeshellsLogo-650.png';
-import beach from '../assets/beach2.png';
+import beach from '../assets/beach3.png';
+import github from '../assets/github_PNG15.png';
 import '../assets/animation.css';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Grow from '@material-ui/core/Grow';
-import ReactPlayer from "react-player";
+import { Paper, Button, Typography, Grow } from '@material-ui/core';
 
 const styles = {
     downloadPage: {
@@ -20,19 +17,17 @@ const styles = {
         overflow: 'auto',
     },
     image: {
-        display: 'grid',
+        display: 'flex',
         width: '100%',
         height: '600px',
         textAlign: 'center',
-        alignSelf: 'center',
         backgroundImage: 'url(' + beach + ')',
         overflow: 'hidden',
+        borderRadius: '0',
     },
     logo: {
         height: '150px',
         width: '150px',
-        display: 'flex',
-        float: 'left',
     },
     downloadContainer: {
         display: 'flex',
@@ -72,10 +67,13 @@ const styles = {
         justifyContent: 'center',
         marginTop: '5%',
     },
-    video: {
+    githubContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    github: {
         paddingTop: '5%',
-        height: '40%',
-        width: '80%',
+        width: '45%',
     },
 }
 
@@ -83,26 +81,27 @@ const styles = {
 *   DownloadPage.js
 *   - serves the link to the SeeShells executable, pulled directly from github releases to the SeeShells repository
 */
+// TODO: fix the download page on chrome/edge
 class DownloadPage extends React.Component {
     render() {
         return(
-            <Paper className={this.props.classes.downloadPage}>
-                <Paper className={this.props.classes.downloadContainer}>
-                    <div className={this.props.classes.image}>
+            <Paper elevation={0} className={this.props.classes.downloadPage}>
+                <Paper elevation={0} className={this.props.classes.downloadContainer}>
+                    <Paper elevation={0} className={this.props.classes.image}>
                         <div id='stars'/>
                         <div id='stars2'/>
                         <div id='stars3'/>
-                        <Grow in={true}>
-                            <Paper className={this.props.classes.contentContainer}>
-                                <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
-                                <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
-                                <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.1/SeeShellsV2.exe">SEESHELLS.EXE</Button>
-                                <div className={this.props.classes.video}>
-                                    <ReactPlayer width="100%" height="100%" url="https://www.youtube.com/watch?v=IZrd86723Hc"/>
-                                </div>
-                            </Paper>
-                        </Grow>
-                    </div>
+                    </Paper>
+                    <Grow in={true}>
+                        <Paper className={this.props.classes.contentContainer}>
+                            <Typography variant="title" className={this.props.classes.title}>Download SeeShells</Typography>
+                            <img src={logo} alt='SeeShells Logo' className={this.props.classes.logo}/>
+                            <Button className={this.props.classes.button} href="https://github.com/ShellBags/v2/releases/download/v2.0-beta.4/SeeShellsV2.zip">SEESHELLS.EXE</Button>
+                            <a href="https://github.com/ShellBags/v2" className={this.props.classes.githubContainer} >
+                                <img src={github} alt='Github Logo' className={this.props.classes.github}/>
+                            </a>
+                        </Paper>
+                    </Grow>
                 </Paper>
             </Paper>
         );

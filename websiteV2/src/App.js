@@ -81,9 +81,6 @@ function App(props) {
           <Route exact path="/about/timeline">
             <AboutPage subpage="timeline"/>
           </Route>
-          <Route exact path="/about/filters">
-            <AboutPage subpage="filters"/>
-          </Route>
           <Route exact path="/about/case-studies">
             <AboutPage subpage="case-studies"/>
           </Route>
@@ -101,20 +98,23 @@ function App(props) {
           <Route exact path="/documentation/offline">
             <DocumentationPage subpage="offline"/>
           </Route>
-          <Route exact path="/documentation/advanced">
-            <DocumentationPage subpage="advanced"/>
-          </Route>
-          <Route exact path="/documentation/toolbar">
-            <DocumentationPage subpage="toolbar"/>
-          </Route>
-          <Route exact path="/documentation/data">
-            <DocumentationPage subpage="data"/>
-          </Route>
           <Route exact path="/documentation/timeline">
             <DocumentationPage subpage="timeline"/>
           </Route>
           <Route exact path="/documentation/events">
             <DocumentationPage subpage="events"/>
+          </Route>
+          <Route exact path="/documentation/inspector">
+            <DocumentationPage subpage="inspector"/>
+          </Route>
+          <Route exact path="/documentation/hex">
+            <DocumentationPage subpage="hex"/>
+          </Route>
+          <Route exact path="/documentation/table">
+            <DocumentationPage subpage="table"/>
+          </Route>
+          <Route exact path="/documentation/registry">
+            <DocumentationPage subpage="registry"/>
           </Route>
           <Route exact path="/documentation/filters">
             <DocumentationPage subpage="filters"/>
@@ -122,11 +122,14 @@ function App(props) {
           <Route exact path="/documentation/export">
             <DocumentationPage subpage="export"/>
           </Route>
-          <Route exact path="/documentation/import">
-            <DocumentationPage subpage="import"/>
+          <Route exact path="/documentation/hints">
+            <DocumentationPage subpage="hints"/>
           </Route>
-          <Route exact path="/documentation/licensing">
-            <DocumentationPage subpage="licensing"/>
+          <Route exact path="/documentation/themes">
+            <DocumentationPage subpage="themes"/>
+          </Route>
+          <Route exact path="/documentation/reset">
+            <DocumentationPage subpage="reset"/>
           </Route>
 
           <Route exact path="/developers">
