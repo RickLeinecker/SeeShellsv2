@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -80,13 +75,10 @@ namespace SeeShellsV2.Services
 
 			// extract the elements from the view. this is only necessary if we
 			// want to use these elements *directly* to do work inside this class.
-			// **any data access that can be done with xaml bindings should be done with xaml bindings**
 			var rtb = e.FindName("RichTextBox") as RichTextBox;
 
 			// hook up event listeners
-			//< Image Source = "".. / .. / .. / .. / UI / Images / SeeShells.png""
-			//  Width = ""60""
-			//  VerticalAlignment = ""Center"" />
+			// Image Source = "".. / .. / .. / .. / UI / Images / SeeShells.png""
 			// save RTB element for later
 			Header = rtb;
 

@@ -1,22 +1,11 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Packaging;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Xps;
-using System.Windows.Xps.Packaging;
 using Unity;
 using System.Windows.Documents;
-using System.Windows.Markup;
 using SeeShellsV2.Data;
 
 namespace SeeShellsV2.Services
@@ -57,7 +46,7 @@ namespace SeeShellsV2.Services
 				foreach (IPdfModule module in moduleList)
 				{
 					BlockUIContainer bc = new BlockUIContainer();
-					if (module.GetType().Name == "RTFModule")
+					if (module.GetType().Name == "RTFModule" || module.GetType().Name == "HeaderModule")
 					{
 						List<Block> fdBlocks = new List<Block>((module.Render() as RichTextBox).Document.Blocks);
 						foreach (Block block in fdBlocks)
@@ -67,7 +56,6 @@ namespace SeeShellsV2.Services
 					}
 					else if (module.GetType().Name == "ShellbagTableModule")
 					{
-						Debug.WriteLine("here");
 						Table table = new Table();
 						DataGrid data = (module.Render() as DataGrid);
 
@@ -115,7 +103,11 @@ namespace SeeShellsV2.Services
 							currentRow.Cells.Add(new TableCell(new Paragraph(new Run(headerList[j]))));
 						}
 
-						List<IShellEvent> list = data.Items.OfType<IShellEvent>().ToList();
+						List<IShellEvent> list = data.SelectedItems.OfType<IShellEvent>().ToList();
+						if (list.Count == 0)
+						{
+							list = data.Items.OfType<IShellEvent>().ToList();
+						}
 						int k = 2;
 						foreach (IShellEvent shell in list)
 						{

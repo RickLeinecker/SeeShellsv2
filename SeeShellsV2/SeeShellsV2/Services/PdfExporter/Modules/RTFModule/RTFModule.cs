@@ -2,17 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Xml;
 
 namespace SeeShellsV2.Services
@@ -85,10 +77,7 @@ namespace SeeShellsV2.Services
 
 			// extract the elements from the view. this is only necessary if we
 			// want to use these elements *directly* to do work inside this class.
-			// **any data access that can be done with xaml bindings should be done with xaml bindings**
 			var rtb = e.FindName("RichTextBox") as RichTextBox;
-
-			// hook up event listeners
 
 			// save RTB element for later
 			Rtb = rtb;

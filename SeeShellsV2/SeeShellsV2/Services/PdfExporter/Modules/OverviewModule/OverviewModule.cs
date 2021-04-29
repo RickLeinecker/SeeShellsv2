@@ -5,13 +5,9 @@ using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.UI;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -29,7 +25,6 @@ namespace SeeShellsV2.Services
 		public FrameworkElement SECount { get; set; }
 		public FrameworkElement ESpan { get; set; }
 
-
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
 
@@ -44,8 +39,6 @@ namespace SeeShellsV2.Services
 
 		public OverviewModule([Dependency] IShellEventCollection shellEvents, [Dependency] IShellItemCollection shellItems)
 		{
-			//if (shellEvents.Count == 0)
-			//	return;
 				
 			ShellEvents = shellEvents;
 
@@ -192,7 +185,7 @@ namespace SeeShellsV2.Services
 				</Grid>";
 
 
-			//// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
+			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
 			ParserContext context = new ParserContext();
 			context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
 			context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
@@ -207,7 +200,7 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
+			// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
 			e.DataContext = this;

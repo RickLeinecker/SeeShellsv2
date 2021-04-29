@@ -1,9 +1,5 @@
 ﻿using SeeShellsV2.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -36,6 +32,9 @@ namespace SeeShellsV2.Services
 			caption.Width = 350;
 			caption.Height = 900;
 			caption.Text = (TextBox as TextBox).Text;
+			caption.FontFamily = (TextBox as TextBox).FontFamily;
+			caption.FontSize = (TextBox as TextBox).FontSize;
+			caption.FontWeight = (TextBox as TextBox).FontWeight;
 
 			var plot = (TimeHisto as TimeSeriesHistogram).HistogramPlot;
 			var s = plot.ToBitmap();
@@ -100,7 +99,7 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
+			// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
 			e.DataContext = vm;

@@ -1,18 +1,10 @@
 ﻿using SeeShellsV2.Repositories;
 using SeeShellsV2.UI;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Markup;
-using System.Xml;
 using Unity;
 
 namespace SeeShellsV2.Services
@@ -20,14 +12,11 @@ namespace SeeShellsV2.Services
 	class CaptionedHeatMapModule : IPdfModule
 	{
 		public string Name => "Captioned HeatMap";
-
 		public FrameworkElement HeatMap { get; set; }
 		public FrameworkElement TextBox { get; set; }
 
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
-
-
 		public ICollectionView FilteredShellEvents => ShellEvents.FilteredView;
 
 		public CaptionedHeatMapModule([Dependency] IShellEventCollection shellEvents)
@@ -45,18 +34,15 @@ namespace SeeShellsV2.Services
 			if (TextBox == null || HeatMap == null)
 				return null;
 
-			//string s = XamlWriter.Save(Rtb);
-			//StringReader sr = new StringReader(s);
-			//XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
-			//FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
-			//var rtb = e.FindName("RichTextBox") as RichTextBox;
-
 			TextBlock caption = new TextBlock();
 			caption.TextWrapping = TextWrapping.Wrap;
 			caption.TextAlignment = TextAlignment.Left;
 			caption.Width = 500;
 			caption.Height = 800;
 			caption.Text = (TextBox as TextBox).Text;
+			caption.FontFamily = (TextBox as TextBox).FontFamily;
+			caption.FontSize = (TextBox as TextBox).FontSize;
+			caption.FontWeight = (TextBox as TextBox).FontWeight;
 
 			var plot = (HeatMap as CalendarHeatMap).HeatMapPlot;
 			var bmp = plot.ToBitmap();
@@ -80,37 +66,6 @@ namespace SeeShellsV2.Services
 			captioned.Orientation = Orientation.Horizontal;
 			captioned.Children.Add(sp);
 			captioned.Children.Add(caption);
-			
-
-			//Figure fig = new Figure();
-			//fig.HorizontalAnchor = FigureHorizontalAnchor.PageLeft;
-			////FigureLength fl = new FigureLength(0.3, FigureUnitType.Column);
-			////fig.Width = fl;
-			//fig.Blocks.Add(bc);
-
-			//Paragraph p = new Paragraph();
-			//p.Inlines.Add(fig);
-
-			////Floater fig = new Floater();
-			////fig.HorizontalAlignment = HorizontalAlignment.Left;
-			////fig.Width = image.Width;
-			////fig.Blocks.Add(bc);
-
-			//List<Block> rtbBlocks = new List<Block>(rtb.Document.Blocks);
-
-			//foreach (Block block in rtbBlocks)
-			//{
-			//	Debug.WriteLine(block.GetType().Name);
-			//}
-
-			//foreach (Block block in rtbBlocks)
-			//{
-			//	List<Inline> inlines = new List<Inline>((block as Paragraph).Inlines);
-			//	p.Inlines.AddRange(inlines);
-			//}
-
-			//FlowDocument fd = new FlowDocument(p);
-			//RichTextBox r = new RichTextBox(fd);
 
 			return captioned as UIElement;
 		}
@@ -147,7 +102,7 @@ namespace SeeShellsV2.Services
 			</StackPanel>";
 
 
-			//// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
+			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
 			ParserContext context = new ParserContext();
 			context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
 			context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
@@ -162,21 +117,20 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
+			// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
-			//// assign this object as the data context so the view can get/set module properties
+			// assign this object as the data context so the view can get/set module properties
 			e.DataContext = this;
 
-			//// extract the elements from the view. this is only necessary if we
-			//// want to use these elements *directly* to do work inside this class.
-			//// **any data access that can be done with xaml bindings should be done with xaml bindings**
+			// extract the elements from the view. this is only necessary if we
+			// want to use these elements *directly* to do work inside this class.
 			var hm = e.FindName("Heatmap") as CalendarHeatMap;
 			var tb = e.FindName("TextBox") as TextBox;
 
-			//// hook up event listeners
+			// hook up event listeners
 
-			//// save RTB element for later
+			// save RTB element for later
 			HeatMap = hm;
 			TextBox = tb;
 

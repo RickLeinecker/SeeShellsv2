@@ -1,16 +1,10 @@
 ﻿using System;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.UI;
-using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Unity;
-using System.Windows.Documents;
 
 namespace SeeShellsV2.Services
 {
@@ -23,17 +17,6 @@ namespace SeeShellsV2.Services
 
 		[Dependency]
 		public ITimelineViewVM vm { get; set; }
-
-		//[Dependency]
-		//public IShellEventCollection ShellEvents { get; set; }
-
-
-		//public ICollectionView FilteredShellEvents => ShellEvents.FilteredView;
-
-		//public ChartsModule([Dependency] IShellEventCollection shellEvents)
-		//{
-		//	ShellEvents = shellEvents;
-		//}
 
 		public IPdfModule Clone()
 		{
@@ -60,8 +43,6 @@ namespace SeeShellsV2.Services
 			t.HorizontalAlignment = HorizontalAlignment.Center;
 			sp.Children.Add(t);
 			sp.Children.Add(hmImage);
-
-
 
 			var tplot = (TimeHisto as TimeSeriesHistogram).HistogramPlot;
 			var ts = tplot.ToBitmap();
@@ -106,7 +87,7 @@ namespace SeeShellsV2.Services
 				</Grid>";
 
 
-			//// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
+			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
 			ParserContext context = new ParserContext();
 			context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
 			context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
@@ -121,19 +102,18 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
+			// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
-			//// assign this object as the data context so the view can get/set module properties
+			// assign this object as the data context so the view can get/set module properties
 			e.DataContext = vm;
 
-			//// extract the elements from the view. this is only necessary if we
-			//// want to use these elements *directly* to do work inside this class.
-			//// **any data access that can be done with xaml bindings should be done with xaml bindings**
+			// extract the elements from the view. this is only necessary if we
+			// want to use these elements *directly* to do work inside this class.
 			var hm = e.FindName("Heatmap") as CalendarHeatMap;
 			var th = e.FindName("Histogram") as TimeSeriesHistogram;
 
-			//// save elements for later
+			// save elements for later
 			TimeHisto = th;
 			HeatMap = hm;
 

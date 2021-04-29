@@ -1,9 +1,5 @@
 ﻿using SeeShellsV2.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -66,7 +62,6 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
 			e.DataContext = vm;

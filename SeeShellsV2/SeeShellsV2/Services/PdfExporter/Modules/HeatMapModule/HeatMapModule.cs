@@ -1,22 +1,10 @@
-﻿using SeeShellsV2.Data;
-using SeeShellsV2.Repositories;
+﻿using SeeShellsV2.Repositories;
 using SeeShellsV2.UI;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Xml;
 using Unity;
 
 namespace SeeShellsV2.Services
@@ -29,8 +17,6 @@ namespace SeeShellsV2.Services
 
 		[Dependency]
 		public IShellEventCollection ShellEvents { get; set; }
-
-
 		public ICollectionView FilteredShellEvents => ShellEvents.FilteredView;
 
 		public HeatMapModule([Dependency] IShellEventCollection shellEvents)
@@ -40,8 +26,6 @@ namespace SeeShellsV2.Services
 
 		public IPdfModule Clone()
 		{
-			// we only really need a basic copy here to let the exporter
-			// use this object as a template to make more objects
 			return MemberwiseClone() as IPdfModule;
 		}
 
@@ -65,9 +49,6 @@ namespace SeeShellsV2.Services
 			t.HorizontalAlignment = HorizontalAlignment.Center;
 			sp.Children.Add(t);
 			sp.Children.Add(image);
-			//StringReader sr = new StringReader(s);
-			//XmlReader reader = XmlTextReader.Create(sr, new XmlReaderSettings());
-			//FrameworkElement e = (FrameworkElement)XamlReader.Load(reader);
 
 			return sp;
 		}
@@ -89,7 +70,7 @@ namespace SeeShellsV2.Services
 			</Grid>";
 
 
-			//// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
+			// add WPF namespaces to a parser context so we can parse WPF tags like StackPanel
 			ParserContext context = new ParserContext();
 			context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
 			context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
@@ -104,20 +85,17 @@ namespace SeeShellsV2.Services
 			context.XamlTypeMapper.AddMappingProcessingInstruction("local", type.Namespace, type.Assembly.FullName);
 			context.XmlnsDictionary.Add("local", "local");
 
-			//// construct the view using an XAML parser
+			// construct the view using an XAML parser
 			FrameworkElement e = XamlReader.Parse(view, context) as FrameworkElement;
 
-			//// assign this object as the data context so the view can get/set module properties
+			// assign this object as the data context so the view can get/set module properties
 			e.DataContext = this;
 
-			//// extract the elements from the view. this is only necessary if we
-			//// want to use these elements *directly* to do work inside this class.
-			//// **any data access that can be done with xaml bindings should be done with xaml bindings**
+			// extract the elements from the view. this is only necessary if we
+			// want to use these elements *directly* to do work inside this class.
 			var hm = e.FindName("Heatmap") as CalendarHeatMap;
 
-			//// hook up event listeners
-
-			//// save RTB element for later
+			// save RTB element for later
 			HeatMap = hm;
 
 			return e;

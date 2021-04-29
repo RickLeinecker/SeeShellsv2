@@ -1,29 +1,20 @@
-﻿using SeeShellsV2.Data;
-using SeeShellsV2.Repositories;
-using System;
-using System.Collections.Generic;
+﻿using SeeShellsV2.Repositories;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Markup;
-using System.Windows.Media;
 using Unity;
 
 namespace SeeShellsV2.Services
 {
 	class ShellbagTableModule : IPdfModule
 	{
-		public string Name => "ShellEvent Table";
+		public string Name => "Filtered Shellbag Event Table";
 
         private FrameworkElement Datagrid { get; set; }
 
         [Dependency]
         public IShellEventCollection ShellEvents { get; set; }
-
         public ICollectionView FilteredShellEvents => ShellEvents.FilteredView;
 
         public ShellbagTableModule([Dependency] IShellEventCollection shellEvents)
@@ -44,10 +35,10 @@ namespace SeeShellsV2.Services
 		public FrameworkElement View()
 		{
             string view = @"
-                <Grid Height=""800"" Width=""800"">
+                <Grid MaxHeight=""800"" Width=""800"">
                     <DataGrid Name=""Data"" ItemsSource = ""{Binding FilteredShellEvents}""
                             AutoGenerateColumns = ""False""
-                            CanUserAddRows = ""False"" IsReadOnly = ""True"">
+                            CanUserAddRows = ""False"" IsReadOnly = ""True"" Height=""Auto"">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header = ""Event Time"" Binding = ""{Binding TimeStamp}"" />
                             <DataGridTextColumn Header = ""Location Name"" Binding = ""{Binding Place.Name}"" />
@@ -71,10 +62,7 @@ namespace SeeShellsV2.Services
 
             // extract the elements from the view. this is only necessary if we
             // want to use these elements *directly* to do work inside this class.
-            // **any data access that can be done with xaml bindings should be done with xaml bindings**
             var data = e.FindName("Data") as DataGrid;
-
-            // hook up event listeners
 
             // save RTB element for later
             Datagrid = data;
