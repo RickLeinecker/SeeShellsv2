@@ -6,7 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Unity;
+
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.Factories.Tests
 {
@@ -16,12 +19,15 @@ namespace SeeShellsV2.Factories.Tests
         [TestMethod()]
         public void CreateTest()
         {
-            IShellItemFactory factory = new ShellItemFactory();
+            IUnityContainer container = new UnityContainer();
+            container.RegisterType<IConfig, Config>();
 
-            IShellItem i1 = factory.Create(networkBuf);
-            IShellItem i2 = factory.Create(fileBuf);
-            IShellItem i3 = factory.Create(networkBufBad);
-            IShellItem i4 = factory.Create(fileBufBad);
+            ShellItemFactory factory = container.Resolve<ShellItemFactory>();
+
+            IShellItem i1 = factory.Create(null, null, networkBuf);
+            IShellItem i2 = factory.Create(null, null, fileBuf);
+            IShellItem i3 = factory.Create(null, null, networkBufBad);
+            IShellItem i4 = factory.Create(null, null, fileBufBad);
 
             Assert.IsTrue(i1 != null);
             Assert.IsTrue(i2 != null);
@@ -32,7 +38,7 @@ namespace SeeShellsV2.Factories.Tests
             Assert.IsTrue(i2.Type == 0x32);
         }
 
-        private byte[] networkBuf = new byte[]
+        private readonly byte[] networkBuf = new byte[]
         {
             0x31, 0x00, 0xC3, 0x01, 0xC1, 0x5C, 0x5C, 0x31,
             0x39, 0x32, 0x2E, 0x31, 0x36, 0x38, 0x2E, 0x38,
@@ -43,12 +49,12 @@ namespace SeeShellsV2.Factories.Tests
             0x00, 0x00, 0x00
         };
 
-        private byte[] networkBufBad = new byte[]
+        private readonly byte[] networkBufBad = new byte[]
         {
             0x31, 0x00, 0xC3
         };
 
-        private byte[] fileBuf = new byte[] {
+        private readonly byte[] fileBuf = new byte[] {
             0x88, 0x00, 0x32, 0x00, 0xC3, 0x52, 0x7D, 0x00,
             0x85, 0x47, 0x1A, 0xA7, 0x20, 0x00, 0x41, 0x54,
             0x4B, 0x5F, 0x50, 0x41, 0x7E, 0x31, 0x2E, 0x5A,
@@ -69,7 +75,7 @@ namespace SeeShellsV2.Factories.Tests
             0x00, 0x00
         };
 
-        private byte[] fileBufBad = new byte[] {
+        private readonly byte[] fileBufBad = new byte[] {
             0x88, 0x00, 0x32, 0x00, 0xC3, 0x52, 0x7D, 0x00,
             0x85, 0x47, 0x1A, 0xA7, 0x20
         };

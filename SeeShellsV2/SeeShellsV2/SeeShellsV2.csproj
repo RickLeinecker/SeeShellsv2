@@ -10,11 +10,24 @@
     <UseWPF>true</UseWPF>
     <StartupObject>SeeShellsV2.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>SeeShells.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\defaultOS.json" />
-    <None Remove="Resources\xceedLogo.png" />
+    <Compile Remove="Services\PdfExporter\Modules\ShellEventModule\**" />
+    <EmbeddedResource Remove="Services\PdfExporter\Modules\ShellEventModule\**" />
+    <None Remove="Services\PdfExporter\Modules\ShellEventModule\**" />
+    <Page Remove="Services\PdfExporter\Modules\ShellEventModule\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\User\.nuget\packages\wpfhexaeditor\2.1.6\contentFiles\any\net5.0-windows7.0\Resources\EBCDIC-NoSpecialChar.tbl" />
+    <Content Remove="C:\Users\User\.nuget\packages\wpfhexaeditor\2.1.6\contentFiles\any\net5.0-windows7.0\Resources\EBCDIC.tbl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Config.json" />
+    <None Remove="UI\Images\beach2.png" />
     <None Remove="UI\Images\SeeShells.png" />
   </ItemGroup>
 
@@ -24,17 +37,17 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.50.2" />
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.96" />
     <PackageReference Include="MahApps.Metro" Version="2.4.4" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
     <PackageReference Include="Unity" Version="5.11.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\defaultOS.json" />
-    <EmbeddedResource Include="Resources\xceedLogo.png" />
+	<PackageReference Include="WPFHexaEditor" Version="2.1.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Registry\Registry.csproj" />
+    <EmbeddedResource Include="Config.json" />
+    <Resource Include="UI\Images\beach2.png" />
     <Resource Include="UI\Images\SeeShells.png" />
   </ItemGroup>
 

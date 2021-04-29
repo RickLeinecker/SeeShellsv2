@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="SeeShellsV2.UI.ShellItemTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SeeShellsV2.UI"
+             xmlns:data="clr-namespace:SeeShellsV2.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DataGrid Name="ShellItemTable" ItemsSource="{Binding ShellItems}" SelectionMode="Single" SelectedCellsChanged="DataGrid_SelectedCellsChanged" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding TypeName}"/>
+                <DataGridTextColumn Header="Subtype" Binding="{Binding SubtypeName}"/>
+                <DataGridTextColumn Header="Location Name" Binding="{Binding Place.Name}"/>
+                <DataGridTextColumn Header="Location Path" Binding="{Binding Place.PathName}"/>
+                <DataGridTextColumn Header="Registry" Binding="{Binding RegistryHive.Name}"/>
+                <DataGridTextColumn Header="User" Binding="{Binding RegistryHive.User.Name}"/>
+                <DataGridTextColumn Header="Last Registry Write" Binding="{Binding LastRegistryWriteDate}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

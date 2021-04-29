@@ -8,6 +8,9 @@ using SeeShellsV2.UI;
 
 namespace SeeShellsV2.Factories
 {
+    /// <summary>
+    /// An object that is used to construct new WPF windows and resolve UI view dependencies.
+    /// </summary>
     public interface IWindowFactory
     {
         /// <summary>

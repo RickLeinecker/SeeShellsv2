@@ -1,29 +1,9 @@
-﻿#region copyright
-// SeeShells Copyright (c) 2019-2020 Aleksandar Stoyanov, Bridget Woodye, Klayton Killough, 
-// Richard Leinecker, Sara Frackiewicz, Yara As-Saidi
-// SeeShells is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-// 
-// SeeShells is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along with this program;
-// if not, see <https://www.gnu.org/licenses>
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security;
 using System.Security.Cryptography;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 
 using OnlineRegistry = Microsoft.Win32.Registry;
 using OnlineRegistryKey = Microsoft.Win32.RegistryKey;
@@ -38,244 +18,156 @@ using Unity;
 using SeeShellsV2.Data;
 using SeeShellsV2.Repositories;
 using SeeShellsV2.Factories;
+using SeeShellsV2.Utilities;
+
+// This code was adapted from the SeeShells V1 project
 
 namespace SeeShellsV2.Services
 {
     public class RegistryImporter : IRegistryImporter
     {
-        private IConfigParser Config { get; set; }
+        private IConfig Config { get; set; }
+        private IUserCollection Users { get; set; }
+        private IRegistryHiveCollection RegistryHives { get; set; }
         private IShellItemCollection ShellItems { get; set; }
         private IShellItemFactory ShellFactory { get; set; }
 
-        private ISelected Selected { get; set; }
-
-        private CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private bool registeredCancellation = false;
+        public event EventHandler RegistryImportBegin;
+        public event EventHandler RegistryImportEnd;
 
         public RegistryImporter(
-            [Dependency] IConfigParser config,
+            [Dependency] IConfig config,
+            [Dependency] IUserCollection users,
+            [Dependency] IRegistryHiveCollection registryHives,
             [Dependency] IShellItemCollection shellItems,
-            [Dependency] IShellItemFactory shellFactory,
-            [Dependency] ISelected selected
+            [Dependency] IShellItemFactory shellFactory
         )
         {
             Config = config;
+            Users = users;
+            RegistryHives = registryHives;
             ShellItems = shellItems;
             ShellFactory = shellFactory;
-            Selected = selected;
         }
 
-        public Task<(int, int, long)> ImportOnlineRegistry(bool parseAllUsers = false)
+        public (RegistryHive, IEnumerable<IShellItem>) ImportRegistry(bool parseAllUsers = false, bool useOfflineHive = false, string hiveLocation = null)
         {
-            if (!registeredCancellation && Application.Current != null)
+            RegistryImportBegin?.Invoke(this, EventArgs.Empty);
+
+            IDictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
+
+            IList<IShellItem> parsedItems = new List<IShellItem>();
+
+            User user = null;
+            RegistryHive hive = null;
+
+            IEnumerable<RegistryKeyWrapper> registryEnumerator = useOfflineHive ?
+                GetOfflineRegistryKeyIterator(hiveLocation) :
+                GetOnlineRegistryKeyIterator(parseAllUsers);
+
+            foreach (RegistryKeyWrapper keyWrapper in registryEnumerator)
             {
-                registeredCancellation = true;
-                Application.Current.Exit += (_, _) => { tokenSource.Cancel(); };
-            }
-
-            SynchronizationContext syncher = SynchronizationContext.Current;
-
-            return Task.Run(() =>
-            {
-                int parsed = 0, nulled = 0;
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                RegistryShellbagRoot root = new RegistryShellbagRoot("Active Registry", "None");
-
-                if (Selected != null)
+                if (keyWrapper.Value != null) // Some Registry Keys are null
                 {
-                    Selected.Current = root;
-                    Selected.CurrentEnumerable = root.Children;
-                }
+                    byte[] buffer = keyWrapper.Value;
+                    int off = 0;
 
-                Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
-                foreach (RegistryKeyWrapper keyWrapper in GetOnlineRegistryKeyIterator(parseAllUsers))
-                {
-                    if (keyWrapper.Value != null) // Some Registry Keys are null
+                    if (user == null)
                     {
-                        byte[] buffer = keyWrapper.Value;
-                        int off = 0;
+                        user = Users.FirstOrDefault(
+                            u => u.Name == keyWrapper.RegistryUser && u.SID == keyWrapper.RegistrySID
+                        );
 
-                        // extract shell items from registry value
-                        while (off + 2 <= buffer.Length && Block.UnpackWord(buffer, off) != 0)
+                        if (user != null)
+                            return (null, null);
+
+                        Users.SynchronizationContext?.Send((_) =>
                         {
-                            IShellItem parentShellItem = null;
+                            user = new User { Name = keyWrapper.RegistryUser, SID = keyWrapper.RegistrySID };
+                            Users.Add(user);
+                        }, null);
+                    }
 
-                            //obtain the parent shellitem from the parent registry key (if it exists)
-                            if (keyWrapper.Parent != null)
-                                if (keyShellMappings.TryGetValue(keyWrapper.Parent, out IShellItem pShellItem))
-                                    parentShellItem = pShellItem;
+                    if (hive == null)
+                    {
+                        string name = useOfflineHive ? Path.GetFileName(hiveLocation) : "Live Registry";
+                        string pathname = useOfflineHive ? hiveLocation : "N/A";
 
-                            IShellItem shellItem = ShellFactory.Create(buffer.Skip(off).ToArray(), parentShellItem);
+                        hive = RegistryHives.FirstOrDefault(
+                             u => u.Name == name && u.Path == pathname && u.User == user
+                         );
 
-                            if (shellItem != null)
-                            {
-                                off += shellItem.Size;
-                                parsed++;
-                            }
-                            else
-                            {
-                                off += Block.UnpackWord(buffer, off);
-                                nulled++;
-                                continue;
-                            }
+                        if (hive != null)
+                            return (null, null);
 
-                            shellItem.RegistryKey = keyWrapper;
-                            shellItem.Parent = parentShellItem;
-                            parentShellItem?.Children.Add(shellItem);
+                        RegistryHives.SynchronizationContext?.Send((_) =>
+                        {
+                            hive = new RegistryHive { Name = name, Path = pathname, User = user };
+                            RegistryHives.Add(hive);
+                        }, null);
 
-                            keyShellMappings.Add(keyWrapper, shellItem);
+                        Users.SynchronizationContext?.Send((_) =>
+                        {
+                            user.RegistryHives.Add(hive);
+                        }, null);
+                    }
 
-                            // finish parsing if the parser task was cancelled
-                            if (tokenSource.IsCancellationRequested)
-                                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
+                    // extract shell items from registry value
+                    while (off + 2 <= buffer.Length && BlockHelper.UnpackWord(buffer, off) != 0)
+                    {
+                        IShellItem parentShellItem = null;
 
-                            // add the shell item to the collection in the caller's thread
-                            if (syncher != null)
-                            {
-                                syncher.Post(delegate 
-                                {
-                                    ShellItems.Add(shellItem);
+                        //obtain the parent shellitem from the parent registry key (if it exists)
+                        if (keyWrapper.Parent != null)
+                            if (keyShellMappings.TryGetValue(keyWrapper.Parent, out IShellItem pShellItem))
+                                parentShellItem = pShellItem;
 
-                                    // if the shell item has no parent then it belongs to root
-                                    if (shellItem.Parent == null)
-                                        root.Children.Add(shellItem);
-                                }, null);
-                            }
-                            else
-                            {
-                                ShellItems.Add(shellItem);
+                        byte[] value = buffer.Skip(off).ToArray();
+                        IShellItem shellItem = ShellFactory.Create(hive, keyWrapper, value, parentShellItem);
 
-                                // if the shell item has no parent then it belongs to root
-                                if (shellItem.Parent == null)
-                                    root.Children.Add(shellItem);
-                            }
+                        if (shellItem != null)
+                        {
+                            off += shellItem.Size;
                         }
+                        else
+                        {
+                            off += BlockHelper.UnpackWord(buffer, off);
+
+                            // construct a placeholder item if the shellbag cannot be identified
+                            shellItem = new UnknownShellItem()
+                            {
+                                Place = new UnknownPlace()
+                                {
+                                    Name = "??",
+                                    PathName = parentShellItem != null ? Path.Combine(parentShellItem.Place.PathName ?? string.Empty, parentShellItem.Place.Name) : null,
+                                },
+                                RegistryHive = hive,
+                                Value = value,
+                                NodeSlot = keyWrapper.NodeSlot,
+                                SlotModifiedDate = keyWrapper.SlotModifiedDate,
+                                LastRegistryWriteDate = keyWrapper.LastRegistryWriteDate,
+                                Parent = parentShellItem
+                            };
+
+                            parentShellItem?.Children.Add(shellItem);
+                        }
+
+                        keyShellMappings.Add(keyWrapper, shellItem);
+
+                        // add the shell item to the collection
+                        ShellItems.Add(shellItem);
+                        parsedItems.Add(shellItem);
+
+                        // if the shell item has no parent then it belongs to root
+                        if (shellItem.Parent == null)
+                            hive.Items.Add(shellItem);
                     }
                 }
-
-                // add the root item to the collection in the caller's thread
-                if (syncher != null && root.Children.Count > 0)
-                    syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
-                else if (root.Children.Count > 0)
-                    ShellItems.RegistryRoots.Add(root);
-
-                stopwatch.Stop();
-
-                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
-            }, tokenSource.Token);
-        }
-
-        public Task<(int, int, long)> ImportOfflineRegistry(string registryFilePath)
-        {
-            if (!registeredCancellation && Application.Current != null)
-            {
-                registeredCancellation = true;
-                Application.Current.Exit += (_, _) => { tokenSource.Cancel(); };
             }
 
-            SynchronizationContext syncher = SynchronizationContext.Current;
-
-            return Task.Run(() =>
-            {
-                int parsed = 0, nulled = 0;
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                RegistryShellbagRoot root = new RegistryShellbagRoot(Path.GetFileName(registryFilePath), registryFilePath);
-
-                if (Selected != null)
-                {
-                    Selected.Current = root;
-                    Selected.CurrentEnumerable = root.Children;
-                }
-
-                Dictionary<RegistryKeyWrapper, IShellItem> keyShellMappings = new Dictionary<RegistryKeyWrapper, IShellItem>();
-                foreach (RegistryKeyWrapper keyWrapper in GetOfflineRegistryKeyIterator(registryFilePath))
-                {
-                    if (keyWrapper.Value != null) // Some Registry Keys are null
-                    {
-                        byte[] buffer = keyWrapper.Value;
-                        int off = 0;
-
-                        // extract shell items from registry value
-                        while (off + 2 <= buffer.Length && Block.UnpackWord(buffer, off) != 0)
-                        {
-                            IShellItem parentShellItem = null;
-
-                            //obtain the parent shellitem from the parent registry key (if it exists)
-                            if (keyWrapper.Parent != null)
-                                if (keyShellMappings.TryGetValue(keyWrapper.Parent, out IShellItem pShellItem))
-                                    parentShellItem = pShellItem;
-
-                            IShellItem shellItem = ShellFactory.Create(buffer.Skip(off).ToArray(), parentShellItem);
-
-                            if (shellItem != null)
-                            {
-                                off += shellItem.Size;
-                                parsed++;
-                            }
-                            else
-                            {
-                                off += Block.UnpackWord(buffer, off);
-                                nulled++;
-                                continue;
-                            }
-
-                            shellItem.RegistryKey = keyWrapper;
-                            shellItem.Parent = parentShellItem;
-                            parentShellItem?.Children.Add(shellItem);
-
-                            keyShellMappings.Add(keyWrapper, shellItem);
-
-                            // finish parsing if the parser task was cancelled
-                            if (tokenSource.IsCancellationRequested)
-                                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
-
-                            // add the shell item to the collection in the caller's thread
-                            if (syncher != null)
-                            {
-                                syncher.Post(delegate
-                                {
-                                    ShellItems.Add(shellItem);
-
-                                    // if the shell item has no parent then it belongs to root
-                                    if (shellItem.Parent == null)
-                                        root.Children.Add(shellItem);
-                                }, null);
-                            }
-                            else
-                            {
-                                ShellItems.Add(shellItem);
-
-                                // if the shell item has no parent then it belongs to root
-                                if (shellItem.Parent == null)
-                                    root.Children.Add(shellItem);
-                            }
-                        }
-                    }
-                }
-
-                // add the root item to the collection in the caller's thread
-                if (syncher != null && root.Children.Count > 0)
-                    syncher.Post(delegate { ShellItems.RegistryRoots.Add(root); }, null);
-                else if (root.Children.Count > 0)
-                    ShellItems.RegistryRoots.Add(root);
-
-                stopwatch.Stop();
-
-                return (parsed, nulled, stopwatch.ElapsedMilliseconds);
-            }, tokenSource.Token);
+            RegistryImportEnd?.Invoke(this, EventArgs.Empty);
+            return (hive, parsedItems);
         }
-
-        //known Windows locations of NTUSER.dat and USRCLASS.DAT
-        //( see https://support.microsoft.com/en-us/help/3048895/error-occurs-during-desktop-setup-and-desktop-location-is-unavailable)
-        private static readonly string[] KNOWN_USER_REGISTRY_FILE_LOCATIONS = {
-            @"\ntuser.dat", //ntuser is always in base user directory
-            @"\Local Settings\Application Data\Microsoft\Windows\UsrClass.dat",
-            @"\AppData\Local\Microsoft\Windows\UsrClass.dat"
-        };
 
         private Dictionary<string, string> sidToUsernameMappings = new Dictionary<string, string>();
 
@@ -293,7 +185,6 @@ namespace SeeShellsV2.Services
                     continue;
 
                 string userOfStore = FindOnlineUsername(storeKey);
-                // // logger.Debug($"SID {storeKey.Name} ASSOCIATED WITH {userOfStore}");
 
                 if (parseAllUsers || userOfStore.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -321,13 +212,10 @@ namespace SeeShellsV2.Services
             }
             catch (Exception)
             {
-                // string message = $"{RegistryFilePath} is not a valid Registry Hive.";
-                // logger.Error(ex, message);
-                // LogAggregator.Instance.Add(message);
                 yield break;
             }
 
-            foreach (string location in Config.GetRegistryLocations())
+            foreach (string location in Config.ShellbagRootLocations)
             {
                 string userOfHive = FindOfflineUsername(hive);
                 foreach (RegistryKeyWrapper keyWrapper in IterateOfflineRegistry(hive.GetKey(location), hive, location,
@@ -342,13 +230,6 @@ namespace SeeShellsV2.Services
                     yield return keyWrapper;
                 }
 
-            }
-
-            if (count == 0)
-            {
-                // string errorMessage = $"Unable to parse hive file {RegistryFilePath}. No Shellbag keys found.";
-                // logger.Error(errorMessage);
-                // LogAggregator.Instance.Add(errorMessage);
             }
         }
 
@@ -367,7 +248,7 @@ namespace SeeShellsV2.Services
             {
 
                 Dictionary<string, int> likelyUsernames = new Dictionary<string, int>();
-                foreach (string usernameLocation in Config.GetUsernameLocations())
+                foreach (string usernameLocation in Config.UsernameLocations)
                 {
                     if (userStore.OpenSubKey(usernameLocation) != null)
                     {
@@ -390,10 +271,6 @@ namespace SeeShellsV2.Services
                             }
                         }
                     }
-                    else
-                    {
-                        return retval;
-                    }
                 }
 
                 //most occurred value is probably the username.
@@ -408,10 +285,8 @@ namespace SeeShellsV2.Services
                     sidToUsernameMappings.Add(sid, retval);
                 }
             }
-            catch (Exception ex)
-            {
-                // // logger.Error(ex, $"Unable to retrieve username from hive {userStore.Name}");
-            }
+            catch (Exception)
+            { }
 
             return retval;
         }
@@ -421,30 +296,50 @@ namespace SeeShellsV2.Services
             string retval = string.Empty;
             try
             {
-                if (hive.HiveType != OfflineRegistryType.NtUser)
-                    return retval;
-
                 //todo refactor Parser.GetUsernameLocations() into key-value pairs for lookup, we have to hardcode key-values otherwise.
                 //todo we know of the Desktop value inside the "Shell Folders" location, so naively try this until a better way is found
                 Dictionary<string, int> likelyUsernames = new Dictionary<string, int>();
-                foreach (string usernameLocation in Config.GetUsernameLocations())
+                foreach (string usernameLocation in Config.UsernameLocations)
                 {
+                    if (hive.GetKey(usernameLocation) == null)
+                        continue;
+
+                    Func<string, string> extractUsername = (string path) =>
+                    {
+                        if (!Path.IsPathFullyQualified(path))
+                            return null;
+
+                        //break string up into it's path
+                        string[] pathParts = path.Split('\\');
+                        if (pathParts.Length > 2 && pathParts[1] == "Users")
+                        {
+                            return pathParts[2]; //usually in the form of C:\Users\username
+                        }
+
+                        return null;
+                    };
+
                     //based on the values in '...\Explorer\Shell Folders' the [2] value in the string may not always be the username, but it does appear the most.
                     foreach (OfflineKeyValue value in hive.GetKey(usernameLocation).Values)
                     {
-                        //break string up into it's path
-                        string[] pathParts = value.ValueData.Split('\\');
-                        if (pathParts.Length > 2)
+                        var username = extractUsername(value.ValueData);
+
+                        if (username != null)
                         {
-                            string username = pathParts[2]; //usually in the form of C:\Users\username
                             if (!likelyUsernames.ContainsKey(username))
-                            {
                                 likelyUsernames[username] = 1;
-                            }
                             else
-                            {
                                 likelyUsernames[username]++;
-                            }
+                        }
+
+                        username = extractUsername(value.ValueName);
+
+                        if (username != null)
+                        {
+                            if (!likelyUsernames.ContainsKey(username))
+                                likelyUsernames[username] = 1;
+                            else
+                                likelyUsernames[username]++;
                         }
                     }
                 }
@@ -455,10 +350,8 @@ namespace SeeShellsV2.Services
                     retval = likelyUsernames.OrderByDescending(pair => pair.Value).First().Key;
                 }
             }
-            catch (Exception ex)
-            {
-                // logger.Error(ex, "Unable to retrieve username from hive file");
-            }
+            catch (Exception)
+            { }
 
             return retval;
         }
@@ -477,8 +370,6 @@ namespace SeeShellsV2.Services
 
             string[] subKeys = rk.GetSubKeyNames();
 
-            // logger.Trace("**" + subKey);
-
             foreach (string valueName in subKeys)
             {
                 if (valueName.ToUpper() == "ASSOCIATIONS")
@@ -486,16 +377,14 @@ namespace SeeShellsV2.Services
                     continue;
                 }
 
-                string sk = getSubkeyString(subKey, valueName);
-                // logger.Trace("{0}", sk);
+                string sk = GetSubkeyString(subKey, valueName);
                 OnlineRegistryKey rkNext;
                 try
                 {
                     rkNext = rk.OpenSubKey(valueName);
                 }
-                catch (SecurityException ex)
+                catch (SecurityException)
                 {
-                    // logger.Warn("ACCESS DENIED: " + ex.Message);
                     continue;
                 }
 
@@ -537,16 +426,14 @@ namespace SeeShellsV2.Services
                     continue;
                 }
 
-                string sk = getSubkeyString(subKey, valueName.KeyName);
-                // logger.Trace("{0}", sk);
+                string sk = GetSubkeyString(subKey, valueName.KeyName);
                 OfflineRegistryKey rkNext;
                 try
                 {
-                    rkNext = hive.GetKey(getSubkeyString(rk.KeyPath, valueName.KeyName));
+                    rkNext = hive.GetKey(GetSubkeyString(rk.KeyPath, valueName.KeyName));
                 }
-                catch (SecurityException ex)
+                catch (SecurityException)
                 {
-                    // logger.Warn("ACCESS DENIED: " + ex.Message);
                     continue;
                 }
 
@@ -577,10 +464,9 @@ namespace SeeShellsV2.Services
 
         private IEnumerable<RegistryKeyWrapper> GetLoggedInUserKeys(OnlineRegistryKey userStore)
         {
-            // // logger.Debug("NEW USER SID: " + userStore.Name);
             string userOfStore = FindOnlineUsername(userStore);
 
-            foreach (string location in Config.GetRegistryLocations())
+            foreach (string location in Config.ShellbagRootLocations)
             {
                 foreach (RegistryKeyWrapper keyWrapper in IterateOnlineRegistry(userStore.OpenSubKey(location), location, null))
                 {
@@ -615,7 +501,7 @@ namespace SeeShellsV2.Services
                 string username = userDirectory.Split('\\').Last();
 
                 //check if the files exist in known locations of NTUSER.dat and USRCLASS.DAT 
-                foreach (string userRegistryFilePath in KNOWN_USER_REGISTRY_FILE_LOCATIONS)
+                foreach (string userRegistryFilePath in Config.UserRegistryLocations)
                 {
                     string fullFilePath = userDirectory + userRegistryFilePath;
                     if (File.Exists(fullFilePath))
@@ -628,7 +514,6 @@ namespace SeeShellsV2.Services
                             //resolve this user's SID, if its the SID of a user who's logged in, skip.
                             //todo
 
-                            // // logger.Debug($"Parsing Registry hive for {username} at {fullFilePath}");
                             Console.WriteLine($"Parsing Registry hive for {username} at {fullFilePath}");
 
                             //populate the username since we know the user folder it came from
@@ -638,14 +523,6 @@ namespace SeeShellsV2.Services
                                 yield return userKey;
                             }
                         }
-                        else
-                        {
-                            // // logger.Debug($"Already visited hive at {fullFilePath}. Skipping");
-                        }
-                    }
-                    else
-                    {
-                        // // logger.Warn($"Couldnt find registry file {userRegistryFilePath} in User Account {username}. Skipping retriveal of user's shellbags.");
                     }
                 }
             }
@@ -672,7 +549,7 @@ namespace SeeShellsV2.Services
             }
         }
 
-        private static string getSubkeyString(string subKey, string addOn)
+        private static string GetSubkeyString(string subKey, string addOn)
         {
             return string.Format("{0}{1}{2}", subKey, subKey.Length == 0 ? "" : @"\", addOn);
         }

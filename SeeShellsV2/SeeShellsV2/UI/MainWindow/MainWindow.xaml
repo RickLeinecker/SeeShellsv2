@@ -5,89 +5,112 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeeShellsV2.UI"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:xcad="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
         Title="SeeShells" Icon="../Images/SeeShells.png"
-        Height="450" Width="800">
+        Height="800" Width="1400">
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <Menu Background="Transparent">
-                <MenuItem Header="File" Background="Transparent">
-                    <MenuItem Header="Import">
-                        <MenuItem Header="From CSV" Click="Import_CSV_Click"/>
-                        <MenuItem Header="From Live Registry"  Click="Import_Live_Registry_Click"/>
-                        <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
-                    </MenuItem>
-                    <MenuItem Header="Export">
-                        <MenuItem Header="To CSV" Click="Export_CSV_Click"/>
-                    </MenuItem>
+                <MenuItem Header="Import" Background="Transparent">
+                    <MenuItem Header="From Active Registry"  Click="Import_Live_Registry_Click"/>
+                    <MenuItem Header="From Offline Registry"  Click="Import_Offline_Registry_Click"/>
                 </MenuItem>
+                <MenuItem Header="Export" Background="Transparent">
+                    <MenuItem Header="As Report" Click="Export_Window_Click"/>
+                </MenuItem>
+                <MenuItem Header="Reset" Background="Transparent" Click="ResetMenuItem_Click"/>
             </Menu>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <mah:WindowCommands.Resources>
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.StrokeOn" Color="White" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.KnobFillOn" Color="White" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOn" Color="{DynamicResource MahApps.Colors.ThemeBackground}" />
+                <SolidColorBrush x:Key="MahApps.Brushes.ToggleSwitch.FillOnPointerOver" Color="{DynamicResource MahApps.Colors.Gray7}" />
+            </mah:WindowCommands.Resources>
+            <mah:ToggleSwitch OffContent="Light"
+                              OnContent="Dark"
+                              Toggled="ToggleSwitch_Toggled"
+                              IsOn="True"
+                              HorizontalAlignment="Right"
+                              HorizontalContentAlignment="Right"
+                              ContentDirection="LeftToRight"
+                              Margin="5 0"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <xcad:DockingManager x:Name="DockingManager"
+                             AllowMixedOrientation="True"
+                             BorderBrush="Black"
+                             BorderThickness="1">
+            <xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding Title}" />
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>
 
-            <xcad:DockingManager Grid.Row="1"
-                           AllowMixedOrientation="True"
-                           BorderBrush="Black"
-                           BorderThickness="1">
-                <xcad:DockingManager.DocumentHeaderTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
-                            <TextBlock Text="{Binding Title}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </xcad:DockingManager.DocumentHeaderTemplate>
-                
-                <xcad:LayoutRoot x:Name="_layoutRoot">
-                    <xcad:LayoutPanel Orientation="Horizontal">
-                        
-                        <xcad:LayoutAnchorablePane DockWidth="200">
-                            <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel Orientation="Horizontal">
+
+                    <xcad:LayoutPanel Orientation="Vertical" DockWidth="320">
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="inspectorview" Title="Shell Inspector" CanHide="False" CanClose="False" AutoHideWidth="240" >
                                 <local:InspectorView />
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
-                        
-                        <xcad:LayoutDocumentPaneGroup >
-                            <xcad:LayoutDocumentPane>
-                                <xcad:LayoutDocument ContentId="timelineview" Title="Timeline" CanClose="False" IconSource="../Images/SeeShells.png">
-                                    <local:TimelineView />
-                                </xcad:LayoutDocument>
-                                <xcad:LayoutDocument ContentId="tableview" Title="Table" CanClose="False" IconSource="../Images/SeeShells.png">
-                                    <local:TableView />
-                                </xcad:LayoutDocument>
-                            </xcad:LayoutDocumentPane>
-                        </xcad:LayoutDocumentPaneGroup >
 
-                        <xcad:LayoutAnchorablePaneGroup DockWidth="125">
-                            <xcad:LayoutAnchorablePane>
-                                <xcad:LayoutAnchorable ContentId="filesystemview" Title="File System" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <local:FileSystemView />
-                                </xcad:LayoutAnchorable>
-                                <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <local:RegistryView />
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorablePane>
-                        </xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="hexview" Title="Hex Viewer" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:HexView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
                     </xcad:LayoutPanel>
 
-                    <xcad:LayoutRoot.LeftSide>
-                        <xcad:LayoutAnchorSide>
-                            <xcad:LayoutAnchorGroup>
-                                <xcad:LayoutAnchorable Title="Filter Controls" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" IconSource="../Images/SeeShells.png">
-                                    <local:FilterControlView />
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutAnchorGroup>
-                        </xcad:LayoutAnchorSide>
-                    </xcad:LayoutRoot.LeftSide>
-                </xcad:LayoutRoot>
-            </xcad:DockingManager>
-        </Grid>
+                    <xcad:LayoutDocumentPaneGroup >
+                        <xcad:LayoutDocumentPane>
+                            <xcad:LayoutDocument ContentId="timelineview" Title="Events" CanClose="False" ToolTip="A timeline of user activity">
+                                <local:TimelineView />
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument ContentId="tableview" Title="Shellbags" CanClose="False" ToolTip="A list of shellbags found in the loaded registry hives">
+                                <local:ShellItemTableView />
+                            </xcad:LayoutDocument>
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup >
+
+                    <xcad:LayoutPanel Orientation="Vertical" DockWidth="320">
+                        <xcad:LayoutAnchorablePane DockMinWidth="200">
+                            <xcad:LayoutAnchorable ContentId="registryview" Title="Registry" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:RegistryView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorablePane DockMinWidth="200" DockHeight="260">
+                            <xcad:LayoutAnchorable Title="Global Event Filters" ContentId="filtercpntrolview" CanHide="False" CanClose="False" AutoHideWidth="240" >
+                                <local:FilterControlView />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutPanel>
+                </xcad:LayoutPanel>
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+
+
+        <DockPanel IsEnabled="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False">
+            <StackPanel Visibility="{Binding StatusVisibility}" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Border Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        BorderBrush="{DynamicResource MahApps.Brushes.Gray2}"
+                        BorderThickness="1" Margin="5" Padding="5">
+                    <TextBlock Text="{Binding Status}" />
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <local:QuickStartView />
     </Grid>
 </mah:MetroWindow>

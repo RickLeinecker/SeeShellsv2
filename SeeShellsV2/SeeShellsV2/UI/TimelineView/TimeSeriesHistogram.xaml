@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="SeeShellsV2.UI.TimeSeriesHistogram"
+             x:Name="TimeSeriesHistogramInstance"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:SeeShellsV2.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+    <UserControl.Resources>
+        <local:TimeSeriesHistogramTrackerTextConverter x:Key="TimeSeriesText" />
+    </UserControl.Resources>
+    <Border>
+        <oxy:PlotView Name="HistogramPlot" Background="Transparent">
+            <oxy:PlotView.DefaultTrackerTemplate>
+                <ControlTemplate>
+                    <Canvas>
+                        <Border Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}"
+                                CornerRadius="0 6 6 6" BorderThickness="1"
+                                Padding="5" Margin="0"
+                                Background="Black"
+                                BorderBrush="Black" >
+                            <TextBlock Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource TimeSeriesText}">
+                                        <Binding />
+                                        <Binding ElementName="TimeSeriesHistogramInstance" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Border>
+                    </Canvas>
+                </ControlTemplate>
+            </oxy:PlotView.DefaultTrackerTemplate>
+            <oxy:PlotView.ZoomRectangleTemplate>
+                <ControlTemplate>
+                    <Border BorderBrush="{DynamicResource MahApps.Brushes.ThemeForeground}" BorderThickness="1">
+                        <Rectangle Fill="{DynamicResource MahApps.Brushes.Accent}" />
+                    </Border>
+                </ControlTemplate>
+            </oxy:PlotView.ZoomRectangleTemplate>
+        </oxy:PlotView>
+    </Border>
+</UserControl>

@@ -9,20 +9,21 @@ using SeeShellsV2.Data;
 
 namespace SeeShellsV2.Factories
 {
+    /// <summary>
+    /// An object that constructs IShellItem objects from shellbag byte strings
+    /// </summary>
     public interface IShellItemFactory
     {
         /// <summary>
-        /// Get the type for the shell item of a given type id, if if exists
+        /// Get the type for the shell item of a given shellbag, if if exists
         /// </summary>
-        /// <param name="type">shell item type identifier</param>
         /// <returns>shell item type if it exists, or null otherwise</returns>
-        Type GetShellType(byte type, IShellItem parent = null);
+        Type GetShellType(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null);
 
         /// <summary>
-        /// Create a new shell item from a byte array
+        /// Create a new shell item from a byte string
         /// </summary>
-        /// <param name="buf">the byte array containing shell item data</param>
         /// <returns>a new shell item instance if the buffer can be parsed or null otherwise</returns>
-        IShellItem Create(byte[] buf, IShellItem parent = null);
+        IShellItem Create(RegistryHive hive, RegistryKeyWrapper keyWrapper, byte[] value, IShellItem parent = null);
     }
 }

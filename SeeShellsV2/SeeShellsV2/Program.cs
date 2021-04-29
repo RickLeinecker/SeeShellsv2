@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Media;
 
 using Unity;
+using Newtonsoft.Json;
 
 using SeeShellsV2.Data;
 using SeeShellsV2.Factories;
@@ -21,21 +25,32 @@ namespace SeeShellsV2
         [STAThread]
         public static void Main()
         {
+            // Construct the root container for this application. This container will be used
+            // to resolve the dependencies of all object instances throughout the lifetime of the application.
             IUnityContainer container = new UnityContainer();
+
+            // Read Config.JSON to get registry importer settings as an IConfig object.
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string internalResourcePath = assembly.GetManifestResourceNames().Single(str => str.EndsWith("Config.json"));
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(internalResourcePath)))
+                container.RegisterInstance<IConfig>(JsonConvert.DeserializeObject<Config>(reader.ReadToEnd()));
 
             // Register Factory Types
             container.RegisterType<IWindowFactory, WindowFactory>();
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterType<IShellEventFactory, ShellEventFactory>();
 
             // Register Repository Types
+            container.RegisterSingleton<IUserCollection, UserCollection>();
+            container.RegisterSingleton<IRegistryHiveCollection, RegistryHiveCollection>();
             container.RegisterSingleton<IShellItemCollection, ShellItemCollection>();
             container.RegisterSingleton<IShellEventCollection, ShellEventCollection>();
             container.RegisterSingleton<ISelected, Selected>();
 
             // Register Service Types
-            container.RegisterType<IConfigParser, ConfigParser>();
-            container.RegisterType<ICsvImporter, CsvImporter>();
+            container.RegisterType<IPdfExporter, PdfExporter>();
             container.RegisterType<IRegistryImporter, RegistryImporter>();
+            container.RegisterType<IShellEventManager, ShellEventManager>();
 
             // Register Window Types
             container.RegisterType<IWindow, MainWindow>("main");
@@ -44,20 +59,16 @@ namespace SeeShellsV2
             // Register ViewModel Types
             container.RegisterType<IMainWindowVM, MainWindowVM>();
             container.RegisterType<IExportWindowVM, ExportWindowVM>();
-            container.RegisterType<ITableViewVM, TableViewVM>();
+            container.RegisterType<IShellItemTableViewVM, ShellItemTableViewVM>();
             container.RegisterType<IInspectorViewVM, InspectorViewVM>();
             container.RegisterType<ITimelineViewVM, TimelineViewVM>();
             container.RegisterType<IRegistryViewVM, RegistryViewVM>();
-            container.RegisterType<IFileSystemViewVM, FileSystemViewVM>();
             container.RegisterType<IFilterControlViewVM, FilterControlViewVM>();
+            container.RegisterType<IHexViewVM, HexViewVM>();
 
-            // Create and run app with main window
+            // Create and run app with main window. The main window is contructed in SeeShellsV2.UI.App.OnStartup().
             App app = container.Resolve<App>();
-
-            IWindowFactory windowFactory = container.Resolve<IWindowFactory>();
-            Window mainWindow = windowFactory.Create("main") as Window;
-
-            app.Run(mainWindow);
+            app.Run();
         }
     }
 }

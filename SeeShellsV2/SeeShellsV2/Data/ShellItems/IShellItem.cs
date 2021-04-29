@@ -1,25 +1,12 @@
-﻿#region copyright
-// SeeShells Copyright (c) 2019-2020 Aleksandar Stoyanov, Bridget Woodye, Klayton Killough, 
-// Richard Leinecker, Sara Frackiewicz, Yara As-Saidi
-// SeeShells is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-// 
-// SeeShells is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License along with this program;
-// if not, see <https://www.gnu.org/licenses>
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SeeShellsV2.Data
 {
-    public interface IShellItem
+    /// <summary>
+    /// An object that stores parsed shellbag information. Each ShellItem corresponds to one shellbag.
+    /// </summary>
+    public interface IShellItem : IComparable<IShellItem>
     {
         /// <summary>
         /// A best effort description for a particular ShellItem meant to give the most important / recognizable
@@ -27,21 +14,31 @@ namespace SeeShellsV2.Data
         /// Description can be used to refer to:
         /// <list type="bullet">
         /// <item>filename (e.g. foo.zip)</item>
-        /// <item>directory name</item> (e.g. "C:\" for the C drive directory)
-        /// <item>GUID (or the known correspondence of a GUID (see <see cref="KnownGuids"/>)</item>
+        /// <item>directory name (e.g. "C:\" for the C drive directory)</item>
+        /// <item>GUID (or the known correspondence of a GUID)</item>
         /// </list> 
         /// </summary>
         string Description { init; get; }
 
         /// <summary>
-        /// Registry Key from which the shell item was parsed
+        /// Place refered to by the shell item.
         /// </summary>
-        RegistryKeyWrapper RegistryKey { get; set; }
+        Place Place { init; get; }
+
+        RegistryHive RegistryHive { init; get; }
+
+        byte[] Value { init; get; }
+
+        int? NodeSlot { init; get; }
+
+        DateTime? SlotModifiedDate { init; get; }
+
+        DateTime LastRegistryWriteDate { init; get; }
 
         /// <summary>
         /// Parent of this shell item
         /// </summary>
-        IShellItem Parent { get; set; }
+        IShellItem Parent { init; get; }
 
         /// <summary>
         /// Children of this shell item
@@ -86,11 +83,6 @@ namespace SeeShellsV2.Data
         /// <summary>
         /// List of <see cref="IExtensionBlock"/> instances associated with the shell item
         /// </summary>
-        IReadOnlyList<IExtensionBlock> ExtensionBlocks { get; }
-
-        /// <summary>
-        /// Set of tags associated with the shell item
-        /// </summary>
-        ISet<IShellTag> Tags { get; }
+        IReadOnlyCollection<IExtensionBlock> ExtensionBlocks { init; get; }
     }
 }

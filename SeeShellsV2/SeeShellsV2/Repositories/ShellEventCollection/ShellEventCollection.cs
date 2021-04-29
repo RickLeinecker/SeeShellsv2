@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel;
+using System.Windows.Data;
 using SeeShellsV2.Data;
 using SeeShellsV2.Utilities;
 
@@ -8,34 +9,25 @@ namespace SeeShellsV2.Repositories
 {
     public class ShellEventCollection : ObservableSortedList<IShellEvent>, IShellEventCollection
     {
-        public ShellEventCollection() : base(new ShellEventComparer()) { }
-    }
+        public event FilterEventHandler Filter;
+        public ICollectionView FilteredView => collectionViewSource.View;
 
-    internal class ShellEventComparer : IComparer<IShellEvent>
-    {
-        public int Compare(IShellEvent a, IShellEvent b)
+        public ShellEventCollection()
         {
-            int datetime = DateTime.Compare(a.TimeStamp, b.TimeStamp);
-            if (datetime != 0)
-                return datetime;
+            collectionViewSource.Source = this;
+            collectionViewSource.Filter += (o, e) =>
+            {
+                foreach (var callback in Filter?.GetInvocationList())
+                {
+                    callback.DynamicInvoke(o, e);
 
-            int username = string.Compare(a.User.Name, b.User.Name);
-            if (username != 0)
-                return username;
+                    if (!e.Accepted) break;
+                }
+            };
 
-            int location = string.Compare(a.Place.Name, b.Place.Name);
-            if (location != 0)
-                return location;
-
-            int typename = string.Compare(a.TypeName, b.TypeName);
-            if (typename != 0)
-                return typename;
-
-            int description = string.Compare(a.Description, b.Description);
-            if (description != 0)
-                return description;
-
-            return 0;
+            Filter += (object o, FilterEventArgs args) => args.Accepted = !(args.Item is IIntermediateShellEvent e) || !e.Consumed;
         }
+
+        private readonly CollectionViewSource collectionViewSource = new CollectionViewSource();
     }
 }

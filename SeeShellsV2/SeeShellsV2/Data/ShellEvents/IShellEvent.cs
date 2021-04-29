@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+using SeeShellsV2.UI;
 
 namespace SeeShellsV2.Data
 {
     /// <summary>
     /// Represents a suspected action performed by a user
     /// </summary>
-    public interface IShellEvent
+    public interface IShellEvent : IComparable<IShellEvent>
     {
         /// <summary>
         /// The type of event that occured (File Create, File Download, etc.)
         /// </summary>
         string TypeName { get; }
+
+        /// <summary>
+        /// A long description of the event, including details on why the event was generated.
+        /// </summary>
+        string LongDescription { get; }
 
         /// <summary>
         /// A short description of the event

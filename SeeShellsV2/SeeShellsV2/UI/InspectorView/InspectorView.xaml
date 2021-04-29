@@ -1,26 +1,35 @@
 ﻿<UserControl x:Class="SeeShellsV2.UI.InspectorView"
+             x:Name="Inspector"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SeeShellsV2.UI"
              xmlns:data="clr-namespace:SeeShellsV2.Data"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type data:RegistryShellbagRoot}">
+        <local:CamelCaseConverter x:Key="CamelCaseConverter"/>
+        <local:UpperCaseConverter x:Key="UpperCaseConverter"/>
+        <local:SelectedItemConverter x:Key="SelectedItemConverter"/>
+
+        <!-- User -->
+        <DataTemplate DataType="{x:Type data:User}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
-                        REGISTRY INFORMATION
+                <TextBlock FontWeight="Black" FontSize="14">
+                        USER
                 </TextBlock>
                 <Grid Margin="4">
+                    <TextBlock Text="Information about a system user, extracted from one or more registry hives." Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -29,15 +38,193 @@
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="SID" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding SID}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Registries Count" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding RegistryHives.Count}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+        
+        <!-- RegistryHive -->
+        <DataTemplate DataType="{x:Type data:RegistryHive}">
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black" FontSize="14">
+                        REGISTRY HIVE
+                </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="A registry hive belonging to a specific user." Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Right"/>
                     <TextBlock Text="{Binding Path}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="User" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding User.Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
             </StackPanel>
         </DataTemplate>
+
+        <!-- RegistryCollection -->
+        <DataTemplate DataType="{x:Type local:RegistryCollection}">
+            <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Black" FontSize="14">
+                        REGISTRY COLLECTION
+                </TextBlock>
+                <Grid Margin="4">
+                    <TextBlock Text="A collection of items that have been extracted from a registry hive." Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Items Count" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Items.Count}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+        <!-- Place -->
+        <DataTemplate DataType="{x:Type data:Place}">
+            <VirtualizingStackPanel
+                Margin="10"
+                Grid.IsSharedSizeScope="True"
+                IsVirtualizing="True">
+                <VirtualizingStackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </VirtualizingStackPanel.Resources>
+                <TextBlock Text="{Binding Type, Converter={StaticResource UpperCaseConverter}}" FontWeight="Black" FontSize="14" />
+                <Grid Margin="4">
+                    <TextBlock Text="Information about a file system location that has been accessed by a user." Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Type" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Type}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding PathName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <TextBlock FontWeight="Bold" Margin="0 10 0 0">
+                        ASSOCIATED SHELLBAGS
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="Border"
+                                    Margin="0 10 0 0"
+                                    BorderThickness="1"
+                                    Background="Transparent"
+                                    MouseLeftButtonDown="Item_MouseLeftButtonDown">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+                                            </Trigger>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource SelectedItemConverter}">
+                                                        <Binding />
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected"/>
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected.CurrentData"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentControl Content="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </VirtualizingStackPanel>
+        </DataTemplate>
+
+        <!-- ShellItem -->
         <DataTemplate DataType="{x:Type data:ShellItem}">
             <StackPanel Margin="10" Grid.IsSharedSizeScope="True">
                 <StackPanel.Resources>
@@ -45,12 +232,15 @@
                         <Setter Property="TextWrapping" Value="Wrap"/>
                     </Style>
                 </StackPanel.Resources>
-                <TextBlock FontWeight="Black">
-                        SHELLBAG INFORMATION
+                <TextBlock FontWeight="Black" FontSize="14">
+                    SHELLBAG INFORMATION
                 </TextBlock>
                 <Grid Margin="4">
+                    <TextBlock Text="Data fields extracted from a shellbag in the user's registry hive." Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -59,7 +249,7 @@
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -68,7 +258,7 @@
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -77,33 +267,199 @@
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Location Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Place.Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Location Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Place.PathName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontWeight="Bold" Text="Registry Path" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <TextBlock Text="{Binding RegistryKey.RegistryPath}" Grid.Column="1" Margin="6 0 0 0"/>
+                    <TextBlock Text="{Binding RegistryHive.Path}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontWeight="Bold" Text="Registry Owner" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <TextBlock Text="{Binding RegistryKey.RegistryUser}" Grid.Column="1" Margin="6 0 0 0"/>
+                    <TextBlock Text="{Binding RegistryHive.User.Name}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
                 <Grid Margin="4">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock FontWeight="Bold" Text="Last Registry Write Date" Grid.Column="0" HorizontalAlignment="Right"/>
-                    <TextBlock Text="{Binding RegistryKey.LastRegistryWriteDate}" Grid.Column="1" Margin="6 0 0 0"/>
+                    <TextBlock Text="{Binding LastRegistryWriteDate}" Grid.Column="1" Margin="6 0 0 0"/>
                 </Grid>
+                <Separator Margin="0 10"/>
+                <TextBlock FontWeight="Bold">
+                    SHELLBAG FIELDS
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Fields}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Key, Converter={StaticResource CamelCaseConverter}}" Grid.Column="0" HorizontalAlignment="Right"/>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Value}" Grid.Column="1" Margin="6 0 0 0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </DataTemplate>
+
+        <!-- ShellEvent -->
+        <DataTemplate DataType="{x:Type data:ShellEvent}">
+            <VirtualizingStackPanel
+                Margin="10"
+                Grid.IsSharedSizeScope="True"
+                IsVirtualizing="True">
+                <VirtualizingStackPanel.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </VirtualizingStackPanel.Resources>
+                <TextBlock Text="{Binding TypeName}" FontWeight="Black" FontSize="14"/>
+                <Grid Margin="4">
+                    <TextBlock Text="{Binding LongDescription}" Margin="10"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Description" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Description}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Event Time" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding TimeStamp}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="User" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding User.Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Location Name" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Place.Name}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <Grid Margin="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock FontWeight="Bold" Text="Location Path" Grid.Column="0" HorizontalAlignment="Right"/>
+                    <TextBlock Text="{Binding Place.PathName}" Grid.Column="1" Margin="6 0 0 0"/>
+                </Grid>
+                <TextBlock FontWeight="Bold" Margin="0 10 0 0">
+                        SHELLBAG EVIDENCE
+                </TextBlock>
+                <ItemsControl ItemsSource="{Binding Evidence}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0 10 0 0"
+                                    BorderThickness="1"
+                                    MouseLeftButtonDown="Item_MouseLeftButtonDown"
+                                    Background="Transparent">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}"/>
+                                            </Trigger>
+                                            <DataTrigger Value="True">
+                                                <DataTrigger.Binding>
+                                                    <MultiBinding Converter="{StaticResource SelectedItemConverter}">
+                                                        <Binding />
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected"/>
+                                                        <Binding ElementName="Inspector" Path="DataContext.Selected.CurrentData"/>
+                                                    </MultiBinding>
+                                                </DataTrigger.Binding>
+                                                <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <ContentControl Content="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Recycling"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </VirtualizingStackPanel>
+        </DataTemplate>
     </UserControl.Resources>
-    <ContentControl Content="{ Binding Selected.Current }"></ContentControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.RowSpan="2" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+            <ContentControl Content="{ Binding Selected.CurrentInspector }"/>
+        </ScrollViewer>
+        <TextBlock TextWrapping="Wrap" Margin="20 10" Text="Select an item in the Event Timeline or the Registry View to view its properties.">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Selected.CurrentInspector}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock Text="?" Grid.Row="1" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource MahApps.Brushes.Gray6}"
+                           ToolTip="Select an item in the Events tab, the Shellbags Tab, or the Registry Tab to view its properties.&#x0a;All timestamps displayed in SeeShells are UTC timestamps."
+                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="18 6"/>
+    </Grid>
 </UserControl>

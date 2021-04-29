@@ -8,7 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
 using Unity;
+
+using SeeShellsV2.Data;
 
 namespace SeeShellsV2.Services.Tests
 {
@@ -19,10 +22,40 @@ namespace SeeShellsV2.Services.Tests
         public void RegistryImporterTest()
         {
             IUnityContainer container = new UnityContainer();
-            container.RegisterType<IConfigParser, ConfigParser>();
+
+            IConfig config = new Config
+            {
+                UsernameLocations = new List<string>() {
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
+                },
+                UserRegistryLocations = new List<string>() {
+                    "ntuser.dat",
+                    "Local Settings\\Application Data\\Microsoft\\Windows\\UsrClass.dat",
+                    "AppData\\Local\\Microsoft\\Windows\\UsrClass.dat"
+                },
+                ShellbagRootLocations = new List<string> {
+                    "Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Software\\Microsoft\\Windows\\Shell\\Bags",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\BagMRU",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\Bags",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags"
+                },
+                KnownGuids = new Dictionary<string, string>()
+            };
+
+            Selected selected = new Selected();
+            ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+
             container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterType<IShellItemCollection, ShellItemCollection>();
-            container.RegisterInstance<ISelected>(null);
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
+            container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
@@ -30,39 +63,97 @@ namespace SeeShellsV2.Services.Tests
         }
 
         [TestMethod()]
-        public async Task ImportOnlineRegistryTest()
+        public void ImportOnlineRegistryTest()
         {
             IUnityContainer container = new UnityContainer();
-            container.RegisterType<IConfigParser, ConfigParser>();
-            container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterInstance<ISelected>(null);
 
+            IConfig config = new Config
+            {
+                UsernameLocations = new List<string>() {
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
+                },
+                UserRegistryLocations = new List<string>() {
+                    "ntuser.dat",
+                    "Local Settings\\Application Data\\Microsoft\\Windows\\UsrClass.dat",
+                    "AppData\\Local\\Microsoft\\Windows\\UsrClass.dat"
+                },
+                ShellbagRootLocations = new List<string> {
+                    "Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Software\\Microsoft\\Windows\\Shell\\Bags",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\BagMRU",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\Bags",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags"
+                },
+                KnownGuids = new Dictionary<string, string>()
+            };
+
+            Selected selected = new Selected();
             ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+
+            container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
-            (int parsed, _, _) = await regImporter.ImportOnlineRegistry();
+            (_, IEnumerable<IShellItem> items) = regImporter.ImportRegistry();
 
-            Assert.IsTrue(shellItems.Count == parsed);
+            Assert.IsTrue(shellItems.Count == items.Count());
         }
 
         [TestMethod()]
-        public async Task ImportOfflineRegistryTest()
+        public void ImportOfflineRegistryTest()
         {
             IUnityContainer container = new UnityContainer();
-            container.RegisterType<IConfigParser, ConfigParser>();
-            container.RegisterType<IShellItemFactory, ShellItemFactory>();
-            container.RegisterInstance<ISelected>(null);
 
+            IConfig config = new Config
+            {
+                UsernameLocations = new List<string>() {
+                    "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache"
+                },
+                UserRegistryLocations = new List<string>() {
+                    "ntuser.dat",
+                    "Local Settings\\Application Data\\Microsoft\\Windows\\UsrClass.dat",
+                    "AppData\\Local\\Microsoft\\Windows\\UsrClass.dat"
+                },
+                ShellbagRootLocations = new List<string> {
+                    "Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Software\\Microsoft\\Windows\\Shell\\Bags",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\BagMRU",
+                    "Software\\Microsoft\\Windows\\ShellNoRoam\\Bags",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU",
+                    "Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags"
+                },
+                KnownGuids = new Dictionary<string, string>()
+            };
+
+            Selected selected = new Selected();
             ShellItemCollection shellItems = new ShellItemCollection();
+            UserCollection users = new UserCollection();
+            RegistryHiveCollection registries = new RegistryHiveCollection();
+            
+            container.RegisterType<IShellItemFactory, ShellItemFactory>();
+            container.RegisterInstance<IConfig>(config, InstanceLifetime.Singleton);
             container.RegisterInstance<IShellItemCollection>(shellItems, InstanceLifetime.Singleton);
+            container.RegisterInstance<IUserCollection>(users, InstanceLifetime.Singleton);
+            container.RegisterInstance<IRegistryHiveCollection>(registries, InstanceLifetime.Singleton);
+            container.RegisterInstance<ISelected>(selected, InstanceLifetime.Singleton);
 
             IRegistryImporter regImporter = container.Resolve<RegistryImporter>();
 
-            (int parsed, _, _) = await regImporter.ImportOfflineRegistry("Resources\\UsrClass.dat");
+            (_, IEnumerable<IShellItem> items) = regImporter.ImportRegistry(false, true, "Resources\\UsrClass.dat");
 
-            Assert.IsTrue(shellItems.Count == parsed);
+            Assert.IsTrue(shellItems.Count == items.Count());
+            Assert.IsTrue(registries.Count == 1);
+            Assert.IsTrue(registries.First().Places.Distinct().SequenceEqual(registries.First().Places));
         }
     }
 }

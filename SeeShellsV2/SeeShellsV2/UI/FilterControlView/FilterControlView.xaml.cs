@@ -15,12 +15,21 @@ using System.Windows.Shapes;
 
 using Unity;
 using SeeShellsV2.Data;
+using SeeShellsV2.Repositories;
 
 namespace SeeShellsV2.UI
 {
     public interface IFilterControlViewVM : IViewModel
     {
-        
+        IShellEventCollection ShellEvents { get; }
+        IUserCollection UserCollection { get; }
+        IRegistryHiveCollection RegistryHiveCollection { get; }
+        User User { get; set; }
+        RegistryHive RegistryHive { get; set; }
+        DateTime? Begin { get;  set; }
+        DateTime? End { get; set; }
+        string Path { get; set; }
+        Type Type { get; set; }
     }
 
     /// <summary>
@@ -33,6 +42,19 @@ namespace SeeShellsV2.UI
         public FilterControlView()
         {
             InitializeComponent();
+        }
+
+        private void TextBox_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TextBox tBox = (TextBox)sender;
+                DependencyProperty prop = TextBox.TextProperty;
+
+                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+                if (binding != null) { binding.UpdateSource(); }
+                Keyboard.ClearFocus();
+            }
         }
     }
 }
