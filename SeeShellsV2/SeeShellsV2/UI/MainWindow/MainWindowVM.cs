@@ -20,8 +20,8 @@ namespace SeeShellsV2.UI
         [Dependency] public IShellEventManager ShellEventManager { get; set; }
         [Dependency] public ISelected Selected { get; set; }
 
-        public string WebsiteUrl => @"https://shellbags.github.io/v2";
-        public string GithubUrl => @"https://github.com/ShellBags/v2";
+        public string WebsiteUrl => @"https://rickleinecker.github.io/SeeShellsv2";
+        public string GithubUrl => @"https://github.com/RickLeinecker/SeeShellsv2";
 
         public Visibility StatusVisibility => Status != string.Empty ? Visibility.Visible : Visibility.Collapsed;
         public string Status { get => _status; private set { _status = value; NotifyPropertyChanged(nameof(Status)); NotifyPropertyChanged(nameof(StatusVisibility)); } }
