@@ -5,7 +5,7 @@
 
 [![SeeShells Logo](website/src/assets/logo.png)](https://rickleinecker.github.io/SeeShells/)
 ### [Visit v1 Website](https://rickleinecker.github.io/SeeShells/)
-### [Visit v2 Website](https://shellbags.github.io/v2/#/)
+### [Visit v2 Website](https://rickleinecker.github.io/SeeShellsv2/#/)
 
 SeeShells is a configurable Windows desktop application which focuses on extracting specific Registry data known as ShellBags. SeeShells displays this information in a interactive timeline that highlights user events as they were recorded.
 
